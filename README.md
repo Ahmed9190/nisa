@@ -4,7 +4,7 @@ This is a production-ready e-commerce website for a modest fashion brand, built 
 
 ## Live Demo
 
-[Link to your live site] <!-- Add your live site URL here -->
+[https://nisa0.netlify.app]
 
 ## Features
 
@@ -19,7 +19,7 @@ This is a production-ready e-commerce website for a modest fashion brand, built 
 ## Project Structure
 
 ```
-/nisa-website
+/nisa
 ├── public/
 │   └── assets/         # Product images and other static assets
 ├── src/
@@ -52,7 +52,7 @@ This is a production-ready e-commerce website for a modest fashion brand, built 
 1.  **Clone the repository:**
 
     ```bash
-    git clone <your-repository-url>
+    git clone https://github.com/Ahmed9190/nisa.git
     cd nisa-website
     ```
 
