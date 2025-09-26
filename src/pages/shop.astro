@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import content from '../data/content.json';
+import products from '../data/products.json';
+
+const allColors = [...new Set(products.products.flatMap(p => p.colors.map(c => c.name)))];
+---
+
+<Layout title="Shop - nisa">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 class="text-4xl font-medium text-center mb-12">{content.shop.title}</h1>
+        <div id="shop-products" class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {products.products.map(product => (
+                <ProductCard product={product} />
+            ))}
+        </div>
+    </div>
+</Layout>

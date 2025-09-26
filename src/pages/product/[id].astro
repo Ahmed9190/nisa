@@ -1,0 +1,217 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import products from '../../data/products.json';
+import type { Product } from '../../types';
+
+export async function getStaticPaths() {
+  return products.products.map(product => ({
+    params: { id: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props as { product: Product };
+
+const formatPrice = (price: number, currency = 'EGP') => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency', currency, minimumFractionDigits: 0
+    }).format(price);
+};
+---
+
+<Layout title={product.name + ' - nisa'}>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+         <div class="flex flex-col lg:flex-row gap-12">
+            <div class="w-full lg:w-1/2">
+                <div class="relative">
+                    <img id="main-product-image" src={product.colors[0].images[0]} alt={product.name} class="w-full rounded-lg shadow-lg sticky top-24">
+                    <div id="gallery-controls" class="absolute inset-0 flex items-center justify-between px-4 text-white" style="display: none;">
+                        <button id="prev-image" class="bg-black/30 rounded-full p-2 hover:bg-black/50 transition-colors">&lt;</button>
+                        <button id="next-image" class="bg-black/30 rounded-full p-2 hover:bg-black/50 transition-colors">&gt;</button>
+                    </div>
+                </div>
+                <div id="thumbnail-container" class="flex gap-2 mt-4 overflow-x-auto">
+                    <!-- Thumbnails will be injected here -->
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2">
+                <h1 class="text-4xl font-medium">{product.name}</h1>
+                <p class="text-2xl my-4">{formatPrice(product.price)}</p>
+                <p class="text-[#6B7B8C] leading-relaxed mb-6">{product.description}</p>
+
+                <div class="mb-6">
+                    <label class="block font-medium mb-2">Color</label>
+                    <div class="flex gap-2">
+                        {product.colors.map((color, index) => (
+                            <button class=`color-swatch border-2 rounded-full h-8 w-8 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#204566] ${index === 0 ? 'border-[#204566]' : 'border-transparent'}` style={`background-color: ${color.code};`} data-images={JSON.stringify(color.images)}></button>
+                        ))}
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                     <div class="flex justify-between items-center mb-2">
+                        <label class="block font-medium">Size</label>
+                        <button id="size-guide-btn" class="text-sm text-[#6B7B8C] underline hover:text-[#204566]">Size Guide</button>
+                    </div>
+                    <div class="flex gap-2">
+                        {product.sizes.map((size, index) => (
+                            <button class=`size-btn border-2 px-4 py-2 rounded-md ${index === 0 ? 'bg-[#204566] text-white' : 'bg-transparent'}`>{size}</button>
+                        ))}
+                    </div>
+                </div>
+
+                <button class="btn-primary w-full" disabled={!product.inStock}>
+                    {product.inStock ? 'Add to Cart' : 'Sold Out'}
+                </button>
+                {!product.inStock && <p class="text-center mt-4 text-red-600 font-semibold">This product is currently sold out.</p>}
+
+                 <div class="mt-8 flex justify-around text-center text-sm text-[#6B7B8C] border-t border-b border-[#D4E4E8] py-4">
+                    <div class="flex items-center gap-2"><span>✓</span><span>Hassle-Free Returns</span></div>
+                    <div class="flex items-center gap-2"><span>✓</span><span>Secure Payments</span></div>
+                     <div class="flex items-center gap-2"><span>✓</span><span>Quality Fabrics</span></div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-xl font-medium mb-4 border-b border-[#D4E4E8] pb-2">Details & Fit</h3>
+                    <ul class="text-[#6B7B8C] space-y-2">
+                        <li><strong>Fabric:</strong> {product.details.fabric}</li>
+                        <li><strong>Fit:</strong> {product.details.fit}</li>
+                        <li><strong>Care:</strong> {product.details.care}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<script is:inline>
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    const mainImage = document.getElementById('main-product-image');
+    const galleryControls = document.getElementById('gallery-controls');
+    const prevButton = document.getElementById('prev-image');
+    const nextButton = document.getElementById('next-image');
+    const thumbnailContainer = document.getElementById('thumbnail-container');
+    const sizeBtns = document.querySelectorAll('.size-btn');
+
+    let currentImages = [];
+    let currentImageIndex = 0;
+
+    function updateGallery(images) {
+        currentImages = images;
+        currentImageIndex = 0;
+        mainImage.src = currentImages[currentImageIndex];
+
+        if (currentImages.length > 1) {
+            galleryControls.style.display = 'flex';
+        } else {
+            galleryControls.style.display = 'none';
+        }
+
+        thumbnailContainer.innerHTML = currentImages.map((image, index) => `
+            <img src="${image}" class="w-16 h-16 object-cover rounded-md cursor-pointer ${index === 0 ? 'border-2 border-[#204566]' : ''}" data-index="${index}">
+        `).join('');
+    }
+
+    colorSwatches.forEach(swatch => {
+        swatch.addEventListener('click', () => {
+            colorSwatches.forEach(s => s.classList.remove('border-[#204566]'));
+            swatch.classList.add('border-[#204566]');
+
+            const images = JSON.parse(swatch.dataset.images);
+            updateGallery(images);
+        });
+    });
+
+    prevButton.addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+        mainImage.src = currentImages[currentImageIndex];
+        updateThumbnails();
+    });
+
+    nextButton.addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+        mainImage.src = currentImages[currentImageIndex];
+        updateThumbnails();
+    });
+
+    thumbnailContainer.addEventListener('click', e => {
+        if (e.target.tagName === 'IMG') {
+            currentImageIndex = parseInt(e.target.dataset.index);
+            mainImage.src = currentImages[currentImageIndex];
+            updateThumbnails();
+        }
+    });
+
+    function updateThumbnails() {
+        thumbnailContainer.querySelectorAll('img').forEach((img, index) => {
+            if (index === currentImageIndex) {
+                img.classList.add('border-2', 'border-[#204566]');
+            } else {
+                img.classList.remove('border-2', 'border-[#204566]');
+            }
+        });
+    }
+
+    sizeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Reset all buttons to inactive state
+            sizeBtns.forEach(b => {
+                b.classList.remove('bg-[#204566]', 'text-white');
+                b.classList.add('bg-transparent');
+            });
+            // Set the clicked button to active state
+            btn.classList.remove('bg-transparent');
+            btn.classList.add('bg-[#204566]', 'text-white');
+        });
+    });
+
+    // Initial gallery setup
+    const initialImages = JSON.parse(colorSwatches[0].dataset.images);
+    updateGallery(initialImages);
+
+    // Size Guide Modal
+    const sizeGuideBtn = document.getElementById('size-guide-btn');
+    const sizeGuideModal = document.getElementById('size-guide-modal');
+    const sizeGuideOverlay = document.getElementById('size-guide-modal-overlay');
+    const closeSizeGuideBtn = document.getElementById('close-size-guide-button');
+
+    function toggleSizeGuideModal(open) {
+        if (open) {
+            sizeGuideModal.classList.remove('hidden');
+            sizeGuideOverlay.classList.remove('hidden');
+        } else {
+            sizeGuideModal.classList.add('hidden');
+            sizeGuideOverlay.classList.add('hidden');
+        }
+    }
+
+    sizeGuideBtn.addEventListener('click', () => toggleSizeGuideModal(true));
+    closeSizeGuideBtn.addEventListener('click', () => toggleSizeGuideModal(false));
+    sizeGuideOverlay.addEventListener('click', () => toggleSizeGuideModal(false));
+
+</script>
+
+<style>
+.btn-primary {
+    background-color: #204566;
+    color: #FFF5E0;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #163554;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(32, 69, 102, 0.3);
+}
+
+.btn-primary:disabled {
+    background-color: #6B7B8C;
+    cursor: not-allowed;
+}
+</style>

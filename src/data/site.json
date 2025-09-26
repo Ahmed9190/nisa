@@ -1,0 +1,14 @@
+{
+  "title": "nisa - Not for every eye",
+  "description": "A fashion e-commerce website for modest women's clothing.",
+  "navigation": [
+    { "name": "Home", "href": "/" },
+    { "name": "Shop", "href": "/shop" },
+    { "name": "About", "href": "/about" },
+    { "name": "Contact", "href": "/contact" }
+  ],
+  "footer": {
+    "copyright": "© 2025 nisa. All rights reserved.",
+    "tagline": "Elegance in Modesty. Not for every eye."
+  }
+}

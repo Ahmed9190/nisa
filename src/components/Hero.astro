@@ -1,0 +1,12 @@
+---
+import content from '../data/content.json';
+---
+
+<div class="relative text-center text-white h-[60vh] md:h-[80vh] flex items-center justify-center">
+    <img src={content.home.hero.backgroundImage} alt="Modest fashion cover" class="absolute inset-0 w-full h-full object-cover -z-10">
+    <div class="absolute inset-0 bg-black/40 -z-10"></div>
+    <div>
+        <h1 class="text-7xl md:text-8xl font-bold tracking-widest leading-tight" style="color: #FFF5E0;">{content.home.hero.title}</h1>
+        <p class="text-2xl mt-2" style="color: #FFF5E0;">{content.home.hero.subtitle}</p>
+    </div>
+</div>

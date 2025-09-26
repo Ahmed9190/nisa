@@ -1,0 +1,73 @@
+---
+import type { Product } from '../types';
+
+export interface Props {
+    product: Product;
+}
+
+const { product } = Astro.props;
+
+const formatPrice = (price: number, currency = 'EGP') => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency', currency, minimumFractionDigits: 0
+    }).format(price);
+};
+---
+
+<div class="product-card p-4 flex flex-col text-center border border-[#D4E4E8] rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
+    { !product.inStock && <div class="absolute top-2 left-2 bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">Sold Out</div> }
+    <a href={`/product/${product.id}`}>
+        <img src={product.colors[0].images[0]} alt={product.name} class="w-full h-auto object-cover rounded-md aspect-[3/4]">
+    </a>
+    <div class="flex-grow flex flex-col pt-4">
+        <h3 class="text-xl font-medium">{product.name}</h3>
+        <p class="text-lg text-[#6B7B8C] mt-1 flex-grow">{formatPrice(product.price)}</p>
+        <div class="mt-4 grid grid-cols-2 gap-2">
+            <a href={`/product/${product.id}`} class="btn-secondary py-2 px-4 text-sm">Details</a>
+            <button class="btn-primary py-2 px-4 text-sm add-to-cart-card-btn" data-product-id={product.id} disabled={!product.inStock}>
+                {product.inStock ? 'Add to Cart' : 'Sold Out'}
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.btn-primary {
+    background-color: #204566;
+    color: #FFF5E0;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #163554;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(32, 69, 102, 0.3);
+}
+.btn-primary:disabled {
+    background-color: #6B7B8C;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #204566;
+    border: 2px solid #204566;
+    padding: calc(0.5rem - 2px) calc(1rem - 2px);
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.btn-secondary:hover {
+    background-color: #204566;
+    color: #FFF5E0;
+}
+</style>

@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>nisa - Not for every eye</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles from design.md */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #FFF5E0; /* Warm Cream */
+            color: #204566; /* Deep Navy */
+        }
+
+        /* Applying design system colors and styles */
+        :root {
+            --brand-primary: #204566;
+            --brand-secondary: #BEE2E8;
+            --background-primary: #FFF5E0;
+            --text-primary: #204566;
+            --text-secondary: #6B7B8C;
+            --border-primary: #D4E4E8;
+        }
+
+        .btn-primary {
+            background-color: var(--brand-primary);
+            color: var(--background-primary);
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #163554; /* Darker navy */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(32, 69, 102, 0.3);
+        }
+        .btn-primary:disabled {
+            background-color: #6B7B8C;
+            cursor: not-allowed;
+        }
+
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--brand-primary);
+            border: 2px solid var(--brand-primary);
+            padding: calc(1rem - 2px) calc(2rem - 2px);
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--brand-primary);
+            color: var(--background-primary);
+        }
+
+        .product-card {
+            background-color: var(--background-primary);
+            border-radius: 12px;
+            box-shadow: 0 2px 16px rgba(32, 69, 102, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(32, 69, 102, 0.12);
+        }
+
+        .sold-out-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--text-secondary);
+            color: var(--background-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Cart Drawer transition */
+        #cart-drawer {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .form-input {
+          border: 1px solid var(--border-primary);
+          background: #FFFFFF;
+          padding: 0.75rem 1rem;
+          border-radius: 6px;
+          font-size: 16px;
+          width: 100%;
+          transition: border-color 0.2s ease;
+        }
+        .form-input:focus {
+          border-color: var(--brand-primary);
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(32, 69, 102, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-[#FFF5E0]/80 backdrop-blur-lg sticky top-0 z-40 border-b border-[#D4E4E8]">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <a href="#home" class="text-4xl font-medium tracking-wider nav-link">nisa</a>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-10">
+                    <a href="#home" class="text-lg hover:text-[#6B7B8C] transition-colors nav-link">Home</a>
+                    <a href="#shop" class="text-lg hover:text-[#6B7B8C] transition-colors nav-link">Shop</a>
+                    <a href="#about" class="text-lg hover:text-[#6B7B8C] transition-colors nav-link">About</a>
+                    <a href="#contact" class="text-lg hover:text-[#6B7B8C] transition-colors nav-link">Contact</a>
+                </nav>
+
+                <!-- Cart Icon -->
+                <div class="flex items-center">
+                    <button id="cart-button" class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-[#BEE2E8] text-[#204566] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center cart-count" style="display: none;">0</span>
+                    </button>
+                    <button id="mobile-menu-button" class="ml-4 md:hidden">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+         <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
+            <a href="#home" class="block text-lg hover:text-[#6B7B8C] transition-colors nav-link">Home</a>
+            <a href="#shop" class="block text-lg hover:text-[#6B7B8C] transition-colors nav-link">Shop</a>
+            <a href="#about" class="block text-lg hover:text-[#6B7B8C] transition-colors nav-link">About</a>
+            <a href="#contact" class="block text-lg hover:text-[#6B7B8C] transition-colors nav-link">Contact</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="app-content">
+        <!-- Content for different pages will be injected here -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-[#D4E4E8] mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-[#6B7B8C]">
+                <p>&copy; 2025 nisa. All rights reserved.</p>
+                <p class="mt-2 text-sm">Elegance in Modesty. Not for every eye.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div id="cart-drawer-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-[#FFF5E0] shadow-2xl z-50 transform translate-x-full">
+        <div class="flex flex-col h-full">
+            <div class="flex items-center justify-between p-6 border-b border-[#D4E4E8]">
+                <h2 class="text-2xl font-medium">Your Cart</h2>
+                <button id="close-cart-button" class="text-3xl">&times;</button>
+            </div>
+            <div id="cart-items" class="flex-grow p-6 overflow-y-auto">
+                <!-- Cart items will be injected here -->
+                <p class="text-center text-[#6B7B8C]">Your cart is empty.</p>
+            </div>
+            <div class="p-6 border-t border-[#D4E4E8]">
+                <div class="flex justify-between items-center text-xl font-medium mb-4">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal">EGP 0</span>
+                </div>
+                <button id="proceed-to-checkout" class="btn-primary w-full">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Size Guide Modal -->
+    <div id="size-guide-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"></div>
+    <div id="size-guide-modal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#FFF5E0] shadow-2xl z-50 rounded-lg p-8 w-11/12 max-w-2xl hidden">
+         <button id="close-size-guide-button" class="absolute top-4 right-4 text-3xl">&times;</button>
+         <h2 class="text-2xl font-medium mb-4 text-center">Size Guide</h2>
+         <p class="text-center text-[#6B7B8C] mb-6">All measurements are in centimeters (cm).</p>
+         <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-[#D4E4E8]">
+                        <th class="py-2 px-4">Size</th>
+                        <th class="py-2 px-4">Bust</th>
+                        <th class="py-2 px-4">Waist</th>
+                        <th class="py-2 px-4">Hips</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-[#D4E4E8]">
+                        <td class="py-2 px-4 font-medium">S</td>
+                        <td class="py-2 px-4">86-89</td>
+                        <td class="py-2 px-4">69-71</td>
+                        <td class="py-2 px-4">94-97</td>
+                    </tr>
+                    <tr class="border-b border-[#D4E4E8]">
+                        <td class="py-2 px-4 font-medium">M</td>
+                        <td class="py-2 px-4">91-94</td>
+                        <td class="py-2 px-4">74-76</td>
+                        <td class="py-2 px-4">99-102</td>
+                    </tr>
+                     <tr class="border-b border-[#D4E4E8]">
+                        <td class="py-2 px-4 font-medium">L</td>
+                        <td class="py-2 px-4">98-102</td>
+                        <td class="py-2 px-4">80-84</td>
+                        <td class="py-2 px-4">105-109</td>
+                    </tr>
+                     <tr>
+                        <td class="py-2 px-4 font-medium">XL</td>
+                        <td class="py-2 px-4">105-109</td>
+                        <td class="py-2 px-4">88-92</td>
+                        <td class="py-2 px-4">113-117</td>
+                    </tr>
+                </tbody>
+            </table>
+         </div>
+    </div>
+
+
+    <!-- Page Templates -->
+    <template id="home-page-template">
+        <div class="relative text-center text-white h-[60vh] md:h-[80vh] flex items-center justify-center">
+            <img src="https://picsum.photos/1920/1080?grayscale&blur=2" alt="Modest fashion cover" class="absolute inset-0 w-full h-full object-cover -z-10">
+            <div class="absolute inset-0 bg-black/40 -z-10"></div>
+            <div>
+                <h1 class="text-7xl md:text-8xl font-bold tracking-widest leading-tight" style="color: #FFF5E0;">nisa</h1>
+                <p class="text-2xl mt-2" style="color: #FFF5E0;">Not for every eye</p>
+            </div>
+        </div>
+
+        <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-12">
+            <h2 class="text-3xl font-medium text-center mb-12">Featured Collection</h2>
+            <div id="featured-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Featured products will be injected here -->
+            </div>
+             <div class="text-center mt-16">
+                <a href="#shop" class="btn-secondary nav-link">Shop The Full Collection</a>
+            </div>
+        </section>
+    </template>
+
+    <template id="shop-page-template">
+         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h1 class="text-4xl font-medium text-center mb-12">Our Collection</h1>
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Filters -->
+                <aside class="w-full md:w-1/4">
+                    <h3 class="text-xl font-medium mb-4">Filters</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium mb-2">Color</h4>
+                            <div id="color-filters" class="flex flex-wrap gap-2">
+                                 <!-- Color filters injected here -->
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                <!-- Product Grid -->
+                <div id="shop-products" class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Shop products will be injected here -->
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="product-page-template">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+             <div class="flex flex-col lg:flex-row gap-12">
+                <div class="w-full lg:w-1/2">
+                    <img id="product-image" src="" alt="Product Image" class="w-full rounded-lg shadow-lg sticky top-24">
+                </div>
+                <div class="w-full lg:w-1/2">
+                    <h1 id="product-name" class="text-4xl font-medium"></h1>
+                    <p id="product-price" class="text-2xl my-4"></p>
+                    <p id="product-description" class="text-[#6B7B8C] leading-relaxed mb-6"></p>
+
+                    <div class="mb-6">
+                        <label class="block font-medium mb-2">Color</label>
+                        <div id="product-colors" class="flex gap-2"></div>
+                    </div>
+
+                    <div class="mb-6">
+                         <div class="flex justify-between items-center mb-2">
+                            <label class="block font-medium">Size</label>
+                            <button id="size-guide-btn" class="text-sm text-[#6B7B8C] underline hover:text-[#204566]">Size Guide</button>
+                        </div>
+                        <select id="product-size" class="w-full p-3 border border-[#D4E4E8] rounded-md bg-white">
+                        </select>
+                    </div>
+
+                    <button id="add-to-cart-btn" class="btn-primary w-full">Add to Cart</button>
+                    <p id="sold-out-message" class="text-center mt-4 text-red-600 font-semibold hidden">This product is currently sold out.</p>
+
+                     <div class="mt-8 flex justify-around text-center text-sm text-[#6B7B8C] border-t border-b border-[#D4E4E8] py-4">
+                        <div class="flex items-center gap-2">
+                            <span>✓</span><span>Hassle-Free Returns</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                           <span>✓</span><span>Secure Payments</span>
+                        </div>
+                         <div class="flex items-center gap-2">
+                           <span>✓</span><span>Quality Fabrics</span>
+                        </div>
+                    </div>
+
+                    <div id="product-details-accordion" class="mt-8">
+                        <h3 class="text-xl font-medium mb-4 border-b border-[#D4E4E8] pb-2">Details & Fit</h3>
+                        <ul class="text-[#6B7B8C] space-y-2">
+                            <li><strong>Fabric:</strong> <span id="product-fabric"></span></li>
+                            <li><strong>Fit:</strong> <span id="product-fit"></span></li>
+                            <li><strong>Care:</strong> <span id="product-care"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+             <section id="related-products-section" class="mt-24">
+                <h2 class="text-3xl font-medium text-center mb-12">You Might Also Like</h2>
+                <div id="related-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                </div>
+            </section>
+        </div>
+    </template>
+
+    <template id="about-page-template">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-4xl font-medium mb-8">Our Story</h1>
+                <p class="text-lg text-[#6B7B8C] leading-relaxed">
+                    nisa was born from a desire to blend timeless modesty with contemporary elegance. We believe that style should be an expression of self, and for many women, that expression includes a commitment to modest dress. Our brand is a celebration of this choice, offering beautifully crafted pieces that are both sophisticated and empowering. The name 'nisa', meaning 'women' in Arabic, is at the core of our mission: to serve and uplift women through fashion that resonates with their values.
+                </p>
+            </div>
+        </div>
+    </template>
+
+    <template id="contact-page-template">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+             <div class="max-w-xl mx-auto">
+                <h1 class="text-4xl font-medium text-center mb-8">Get In Touch</h1>
+                <form action="https://formspree.io/f/xyzdlwgd" method="POST" class="space-y-6">
+                    <div>
+                        <label for="name" class="block font-medium mb-2">Name</label>
+                        <input type="text" id="name" name="name" class="w-full p-3 border border-[#D4E4E8] rounded-md focus:border-[#204566] focus:ring focus:ring-[#204566]/20 outline-none transition">
+                    </div>
+                     <div>
+                        <label for="email" class="block font-medium mb-2">Email</label>
+                        <input type="email" id="email" name="email" class="w-full p-3 border border-[#D4E4E8] rounded-md focus:border-[#204566] focus:ring focus:ring-[#204566]/20 outline-none transition">
+                    </div>
+                     <div>
+                        <label for="message" class="block font-medium mb-2">Message</label>
+                        <textarea id="message" name="message" rows="5" class="w-full p-3 border border-[#D4E4E8] rounded-md focus:border-[#204566] focus:ring focus:ring-[#204566]/20 outline-none transition"></textarea>
+                    </div>
+                    <div class="text-center">
+                         <button type="submit" class="btn-primary">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+
+    <template id="checkout-page-template">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h1 class="text-4xl font-medium text-center mb-2">Checkout</h1>
+            <p class="text-center text-[#6B7B8C] mb-12">Complete your purchase</p>
+            <form id="checkout-form" action="https://formspree.io/f/xyzdlwgd" method="POST" class="flex flex-col-reverse lg:flex-row gap-12">
+                <!-- Left Side: Form -->
+                <div class="w-full lg:w-3/5">
+                    <div class="space-y-8">
+                        <!-- Contact Information -->
+                        <div>
+                            <h2 class="text-2xl font-medium mb-4">Contact Information</h2>
+                            <input type="email" name="email" placeholder="Email Address" class="form-input" required>
+                        </div>
+                        <!-- Shipping Address -->
+                        <div>
+                            <h2 class="text-2xl font-medium mb-4">Shipping Address</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <input type="text" name="fullName" placeholder="Full Name" class="form-input sm:col-span-2" required>
+                                <input type="text" name="streetAddress" placeholder="Street Address" class="form-input sm:col-span-2" required>
+                                <input type="text" name="apartment" placeholder="Apartment, suite, etc. (optional)" class="form-input sm:col-span-2">
+                                <input type="text" name="city" placeholder="City" class="form-input" required>
+                                <select name="governorate" class="form-input" required>
+                                    <option disabled selected value="">Governorate</option>
+                                    <option>Cairo</option>
+                                    <option>Giza</option>
+                                    <option>Alexandria</option>
+                                    <option>Qalyubia</option>
+                                </select>
+                                <textarea name="deliveryInstructions" placeholder="Landmark or special delivery instructions" rows="3" class="form-input sm:col-span-2"></textarea>
+                            </div>
+                        </div>
+                         <!-- Hidden fields for order data -->
+                        <input type="hidden" name="orderSummary" id="order-summary-input">
+                        <input type="hidden" name="orderTotal" id="order-total-input">
+                    </div>
+                </div>
+                <!-- Right Side: Order Summary -->
+                <div class="w-full lg:w-2/5">
+                    <div class="border border-[#D4E4E8] bg-white/50 rounded-lg p-6 sticky top-24">
+                        <h2 class="text-2xl font-medium mb-6">Order Summary</h2>
+                        <div id="checkout-items" class="space-y-4 max-h-64 overflow-y-auto mb-6 pr-2">
+                            <!-- Checkout items injected here -->
+                        </div>
+                        <div class="space-y-2 border-t border-[#D4E4E8] pt-4">
+                            <div class="flex justify-between text-[#6B7B8C]"><span>Subtotal</span><span id="checkout-subtotal"></span></div>
+                            <div class="flex justify-between text-[#6B7B8C]"><span>Shipping</span><span id="checkout-shipping"></span></div>
+                            <div class="flex justify-between font-bold text-lg border-t border-[#D4E4E8] pt-2 mt-2"><span>Total</span><span id="checkout-total"></span></div>
+                        </div>
+                        <button type="submit" class="btn-primary w-full mt-6">Place Order</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </template>
+
+    <!-- Product data and App Logic -->
+    <script type="module">
+        // --- DATA (from products.json) ---
+        const productData = {
+          "products": [
+            {
+              "id": "abaya-01", "name": "Classic Linen Abaya", "price": 1850, "currency": "EGP",
+              "description": "An essential piece for any modest wardrobe. Crafted from breathable linen, perfect for year-round comfort and elegance.",
+              "details": { "fabric": "100% Premium Linen", "fit": "Relaxed, straight cut", "care": "Machine wash cold, hang to dry." },
+              "sizes": ["S", "M", "L", "XL"],
+              "colors": [
+                { "name": "Charcoal", "code": "#36454F", "images": ["https://picsum.photos/seed/abaya-charcoal/600/800"] },
+                { "name": "Dusty Rose", "code": "#D4A4A4", "images": ["https://picsum.photos/seed/abaya-rose/600/800"] }
+              ],
+              "category": "abayas", "featured": true, "inStock": true, "sku": "NSA-001"
+            },
+            {
+              "id": "hijab-01", "name": "Luxury Silk Hijab", "price": 750, "currency": "EGP",
+              "description": "Experience the soft touch of pure silk. This hijab drapes beautifully and adds a touch of luxury to any outfit.",
+              "details": { "fabric": "100% Mulberry Silk", "fit": "Large rectangle (200cm x 70cm)", "care": "Hand wash only, lay flat to dry." },
+              "sizes": ["One Size"],
+              "colors": [
+                { "name": "Pearl", "code": "#EAE0C8", "images": ["https://picsum.photos/seed/hijab-pearl/600/800"] },
+                { "name": "Midnight Blue", "code": "#003366", "images": ["https://picsum.photos/seed/hijab-blue/600/800"] },
+                { "name": "Emerald", "code": "#50C878", "images": ["https://picsum.photos/seed/hijab-emerald/600/800"] }
+              ],
+              "category": "hijabs", "featured": true, "inStock": false, "sku": "NSA-002"
+            },
+            {
+              "id": "dress-01", "name": "Modest Maxi Dress", "price": 2100, "currency": "EGP",
+              "description": "A flowing maxi dress with a defined waist and long sleeves. Perfect for special occasions or elegant everyday wear.",
+              "details": { "fabric": "Viscose-Crepe Blend", "fit": "A-line silhouette, fitted waist", "care": "Gentle machine wash." },
+              "sizes": ["S", "M", "L"],
+              "colors": [
+                { "name": "Sage Green", "code": "#B2AC88", "images": ["https://picsum.photos/seed/dress-sage/600/800"] },
+                { "name": "Terracotta", "code": "#E2725B", "images": ["https://picsum.photos/seed/dress-terracotta/600/800"] }
+              ],
+              "category": "dresses", "featured": true, "inStock": true, "sku": "NSA-003"
+            },
+            {
+              "id": "abaya-02", "name": "Embroidered Kimono Abaya", "price": 2500, "currency": "EGP",
+              "description": "An open-front kimono style abaya with delicate embroidery on the sleeves. A true statement piece.",
+              "details": { "fabric": "Nida Fabric", "fit": "Open front, wide sleeves", "care": "Dry clean recommended." },
+              "sizes": ["M", "L", "XL"],
+              "colors": [
+                { "name": "Black", "code": "#000000", "images": ["https://picsum.photos/seed/abaya-black/600/800"] }
+              ],
+              "category": "abayas", "featured": false, "inStock": true, "sku": "NSA-004"
+            },
+            {
+              "id": "tunic-01", "name": "High-Neck Tunic", "price": 1200, "currency": "EGP",
+              "description": "A versatile high-neck tunic that can be dressed up or down. Features a relaxed fit and side slits for ease of movement.",
+              "details": { "fabric": "Cotton Poplin", "fit": "Relaxed fit", "care": "Machine wash warm." },
+              "sizes": ["S", "M", "L", "XL"],
+              "colors": [
+                { "name": "White", "code": "#FFFFFF", "images": ["https://picsum.photos/seed/tunic-white/600/800"] },
+                { "name": "Beige", "code": "#F5F5DC", "images": ["https://picsum.photos/seed/tunic-beige/600/800"] }
+              ],
+              "category": "tunics", "featured": false, "inStock": true, "sku": "NSA-005"
+            },
+            {
+              "id": "hijab-02", "name": "Pleated Chiffon Hijab", "price": 650, "currency": "EGP",
+              "description": "Lightweight and elegant, this pleated chiffon hijab adds texture and sophistication to your look.",
+              "details": { "fabric": "Polyester Chiffon", "fit": "Standard rectangle (180cm x 70cm)", "care": "Hand wash recommended." },
+              "sizes": ["One Size"],
+              "colors": [
+                { "name": "Mauve", "code": "#E0B0FF", "images": ["https://picsum.photos/seed/hijab-mauve/600/800"] },
+                { "name": "Navy", "code": "#000080", "images": ["https://picsum.photos/seed/hijab-navy/600/800"] }
+              ],
+              "category": "hijabs", "featured": false, "inStock": true, "sku": "NSA-006"
+            },
+            {
+              "id": "trousers-01", "name": "Crepe Wide-Leg Trousers", "price": 1400, "currency": "EGP",
+              "description": "Effortlessly chic wide-leg trousers in a beautiful crepe fabric that drapes perfectly.",
+              "details": { "fabric": "Polyester Crepe", "fit": "High-waisted, wide-leg", "care": "Machine wash cold." },
+              "sizes": ["S", "M", "L"],
+              "colors": [
+                { "name": "Camel", "code": "#C19A6B", "images": ["https://picsum.photos/seed/trousers-camel/600/800"] }
+              ],
+              "category": "trousers", "featured": false, "inStock": true, "sku": "NSA-007"
+            },
+            {
+              "id": "dress-02", "name": "Tiered Cotton Maxi Dress", "price": 2300, "currency": "EGP",
+              "description": "A romantic and feminine tiered maxi dress made from soft, breathable cotton. Perfect for summer days.",
+              "details": { "fabric": "100% Cotton", "fit": "Tiered A-line", "care": "Machine wash cold." },
+              "sizes": ["M", "L", "XL"],
+              "colors": [
+                { "name": "Sky Blue", "code": "#87CEEB", "images": ["https://picsum.photos/seed/dress-skyblue/600/800"] }
+              ],
+              "category": "dresses", "featured": false, "inStock": false, "sku": "NSA-008"
+            },
+            {
+              "id": "skirt-01", "name": "Pleated Satin Midi Skirt", "price": 1600, "currency": "EGP",
+              "description": "A luxurious pleated satin skirt with beautiful movement. Ideal for dressing up for any occasion.",
+              "details": { "fabric": "Polyester Satin", "fit": "A-line midi", "care": "Dry clean only." },
+              "sizes": ["S", "M", "L"],
+              "colors": [
+                { "name": "Champagne", "code": "#F7E7CE", "images": ["https://picsum.photos/seed/skirt-champagne/600/800"] },
+                { "name": "Forest Green", "code": "#228B22", "images": ["https://picsum.photos/seed/skirt-green/600/800"] }
+              ],
+              "category": "skirts", "featured": true, "inStock": true, "sku": "NSA-009"
+            },
+            {
+              "id": "abaya-03", "name": "Batwing Sleeve Abaya", "price": 2200, "currency": "EGP",
+              "description": "A modern take on the classic abaya, featuring dramatic batwing sleeves for a contemporary silhouette.",
+              "details": { "fabric": "Lightweight Crepe", "fit": "Oversized, batwing sleeves", "care": "Gentle machine wash." },
+              "sizes": ["One Size"],
+              "colors": [
+                { "name": "Greige", "code": "#BEBDB8", "images": ["https://picsum.photos/seed/abaya-greige/600/800"] }
+              ],
+              "category": "abayas", "featured": false, "inStock": true, "sku": "NSA-010"
+            },
+             {
+              "id": "hijab-03", "name": "Everyday Jersey Hijab", "price": 450, "currency": "EGP",
+              "description": "The perfect go-to hijab for daily wear. Made from soft, stretchy jersey for ultimate comfort.",
+              "details": { "fabric": "Cotton Jersey Blend", "fit": "Standard rectangle (180cm x 85cm)", "care": "Machine wash cold." },
+              "sizes": ["One Size"],
+              "colors": [
+                { "name": "Heather Grey", "code": "#B2B2B2", "images": ["https://picsum.photos/seed/hijab-grey/600/800"] },
+                { "name": "Mocha", "code": "#967969", "images": ["https://picsum.photos/seed/hijab-mocha/600/800"] }
+              ],
+              "category": "hijabs", "featured": false, "inStock": true, "sku": "NSA-011"
+            },
+            {
+              "id": "tunic-02", "name": "Button-Front Linen Tunic", "price": 1350, "currency": "EGP",
+              "description": "A classic button-front tunic in breathable linen. Can be worn as a shirt or a light outer layer.",
+              "details": { "fabric": "Linen Blend", "fit": "Straight cut", "care": "Machine wash cold." },
+              "sizes": ["S", "M", "L"],
+              "colors": [
+                { "name": "Olive", "code": "#808000", "images": ["https://picsum.photos/seed/tunic-olive/600/800"] }
+              ],
+              "category": "tunics", "featured": false, "inStock": true, "sku": "NSA-012"
+            },
+             {
+              "id": "dress-03", "name": "Shirt Dress with Belt", "price": 1950, "currency": "EGP",
+              "description": "A smart and stylish shirt dress with a matching belt to cinch the waist. Perfect for a professional look.",
+              "details": { "fabric": "Tencel", "fit": "Regular fit, belted waist", "care": "Gentle machine wash." },
+              "sizes": ["S", "M", "L", "XL"],
+              "colors": [
+                { "name": "Denim Blue", "code": "#6F8FAF", "images": ["https://picsum.photos/seed/dress-denim/600/800"] }
+              ],
+              "category": "dresses", "featured": false, "inStock": true, "sku": "NSA-013"
+            },
+            {
+              "id": "trousers-02", "name": "Tailored Straight-Leg Trousers", "price": 1500, "currency": "EGP",
+              "description": "Polished and professional, these straight-leg trousers are a wardrobe staple for the modern working woman.",
+              "details": { "fabric": "Polyester Blend", "fit": "Straight-leg, mid-rise", "care": "Machine wash warm." },
+              "sizes": ["S", "M", "L", "XL"],
+              "colors": [
+                { "name": "Graphite", "code": "#383428", "images": ["https://picsum.photos/seed/trousers-graphite/600/800"] }
+              ],
+              "category": "trousers", "featured": false, "inStock": true, "sku": "NSA-014"
+            },
+            {
+              "id": "skirt-02", "name": "Denim A-Line Maxi Skirt", "price": 1750, "currency": "EGP",
+              "description": "A versatile and timeless A-line maxi skirt in a classic dark wash denim.",
+              "details": { "fabric": "Cotton Denim", "fit": "A-line maxi", "care": "Machine wash cold." },
+              "sizes": ["S", "M", "L"],
+              "colors": [
+                { "name": "Indigo", "code": "#4B0082", "images": ["https://picsum.photos/seed/skirt-indigo/600/800"] }
+              ],
+              "category": "skirts", "featured": false, "inStock": true, "sku": "NSA-015"
+            }
+          ]
+        };
+
+        // --- UTILS (from utils.js) ---
+        const formatPrice = (price, currency = 'EGP') => {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency', currency, minimumFractionDigits: 0
+            }).format(price);
+        };
+
+        // --- PRODUCT MANAGER (from product.js) ---
+        class ProductManager {
+            constructor() {
+                this.products = []; this.filteredProducts = [];
+                this.currentFilters = { color: null };
+            }
+            loadProducts(data) {
+                this.products = data.products;
+                this.filteredProducts = [...this.products];
+                return this.products;
+            }
+            getProductById(id) { return this.products.find(p => p.id === id); }
+            getFeaturedProducts() { return this.products.filter(p => p.featured); }
+            getRelatedProducts(currentProductId) {
+                return this.products.filter(p => p.id !== currentProductId).slice(0, 3);
+            }
+            filterProducts(filters) {
+                this.currentFilters = { ...this.currentFilters, ...filters };
+                this.filteredProducts = this.products.filter(p => {
+                    if (this.currentFilters.color && !p.colors.some(c => c.name === this.currentFilters.color)) {
+                        return false;
+                    }
+                    return true;
+                });
+                return this.filteredProducts;
+            }
+            getAllColors() {
+                const allColors = new Set();
+                this.products.forEach(p => p.colors.forEach(c => allColors.add(JSON.stringify({name: c.name, code: c.code}))));
+                return Array.from(allColors).map(c => JSON.parse(c));
+            }
+        }
+
+        // --- SHOPPING CART (from cart.js) ---
+        class ShoppingCart {
+            constructor() { this.items = JSON.parse(localStorage.getItem('nisaCart')) || []; }
+            addItem(product, color, size, quantity = 1) {
+                const existingItem = this.items.find(i => i.id === product.id && i.size === size && i.color.name === color.name);
+                if (existingItem) { existingItem.quantity += quantity; }
+                else {
+                    this.items.push({ id: product.id, name: product.name, price: product.price, size, color, quantity, image: color.images[0] });
+                }
+                this.save();
+            }
+            removeItem(itemId, colorName, size) {
+                this.items = this.items.filter(i => !(i.id === itemId && i.color.name === colorName && i.size === size));
+                this.save();
+            }
+            updateQuantity(itemId, colorName, size, newQuantity) {
+                const item = this.items.find(i => i.id === itemId && i.color.name === colorName && i.size === size);
+                if (item) {
+                    if (newQuantity > 0) {
+                        item.quantity = newQuantity;
+                    } else {
+                        this.removeItem(itemId, colorName, size);
+                    }
+                }
+                this.save();
+            }
+            clearCart() {
+                this.items = [];
+                this.save();
+            }
+            getTotal() { return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0); }
+            getItemCount() { return this.items.reduce((sum, item) => sum + item.quantity, 0); }
+            save() { localStorage.setItem('nisaCart', JSON.stringify(this.items)); }
+        }
+
+        // --- APP STATE (from AppState.js) ---
+        class AppState {
+            constructor() {
+                this.state = {
+                    cart: new ShoppingCart(),
+                    products: new ProductManager(),
+                    currentPage: 'home',
+                    currentProduct: null,
+                };
+            }
+            setState(key, value) { this.state[key] = value; }
+            getState(key) { return this.state[key]; }
+        }
+
+        // --- MAIN APP LOGIC (app.js) ---
+        class App {
+            constructor() {
+                this.appState = new AppState();
+                this.appContent = document.getElementById('app-content');
+                this.init();
+            }
+
+            init() {
+                this.appState.getState('products').loadProducts(productData);
+                this.setupEventListeners();
+                this.handleRouteChange();
+                this.updateCartUI();
+            }
+
+            setupEventListeners() {
+                // Main Navigation
+                document.body.addEventListener('click', e => {
+                    const navLink = e.target.closest('.nav-link');
+                    if (navLink) {
+                        e.preventDefault();
+                        this.appState.setState('currentPage', navLink.hash.substring(1));
+                        window.location.hash = navLink.hash;
+                        this.handleRouteChange();
+                    }
+                });
+
+                // Dynamic content navigation (delegated from body)
+                document.body.addEventListener('click', e => {
+                    const productLink = e.target.closest('.product-link');
+                    const addToCartButton = e.target.closest('.add-to-cart-card-btn');
+
+                    if (productLink) {
+                        e.preventDefault();
+                        const productId = productLink.dataset.productId;
+                        this.appState.setState('currentProduct', this.appState.getState('products').getProductById(productId));
+                        this.appState.setState('currentPage', 'product');
+                        window.location.hash = 'product';
+                        this.handleRouteChange();
+                    }
+                    else if (addToCartButton) {
+                        e.preventDefault();
+                        const productId = addToCartButton.dataset.productId;
+                        const product = this.appState.getState('products').getProductById(productId);
+                        if (product && product.inStock) {
+                            const defaultColor = product.colors[0];
+                            const defaultSize = product.sizes[0];
+                            this.appState.getState('cart').addItem(product, defaultColor, defaultSize);
+                            this.updateCartUI();
+                            this.toggleCartDrawer(true);
+                        }
+                    }
+                });
+
+                // Cart Drawer
+                document.getElementById('cart-button').addEventListener('click', () => this.toggleCartDrawer(true));
+                document.getElementById('close-cart-button').addEventListener('click', () => this.toggleCartDrawer(false));
+                document.getElementById('cart-drawer-overlay').addEventListener('click', () => this.toggleCartDrawer(false));
+                document.getElementById('proceed-to-checkout').addEventListener('click', () => {
+                    if (this.appState.getState('cart').getItemCount() === 0) return;
+                    this.appState.setState('currentPage', 'checkout');
+                    window.location.hash = 'checkout';
+                    this.handleRouteChange();
+                    this.toggleCartDrawer(false);
+                });
+
+                // Checkout form submission
+                document.body.addEventListener('submit', e => {
+                    if (e.target.id === 'checkout-form') {
+                        // The form will submit to Formspree.
+                        // We clear the cart after a brief delay to ensure form data is captured.
+                        setTimeout(() => {
+                            this.appState.getState('cart').clearCart();
+                            this.updateCartUI();
+                        }, 500);
+                    }
+                });
+
+                // Mobile Menu
+                document.getElementById('mobile-menu-button').addEventListener('click', () => {
+                    document.getElementById('mobile-menu').classList.toggle('hidden');
+                });
+
+                // Size Guide Modal
+                document.body.addEventListener('click', e => {
+                    if (e.target.id === 'size-guide-btn') {
+                        this.toggleSizeGuideModal(true);
+                    }
+                    if (e.target.id === 'close-size-guide-button' || e.target.id === 'size-guide-modal-overlay') {
+                         this.toggleSizeGuideModal(false);
+                    }
+                });
+            }
+
+            handleRouteChange() {
+                const page = window.location.hash.substring(1) || 'home';
+                this.appState.setState('currentPage', page);
+
+                switch(page) {
+                    case 'shop': this.renderShopPage(); break;
+                    case 'product': this.renderProductPage(); break;
+                    case 'about': this.renderStaticPage('about'); break;
+                    case 'contact': this.renderStaticPage('contact'); break;
+                    case 'checkout': this.renderCheckoutPage(); break;
+                    case 'home':
+                    default: this.renderHomePage(); break;
+                }
+                window.scrollTo(0, 0);
+            }
+
+            createProductCard(product) {
+                 const soldOutBadge = !product.inStock ? `<div class="sold-out-badge">Sold Out</div>` : '';
+                 const disabled = !product.inStock ? 'disabled' : '';
+                 const buttonText = !product.inStock ? 'Sold Out' : 'Add to Cart';
+
+                 return `
+                    <div class="product-card p-4 flex flex-col text-center">
+                        ${soldOutBadge}
+                        <a href="#product" class="product-link" data-product-id="${product.id}">
+                            <img src="${product.colors[0].images[0]}" alt="${product.name}" class="w-full h-auto object-cover rounded-md aspect-[3/4]">
+                        </a>
+                        <div class="flex-grow flex flex-col pt-4">
+                            <h3 class="text-xl font-medium">${product.name}</h3>
+                            <p class="text-lg text-[#6B7B8C] mt-1 flex-grow">${formatPrice(product.price)}</p>
+                            <div class="mt-4 grid grid-cols-2 gap-2">
+                                <button class="btn-secondary py-2 px-4 text-sm product-link" data-product-id="${product.id}">Details</button>
+                                <button class="btn-primary py-2 px-4 text-sm add-to-cart-card-btn" data-product-id="${product.id}" ${disabled}>${buttonText}</button>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            renderHomePage() {
+                const template = document.getElementById('home-page-template').content.cloneNode(true);
+                this.appContent.innerHTML = '';
+                this.appContent.appendChild(template);
+                const featuredContainer = this.appContent.querySelector('#featured-products');
+                const featured = this.appState.getState('products').getFeaturedProducts();
+                featuredContainer.innerHTML = featured.map(p => this.createProductCard(p)).join('');
+            }
+
+            renderShopPage() {
+                const template = document.getElementById('shop-page-template').content.cloneNode(true);
+                this.appContent.innerHTML = '';
+                this.appContent.appendChild(template);
+                this.renderProductGrid();
+                this.renderColorFilters();
+            }
+
+            renderProductPage() {
+                const product = this.appState.getState('currentProduct');
+                if (!product) { this.handleRouteChange(); return; }
+                const template = document.getElementById('product-page-template').content.cloneNode(true);
+                this.appContent.innerHTML = '';
+                this.appContent.appendChild(template);
+
+                const addToCartBtn = document.getElementById('add-to-cart-btn');
+                const soldOutMsg = document.getElementById('sold-out-message');
+
+                document.getElementById('product-image').src = product.colors[0].images[0];
+                document.getElementById('product-name').textContent = product.name;
+                document.getElementById('product-price').textContent = formatPrice(product.price);
+                document.getElementById('product-description').textContent = product.description;
+                document.getElementById('product-fabric').textContent = product.details.fabric;
+                document.getElementById('product-fit').textContent = product.details.fit;
+                document.getElementById('product-care').textContent = product.details.care;
+
+                if (!product.inStock) {
+                    addToCartBtn.disabled = true;
+                    addToCartBtn.textContent = 'Sold Out';
+                    soldOutMsg.classList.remove('hidden');
+                }
+
+                const colorsContainer = document.getElementById('product-colors');
+                colorsContainer.innerHTML = product.colors.map((color, index) => `
+                    <button class="color-swatch border-2 rounded-full h-8 w-8 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#204566] ${index === 0 ? 'border-[#204566]' : 'border-transparent'}" style="background-color: ${color.code};" data-color='${JSON.stringify(color)}'></button>
+                `).join('');
+
+                const sizesContainer = document.getElementById('product-size');
+                sizesContainer.innerHTML = product.sizes.map(size => `<option value="${size}">${size}</option>`).join('');
+
+                let selectedColor = product.colors[0];
+                colorsContainer.addEventListener('click', e => {
+                    if (e.target.classList.contains('color-swatch')) {
+                        colorsContainer.querySelectorAll('.color-swatch').forEach(el => el.classList.remove('border-[#204566]'));
+                        e.target.classList.add('border-[#204566]');
+                        selectedColor = JSON.parse(e.target.dataset.color);
+                        document.getElementById('product-image').src = selectedColor.images[0];
+                    }
+                });
+
+                addToCartBtn.onclick = () => {
+                    const selectedSize = sizesContainer.value;
+                    this.appState.getState('cart').addItem(product, selectedColor, selectedSize);
+                    this.updateCartUI();
+                    this.toggleCartDrawer(true);
+                };
+
+                // Render related products
+                const relatedContainer = document.getElementById('related-products');
+                const related = this.appState.getState('products').getRelatedProducts(product.id);
+                relatedContainer.innerHTML = related.map(p => this.createProductCard(p)).join('');
+            }
+
+            renderCheckoutPage() {
+                const template = document.getElementById('checkout-page-template').content.cloneNode(true);
+                this.appContent.innerHTML = '';
+                this.appContent.appendChild(template);
+
+                const cart = this.appState.getState('cart');
+                const itemsContainer = document.getElementById('checkout-items');
+                const subtotalEl = document.getElementById('checkout-subtotal');
+                const shippingEl = document.getElementById('checkout-shipping');
+                const totalEl = document.getElementById('checkout-total');
+
+                const shippingCost = cart.items.length > 0 ? 50 : 0;
+
+                if (cart.items.length === 0) {
+                    itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
+                     document.querySelector('#checkout-form button[type="submit"]').disabled = true;
+                } else {
+                    itemsContainer.innerHTML = cart.items.map(item => `
+                        <div class="flex gap-4 items-center">
+                            <div class="relative">
+                                <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-md">
+                                <span class="absolute -top-2 -right-2 bg-[#BEE2E8] text-[#204566] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">${item.quantity}</span>
+                            </div>
+                            <div class="flex-grow">
+                                <h4 class="font-medium text-sm">${item.name}</h4>
+                                <p class="text-xs text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
+                            </div>
+                            <span class="text-sm font-medium">${formatPrice(item.price * item.quantity)}</span>
+                        </div>
+                    `).join('');
+                }
+
+                const subtotal = cart.getTotal();
+                const total = subtotal + shippingCost;
+                subtotalEl.textContent = formatPrice(subtotal);
+                shippingEl.textContent = formatPrice(shippingCost);
+                totalEl.textContent = formatPrice(total);
+
+                // Populate hidden fields for Formspree
+                const orderSummaryInput = document.getElementById('order-summary-input');
+                const orderTotalInput = document.getElementById('order-total-input');
+
+                const summaryText = cart.items.map(item =>
+                    `${item.name} (${item.color.name} / ${item.size}) - Qty: ${item.quantity} - Price: ${formatPrice(item.price * item.quantity)}`
+                ).join('\n');
+
+                orderSummaryInput.value = summaryText;
+                orderTotalInput.value = formatPrice(total);
+            }
+
+            renderStaticPage(pageName) {
+                const template = document.getElementById(`${pageName}-page-template`);
+                if(template) {
+                    this.appContent.innerHTML = '';
+                    this.appContent.appendChild(template.content.cloneNode(true));
+                }
+            }
+
+            renderProductGrid() {
+                const productsContainer = document.getElementById('shop-products');
+                const products = this.appState.getState('products').filteredProducts;
+                if(products.length === 0) {
+                    productsContainer.innerHTML = `<p class="col-span-full text-center text-[#6B7B8C]">No products found matching your criteria.</p>`;
+                } else {
+                    productsContainer.innerHTML = products.map(p => this.createProductCard(p)).join('');
+                }
+            }
+
+            renderColorFilters() {
+                const colors = this.appState.getState('products').getAllColors();
+                const container = document.getElementById('color-filters');
+                const currentFilter = this.appState.getState('products').currentFilters.color;
+
+                let filtersHTML = `<button class="color-filter-btn text-sm px-3 py-1 rounded-full ${!currentFilter ? 'bg-[#204566] text-white' : 'bg-[#D4E4E8] text-[#204566]'}" data-color="all">All</button>`;
+                filtersHTML += colors.map(color => `
+                    <button class="color-filter-btn text-sm px-3 py-1 rounded-full ${currentFilter === color.name ? 'bg-[#204566] text-white' : 'bg-[#D4E4E8] text-[#204566]'}" data-color="${color.name}">
+                       ${color.name}
+                    </button>
+                `).join('');
+                container.innerHTML = filtersHTML;
+
+                container.addEventListener('click', e => {
+                    if(e.target.matches('.color-filter-btn')) {
+                        const color = e.target.dataset.color === 'all' ? null : e.target.dataset.color;
+                        this.appState.getState('products').filterProducts({ color });
+                        this.renderProductGrid();
+                        this.renderColorFilters(); // Re-render to update active state
+                    }
+                });
+            }
+
+            updateCartUI() {
+                const cart = this.appState.getState('cart');
+                const count = cart.getItemCount();
+                const countElements = document.querySelectorAll('.cart-count');
+                countElements.forEach(el => {
+                    el.textContent = count;
+                    el.style.display = count > 0 ? 'flex' : 'none';
+                });
+
+                const itemsContainer = document.getElementById('cart-items');
+                if (cart.items.length === 0) {
+                    itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
+                } else {
+                    itemsContainer.innerHTML = cart.items.map(item => `
+                        <div class="flex gap-4 mb-4">
+                            <img src="${item.image}" alt="${item.name}" class="w-24 h-32 object-cover rounded-md">
+                            <div class="flex-grow flex flex-col justify-between">
+                                <div>
+                                    <h4 class="font-medium">${item.name}</h4>
+                                    <p class="text-sm text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
+                                    <p class="font-medium mt-2">${formatPrice(item.price)}</p>
+                                </div>
+                                <div class="flex items-center border border-gray-300 rounded w-max mt-2">
+                                     <button class="px-2 py-1 cart-quantity-change" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}" data-amount="-1">-</button>
+                                     <span class="px-3 py-1">${item.quantity}</span>
+                                     <button class="px-2 py-1 cart-quantity-change" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}" data-amount="1">+</button>
+                                </div>
+                            </div>
+                             <button class="text-xs text-red-500 hover:underline remove-from-cart self-start" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}">Remove</button>
+                        </div>
+                    `).join('');
+
+                    itemsContainer.querySelectorAll('.remove-from-cart, .cart-quantity-change').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const { id, color, size, amount } = e.target.dataset;
+                            if (amount) { // It's a quantity change button
+                                const item = cart.items.find(i => i.id === id && i.color.name === color && i.size === size);
+                                if (item) {
+                                    const newQuantity = item.quantity + parseInt(amount);
+                                    cart.updateQuantity(id, color, size, newQuantity);
+                                }
+                            } else { // It's a remove button
+                                cart.removeItem(id, color, size);
+                            }
+                            this.updateCartUI();
+                        });
+                    });
+                }
+
+                document.getElementById('cart-subtotal').textContent = formatPrice(cart.getTotal());
+            }
+
+            toggleCartDrawer(open) {
+                const drawer = document.getElementById('cart-drawer');
+                const overlay = document.getElementById('cart-drawer-overlay');
+                if (open) {
+                    overlay.classList.remove('hidden');
+                    drawer.classList.remove('translate-x-full');
+                } else {
+                    overlay.classList.add('hidden');
+                    drawer.classList.add('translate-x-full');
+                }
+            }
+
+            toggleSizeGuideModal(open) {
+                const modal = document.getElementById('size-guide-modal');
+                const overlay = document.getElementById('size-guide-modal-overlay');
+                 if (open) {
+                    overlay.classList.remove('hidden');
+                    modal.classList.remove('hidden');
+                } else {
+                    overlay.classList.add('hidden');
+                    modal.classList.add('hidden');
+                }
+            }
+        }
+
+        // Initialize the app
+        new App();
+
+    </script>
+</body>
+</html>
+
