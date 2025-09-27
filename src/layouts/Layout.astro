@@ -103,12 +103,7 @@ const {
          </div>
     </div>
 
-    <script define:vars={{ products: products.products }}>
-        // This script is inlined and has access to the `products` variable
-    </script>
-    <script is:inline>
-let products = window.products;
-
+    <script define:vars={{ products: products.products }} is:inline>
 // --- UTILS ---
 const formatPrice = (price, currency = 'EGP') => {
     return new Intl.NumberFormat('en-US', {
@@ -116,14 +111,18 @@ const formatPrice = (price, currency = 'EGP') => {
     }).format(price);
 };
 
-// --- SHOPPING CART ---
+// --- CART ---
 class ShoppingCart {
-    constructor() { this.items = JSON.parse(localStorage.getItem('nisaCart')) || []; }
+    constructor() {
+        this.items = JSON.parse(localStorage.getItem('nisaCart')) || [];
+        this.updateCartUI();
+    }
     addItem(product, color, size, quantity = 1) {
         const existingItem = this.items.find(i => i.id === product.id && i.size === size && i.color.name === color.name);
         if (existingItem) { existingItem.quantity += quantity; }
         else {
-            this.items.push({ id: product.id, name: product.name, price: product.price, size, color, quantity, image: color.images[0] });
+            const price = product.discountPrice ?? product.price;
+            this.items.push({ id: product.id, name: product.name, price, size, color, quantity, image: color.images[0] });
         }
         this.save();
     }
@@ -134,184 +133,259 @@ class ShoppingCart {
     updateQuantity(itemId, colorName, size, newQuantity) {
         const item = this.items.find(i => i.id === itemId && i.color.name === colorName && i.size === size);
         if (item) {
-            if (newQuantity > 0) {
-                item.quantity = newQuantity;
-            } else {
-                this.removeItem(itemId, colorName, size);
-            }
+            if (newQuantity > 0) { item.quantity = newQuantity; }
+            else { this.removeItem(itemId, colorName, size); }
         }
         this.save();
     }
     getTotal() { return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0); }
     getItemCount() { return this.items.reduce((sum, item) => sum + item.quantity, 0); }
-    save() { localStorage.setItem('nisaCart', JSON.stringify(this.items)); }
+    save() {
+        localStorage.setItem('nisaCart', JSON.stringify(this.items));
+        this.updateCartUI();
+    }
+    updateCartUI() {
+        const count = this.getItemCount();
+        document.querySelectorAll('.cart-count').forEach(el => {
+            el.textContent = count;
+            el.style.display = count > 0 ? 'flex' : 'none';
+        });
+        const itemsContainer = document.getElementById('cart-items');
+        if (itemsContainer) {
+            if (this.items.length === 0) {
+                itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
+            } else {
+                itemsContainer.innerHTML = this.items.map(item => `
+                    <div class="flex gap-4 mb-4">
+                        <img src="${item.image}" alt="${item.name}" class="w-24 h-32 object-cover rounded-md">
+                        <div class="flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-medium">${item.name}</h4>
+                                <p class="text-sm text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
+                                <p class="font-medium mt-2">${formatPrice(item.price)}</p>
+                            </div>
+                            <div class="flex items-center border border-gray-300 rounded w-max mt-2">
+                                <button class="px-2 py-1 cart-quantity-change" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}" data-amount="-1">-</button>
+                                <span class="px-3 py-1">${item.quantity}</span>
+                                <button class="px-2 py-1 cart-quantity-change" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}" data-amount="1">+</button>
+                            </div>
+                        </div>
+                        <button class="text-xs text-red-500 hover:underline remove-from-cart self-start" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}">Remove</button>
+                    </div>
+                `).join('');
+            }
+        }
+        const cartSubtotal = document.getElementById('cart-subtotal');
+        if(cartSubtotal) {
+            cartSubtotal.textContent = formatPrice(this.getTotal());
+        }
+    }
 }
 
 const cart = new ShoppingCart();
 
-function updateCartUI() {
-    const count = cart.getItemCount();
-    const countElements = document.querySelectorAll('.cart-count');
-    countElements.forEach(el => {
-        el.textContent = count;
-        el.style.display = count > 0 ? 'flex' : 'none';
-    });
-
-    const itemsContainer = document.getElementById('cart-items');
-    if (itemsContainer && cart.items.length === 0) {
-        itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
-    } else if (itemsContainer) {
-        itemsContainer.innerHTML = cart.items.map(item => `
-            <div class="flex gap-4 mb-4">
-                <img src="${item.image}" alt="${item.name}" class="w-24 h-32 object-cover rounded-md">
-                <div class="flex-grow flex flex-col justify-between">
-                    <div>
-                        <h4 class="font-medium">${item.name}</h4>
-                        <p class="text-sm text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
-                        <p class="font-medium mt-2">${formatPrice(item.price)}</p>
-                    </div>
-                    <div class="flex items-center border border-gray-300 rounded w-max mt-2">
-                         <button class="px-2 py-1 cart-quantity-change" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}" data-amount="-1">-</button>
-                         <span class="px-3 py-1">${item.quantity}</span>
-                         <button class="px-2 py-1 cart-quantity-change" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}" data-amount="1">+</button>
-                    </div>
-                </div>
-                 <button class="text-xs text-red-500 hover:underline remove-from-cart self-start" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}">Remove</button>
-            </div>
-        `).join('');
-    }
-
-    const cartSubtotal = document.getElementById('cart-subtotal');
-    if(cartSubtotal) {
-        cartSubtotal.textContent = formatPrice(cart.getTotal());
-    }
-}
-
-function toggleCartDrawer(open) {
-    const drawer = document.getElementById('cart-drawer');
-    const overlay = document.getElementById('cart-drawer-overlay');
-    if (drawer && overlay) {
-        if (open) {
-            overlay.classList.remove('hidden');
-            drawer.classList.remove('translate-x-full');
-        } else {
-            overlay.classList.add('hidden');
-            drawer.classList.add('translate-x-full');
-        }
-    }
-}
-
-function renderCheckoutPage() {
-    const itemsContainer = document.getElementById('checkout-items');
-    const subtotalEl = document.getElementById('checkout-subtotal');
-    const shippingEl = document.getElementById('checkout-shipping');
-    const totalEl = document.getElementById('checkout-total');
-
-    if (!itemsContainer) return;
-
-    const shippingCost = cart.items.length > 0 ? 50 : 0;
-
-    if (cart.items.length === 0) {
-        itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
-        const checkoutButton = document.querySelector('#checkout-form button[type="submit"]');
-        if(checkoutButton) {
-            checkoutButton.disabled = true;
-        }
-    } else {
-        itemsContainer.innerHTML = cart.items.map(item => `
-            <div class="flex gap-4 items-center">
-                <div class="relative">
-                    <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-md">
-                    <span class="absolute -top-2 -right-2 bg-[#BEE2E8] text-[#204566] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">${item.quantity}</span>
-                </div>
-                <div class="flex-grow">
-                    <h4 class="font-medium text-sm">${item.name}</h4>
-                    <p class="text-xs text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
-                </div>
-                <span class="text-sm font-medium">${formatPrice(item.price * item.quantity)}</span>
-            </div>
-        `).join('');
-    }
-
-    const subtotal = cart.getTotal();
-    const total = subtotal + shippingCost;
-    if(subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
-    if(shippingEl) shippingEl.textContent = formatPrice(shippingCost);
-    if(totalEl) totalEl.textContent = formatPrice(total);
-
-    // Populate hidden fields for Formspree
-    const orderSummaryInput = document.getElementById('order-summary-input');
-    const orderTotalInput = document.getElementById('order-total-input');
-
-    if(orderSummaryInput && orderTotalInput) {
-        const summaryText = cart.items.map(item =>
-            `${item.name} (${item.color.name} / ${item.size}) - Qty: ${item.quantity} - Price: ${formatPrice(item.price * item.quantity)}`
-        ).join('\n');
-
-        orderSummaryInput.value = summaryText;
-        orderTotalInput.value = formatPrice(total);
-    }
-}
-
+// --- UI INTERACTIONS ---
 document.addEventListener('DOMContentLoaded', () => {
-    updateCartUI();
-    renderCheckoutPage();
+    // Global elements
+    const body = document.body;
 
-    const cartButton = document.getElementById('cart-button');
-    if(cartButton) {
-        cartButton.addEventListener('click', () => toggleCartDrawer(true));
-    }
-    const closeCartButton = document.getElementById('close-cart-button');
-    if(closeCartButton) {
-        closeCartButton.addEventListener('click', () => toggleCartDrawer(false));
-    }
-    const cartDrawerOverlay = document.getElementById('cart-drawer-overlay');
-    if(cartDrawerOverlay) {
-        cartDrawerOverlay.addEventListener('click', () => toggleCartDrawer(false));
+    // State for product page
+    let product;
+    let selectedColor;
+    let selectedSize;
+
+    // --- INITIALIZATION ---
+    function initProductPage() {
+        const productPageContainer = document.getElementById('add-to-cart-product-page-btn');
+        if (!productPageContainer) return;
+
+        const productId = productPageContainer.dataset.productId;
+        product = products.find(p => p.id === productId);
+        if (!product) return;
+
+        selectedColor = product.colors[0];
+        selectedSize = product.sizes[0];
+        updateGallery(selectedColor.images);
     }
 
-    document.body.addEventListener('click', e => {
-        const addToCartButton = e.target.closest('.add-to-cart-card-btn');
-        if (addToCartButton) {
-            e.preventDefault();
-            const productId = addToCartButton.dataset.productId;
-            const product = products.find(p => p.id === productId);
-            if (product && product.inStock) {
-                const defaultColor = product.colors[0];
-                const defaultSize = product.sizes[0];
-                cart.addItem(product, defaultColor, defaultSize);
-                updateCartUI();
+    function initCheckoutPage() {
+        const itemsContainer = document.getElementById('checkout-items');
+        if (!itemsContainer) return;
+
+        const subtotalEl = document.getElementById('checkout-subtotal');
+        const shippingEl = document.getElementById('checkout-shipping');
+        const totalEl = document.getElementById('checkout-total');
+        const shippingCost = cart.items.length > 0 ? 50 : 0;
+
+        if (cart.items.length === 0) {
+            itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
+            const checkoutButton = document.querySelector('#checkout-form button[type="submit"]');
+            if(checkoutButton) checkoutButton.disabled = true;
+        } else {
+            itemsContainer.innerHTML = cart.items.map(item => `
+                <div class="flex gap-4 items-center">
+                    <div class="relative">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-md">
+                        <span class="absolute -top-2 -right-2 bg-[#BEE2E8] text-[#204566] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">${item.quantity}</span>
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-medium text-sm">${item.name}</h4>
+                        <p class="text-xs text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
+                    </div>
+                    <span class="text-sm font-medium">${formatPrice(item.price * item.quantity)}</span>
+                </div>
+            `).join('');
+        }
+
+        const subtotal = cart.getTotal();
+        const total = subtotal + shippingCost;
+        if(subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
+        if(shippingEl) shippingEl.textContent = formatPrice(shippingCost);
+        if(totalEl) totalEl.textContent = formatPrice(total);
+    }
+
+    // --- EVENT LISTENERS ---
+    body.addEventListener('click', e => {
+        // Cart
+        if (e.target.closest('#cart-button')) toggleCartDrawer(true);
+        if (e.target.closest('#close-cart-button')) toggleCartDrawer(false);
+        if (e.target.closest('#cart-drawer-overlay')) toggleCartDrawer(false);
+
+        // Add to Cart (Card)
+        const addToCartCardBtn = e.target.closest('.add-to-cart-card-btn');
+        if (addToCartCardBtn) {
+            const productId = addToCartCardBtn.dataset.productId;
+            const p = products.find(p => p.id === productId);
+            if (p && p.inStock) {
+                cart.addItem(p, p.colors[0], p.sizes[0]);
                 toggleCartDrawer(true);
             }
         }
 
-        const removeFromCartButton = e.target.closest('.remove-from-cart');
-        if(removeFromCartButton) {
-            const { id, color, size } = removeFromCartButton.dataset;
-            cart.removeItem(id, color, size);
-            updateCartUI();
+        // Add to Cart (Product Page)
+        const addToCartPageBtn = e.target.closest('#add-to-cart-product-page-btn');
+        if (addToCartPageBtn) {
+            cart.addItem(product, selectedColor, selectedSize);
+            toggleCartDrawer(true);
         }
 
-        const quantityChangeButton = e.target.closest('.cart-quantity-change');
-        if(quantityChangeButton) {
-            const { id, color, size, amount } = quantityChangeButton.dataset;
+        // Cart item quantity
+        const quantityChangeBtn = e.target.closest('.cart-quantity-change');
+        if (quantityChangeBtn) {
+            const { id, color, size, amount } = quantityChangeBtn.dataset;
             const item = cart.items.find(i => i.id === id && i.color.name === color && i.size === size);
-            if (item) {
-                const newQuantity = item.quantity + parseInt(amount);
-                cart.updateQuantity(id, color, size, newQuantity);
-                updateCartUI();
-            }
+            if (item) cart.updateQuantity(id, color, size, item.quantity + parseInt(amount));
+        }
+
+        // Remove from cart
+        const removeFromCartBtn = e.target.closest('.remove-from-cart');
+        if (removeFromCartBtn) {
+            const { id, color, size } = removeFromCartBtn.dataset;
+            cart.removeItem(id, color, size);
+        }
+
+        // Mobile Menu
+        if (e.target.closest('#mobile-menu-button')) {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Size Guide
+        if (e.target.closest('#size-guide-btn')) toggleSizeGuideModal(true);
+        if (e.target.closest('#close-size-guide-button')) toggleSizeGuideModal(false);
+        if (e.target.closest('#size-guide-modal-overlay')) toggleSizeGuideModal(false);
+
+        // Product Page: Color Swatch
+        const colorSwatch = e.target.closest('.color-swatch');
+        if (colorSwatch) {
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('border-[#204566]'));
+            colorSwatch.classList.add('border-[#204566]');
+            const colorIndex = parseInt(colorSwatch.dataset.colorIndex);
+            selectedColor = product.colors[colorIndex];
+            updateGallery(selectedColor.images);
+        }
+
+        // Product Page: Size Button
+        const sizeBtn = e.target.closest('.size-btn');
+        if (sizeBtn) {
+            document.querySelectorAll('.size-btn').forEach(b => {
+                b.classList.remove('bg-[#204566]', 'text-white');
+                b.classList.add('bg-transparent');
+            });
+            sizeBtn.classList.remove('bg-transparent');
+            sizeBtn.classList.add('bg-[#204566]', 'text-white');
+            selectedSize = sizeBtn.innerText;
+        }
+
+        // Product Page: Gallery
+        if (e.target.closest('#prev-image')) updateGalleryByOffset(-1);
+        if (e.target.closest('#next-image')) updateGalleryByOffset(1);
+        const thumb = e.target.closest('#thumbnail-container img');
+        if (thumb) {
+            const index = parseInt(thumb.dataset.index);
+            updateGallery(null, index);
         }
     });
-});
-        // Add mobile menu toggle logic
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (mobileMenuButton && mobileMenu) {
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+
+    // --- HELPER FUNCTIONS ---
+    function toggleCartDrawer(open) {
+        const drawer = document.getElementById('cart-drawer');
+        const overlay = document.getElementById('cart-drawer-overlay');
+        if (drawer && overlay) {
+            if (open) {
+                overlay.classList.remove('hidden');
+                drawer.classList.remove('translate-x-full');
+            } else {
+                overlay.classList.add('hidden');
+                drawer.classList.add('translate-x-full');
+            }
         }
-    </script>
+    }
+
+    function toggleSizeGuideModal(open) {
+        const modal = document.getElementById('size-guide-modal');
+        const overlay = document.getElementById('size-guide-modal-overlay');
+        if (modal && overlay) {
+            if (open) {
+                modal.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+            }
+            else {
+                modal.classList.add('hidden');
+                overlay.classList.add('hidden');
+            }
+        }
+    }
+
+    let currentImages = [];
+    let currentImageIndex = 0;
+
+    function updateGallery(images, index) {
+        const mainImage = document.getElementById('main-product-image');
+        const galleryControls = document.getElementById('gallery-controls');
+        const thumbnailContainer = document.getElementById('thumbnail-container');
+        if (!mainImage || !galleryControls || !thumbnailContainer) return;
+
+        if (images) currentImages = images;
+        if (index !== undefined) currentImageIndex = index;
+        
+        mainImage.src = currentImages[currentImageIndex];
+
+        galleryControls.style.display = currentImages.length > 1 ? 'flex' : 'none';
+
+        thumbnailContainer.innerHTML = currentImages.map((image, i) => `
+            <img src="${image}" class="w-16 h-16 object-cover rounded-md cursor-pointer ${i === currentImageIndex ? 'border-2 border-[#204566]' : ''}" data-index="${i}">
+        `).join('');
+    }
+
+    function updateGalleryByOffset(offset) {
+        currentImageIndex = (currentImageIndex + offset + currentImages.length) % currentImages.length;
+        updateGallery(null, currentImageIndex);
+    }
+
+    // --- RUN ON LOAD ---
+    initProductPage();
+    initCheckoutPage();
+});
+</script>
 </body>
 </html>

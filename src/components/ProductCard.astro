@@ -19,11 +19,19 @@ const formatPrice = (price: number, currency = 'EGP') => {
     <a href={`/product/${product.id}`}>
         <img src={product.colors[0].images[0]} alt={product.name} class="w-full h-auto object-cover rounded-md aspect-[3/4]">
     </a>
-    <div class="flex-grow flex flex-col pt-4">
-        <h3 class="text-xl font-medium">{product.name}</h3>
-        <p class="text-lg text-[#6B7B8C] mt-1 flex-grow">{formatPrice(product.price)}</p>
-        <div class="mt-4 grid grid-cols-2 gap-2">
-            <a href={`/product/${product.id}`} class="btn-secondary py-2 px-4 text-sm">Details</a>
+            <div class="flex-grow flex flex-col pt-4">
+                <h3 class="text-xl font-medium">{product.name}</h3>
+                <div class="text-lg text-[#6B7B8C] mt-1 flex-grow">
+                    {product.discountPrice ? (
+                        <div class="flex justify-center items-center gap-2">
+                            <span class="text-red-500">{formatPrice(product.discountPrice)}</span>
+                            <span class="line-through text-sm">{formatPrice(product.price)}</span>
+                        </div>
+                    ) : (
+                        <span>{formatPrice(product.price)}</span>
+                    )}
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-2">            <a href={`/product/${product.id}`} class="btn-secondary py-2 px-4 text-sm">Details</a>
             <button class="btn-primary py-2 px-4 text-sm add-to-cart-card-btn" data-product-id={product.id} disabled={!product.inStock}>
                 {product.inStock ? 'Add to Cart' : 'Sold Out'}
             </button>

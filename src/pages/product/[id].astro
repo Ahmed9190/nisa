@@ -36,14 +36,23 @@ const formatPrice = (price: number, currency = 'EGP') => {
             </div>
             <div class="w-full lg:w-1/2">
                 <h1 class="text-4xl font-medium">{product.name}</h1>
-                <p class="text-2xl my-4">{formatPrice(product.price)}</p>
+                <div class="text-2xl my-4">
+                    {product.discountPrice ? (
+                        <div class="flex items-center gap-2">
+                            <span class="text-red-500">{formatPrice(product.discountPrice)}</span>
+                            <span class="line-through text-base">{formatPrice(product.price)}</span>
+                        </div>
+                    ) : (
+                        <span>{formatPrice(product.price)}</span>
+                    )}
+                </div>
                 <p class="text-[#6B7B8C] leading-relaxed mb-6">{product.description}</p>
 
                 <div class="mb-6">
                     <label class="block font-medium mb-2">Color</label>
                     <div class="flex gap-2">
                         {product.colors.map((color, index) => (
-                            <button class=`color-swatch border-2 rounded-full h-8 w-8 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#204566] ${index === 0 ? 'border-[#204566]' : 'border-transparent'}` style={`background-color: ${color.code};`} data-images={JSON.stringify(color.images)}></button>
+                            <button class=`color-swatch border-2 rounded-full h-8 w-8 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#204566] ${index === 0 ? 'border-[#204566]' : 'border-transparent'}` style={`--swatch-color: ${color.code};`} data-images={JSON.stringify(color.images)} data-color-index={index}></button>
                         ))}
                     </div>
                 </div>
@@ -60,7 +69,7 @@ const formatPrice = (price: number, currency = 'EGP') => {
                     </div>
                 </div>
 
-                <button class="btn-primary w-full" disabled={!product.inStock}>
+                <button id="add-to-cart-product-page-btn" data-product-id={product.id} class="btn-primary w-full" disabled={!product.inStock}>
                     {product.inStock ? 'Add to Cart' : 'Sold Out'}
                 </button>
                 {!product.inStock && <p class="text-center mt-4 text-red-600 font-semibold">This product is currently sold out.</p>}
@@ -84,114 +93,11 @@ const formatPrice = (price: number, currency = 'EGP') => {
     </div>
 </Layout>
 
-<script is:inline>
-    const colorSwatches = document.querySelectorAll('.color-swatch');
-    const mainImage = document.getElementById('main-product-image');
-    const galleryControls = document.getElementById('gallery-controls');
-    const prevButton = document.getElementById('prev-image');
-    const nextButton = document.getElementById('next-image');
-    const thumbnailContainer = document.getElementById('thumbnail-container');
-    const sizeBtns = document.querySelectorAll('.size-btn');
-
-    let currentImages = [];
-    let currentImageIndex = 0;
-
-    function updateGallery(images) {
-        currentImages = images;
-        currentImageIndex = 0;
-        mainImage.src = currentImages[currentImageIndex];
-
-        if (currentImages.length > 1) {
-            galleryControls.style.display = 'flex';
-        } else {
-            galleryControls.style.display = 'none';
-        }
-
-        thumbnailContainer.innerHTML = currentImages.map((image, index) => `
-            <img src="${image}" class="w-16 h-16 object-cover rounded-md cursor-pointer ${index === 0 ? 'border-2 border-[#204566]' : ''}" data-index="${index}">
-        `).join('');
-    }
-
-    colorSwatches.forEach(swatch => {
-        swatch.addEventListener('click', () => {
-            colorSwatches.forEach(s => s.classList.remove('border-[#204566]'));
-            swatch.classList.add('border-[#204566]');
-
-            const images = JSON.parse(swatch.dataset.images);
-            updateGallery(images);
-        });
-    });
-
-    prevButton.addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
-        mainImage.src = currentImages[currentImageIndex];
-        updateThumbnails();
-    });
-
-    nextButton.addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex + 1) % currentImages.length;
-        mainImage.src = currentImages[currentImageIndex];
-        updateThumbnails();
-    });
-
-    thumbnailContainer.addEventListener('click', e => {
-        if (e.target.tagName === 'IMG') {
-            currentImageIndex = parseInt(e.target.dataset.index);
-            mainImage.src = currentImages[currentImageIndex];
-            updateThumbnails();
-        }
-    });
-
-    function updateThumbnails() {
-        thumbnailContainer.querySelectorAll('img').forEach((img, index) => {
-            if (index === currentImageIndex) {
-                img.classList.add('border-2', 'border-[#204566]');
-            } else {
-                img.classList.remove('border-2', 'border-[#204566]');
-            }
-        });
-    }
-
-    sizeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Reset all buttons to inactive state
-            sizeBtns.forEach(b => {
-                b.classList.remove('bg-[#204566]', 'text-white');
-                b.classList.add('bg-transparent');
-            });
-            // Set the clicked button to active state
-            btn.classList.remove('bg-transparent');
-            btn.classList.add('bg-[#204566]', 'text-white');
-        });
-    });
-
-    // Initial gallery setup
-    const initialImages = JSON.parse(colorSwatches[0].dataset.images);
-    updateGallery(initialImages);
-
-    // Size Guide Modal
-    const sizeGuideBtn = document.getElementById('size-guide-btn');
-    const sizeGuideModal = document.getElementById('size-guide-modal');
-    const sizeGuideOverlay = document.getElementById('size-guide-modal-overlay');
-    const closeSizeGuideBtn = document.getElementById('close-size-guide-button');
-
-    function toggleSizeGuideModal(open) {
-        if (open) {
-            sizeGuideModal.classList.remove('hidden');
-            sizeGuideOverlay.classList.remove('hidden');
-        } else {
-            sizeGuideModal.classList.add('hidden');
-            sizeGuideOverlay.classList.add('hidden');
-        }
-    }
-
-    sizeGuideBtn.addEventListener('click', () => toggleSizeGuideModal(true));
-    closeSizeGuideBtn.addEventListener('click', () => toggleSizeGuideModal(false));
-    sizeGuideOverlay.addEventListener('click', () => toggleSizeGuideModal(false));
-
-</script>
-
 <style>
+.color-swatch {
+    background-color: var(--swatch-color);
+}
+
 .btn-primary {
     background-color: #204566;
     color: #FFF5E0;

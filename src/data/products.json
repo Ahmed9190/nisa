@@ -2,46 +2,42 @@
   "products": [
     {
       "id": "abaya-01",
-      "name": "Classic Linen Abaya",
-      "price": 1850,
+      "name": "Onyx cardigan ",
+      "price": 1500,
       "currency": "EGP",
-      "description": "An essential piece for any modest wardrobe. Crafted from breathable linen, perfect for year-round comfort and elegance.",
+      "description": "Crafted from 100% cotton guipure lace.",
       "details": {
         "fabric": "100% Premium Linen",
         "fit": "Relaxed, straight cut",
         "care": "Machine wash cold, hang to dry."
       },
       "sizes": [
-        "S",
-        "M",
-        "L",
-        "XL"
+        "One Size"
       ],
       "colors": [
         {
-          "name": "Gray-Olive",
-          "code": "#b2b19d",
+          "name": "Dark Tan",
+          "code": "a25936",
           "images": [
-"/assets/products/Dove petal/IMG_1496 (Medium).webp",
-"/assets/products/Dove petal/IMG_1500 (Medium).webp",
-"/assets/products/Dove petal/IMG_1496 (Medium) (1).webp"
-
-]
+            "/assets/products/onyx-cardigan/dsc-0022-medium-68d6ea37b6b6d.webp",
+            "/assets/products/onyx-cardigan/dsc-0031-medium-68d6ea5556fe9.webp",
+            "/assets/products/onyx-cardigan/dsc-0023-medium-68d6ea51b5fef.webp"
+          ]
         },
         {
           "name": "Beige",
           "code": "#ddd0b9",
           "images": [
-            "/assets/products/Basic linen dress/IMG_2722 (Medium).webp",
-            "/assets/products/Basic linen dress/IMG_2719 (Medium).webp"
-            
+            "/assets/products/onyx-cardigan/dsc-0081-medium-68d6ea5be092e.webp",
+            "/assets/products/onyx-cardigan/dsc-0079-medium-68d6ea5b881f1.webp"
           ]
         },
         {
-          "name": "Black",
-          "code": "#362e3b",
+          "name": "Plum Black",
+          "code": "#201116",
           "images": [
-            "/assets/products/aurora chemise dress/abaya-01.webp"
+            "/assets/products/onyx-cardigan/dsc-0102-medium-68d6ea5e86729.webp",
+            "/assets/products/onyx-cardigan/dsc4-0069-1-medium-68d6ea3782c7b.webp"
           ]
         }
       ],
@@ -52,10 +48,10 @@
     },
     {
       "id": "hijab-01",
-      "name": "Luxury Silk Hijab",
-      "price": 750,
+      "name": "dahlia set",
+      "price": 1400,
       "currency": "EGP",
-      "description": "Experience the soft touch of pure silk. This hijab drapes beautifully and adds a touch of luxury to any outfit.",
+      "description": "Perfect for summer getaways, brunch dates, and laid-back elegant evenings. Style it with woven accessories or statement scarves for a dreamy look.",
       "details": {
         "fabric": "100% Mulberry Silk",
         "fit": "Large rectangle (200cm x 70cm)",
@@ -66,10 +62,11 @@
       ],
       "colors": [
         {
-          "name": "Pearl",
-          "code": "#EAE0C8",
+          "name": "Maize",
+          "code": "#f3dc6b",
           "images": [
-            "https://picsum.photos/seed/hijab-pearl/600/800"
+           "/assets/products/dahlia set/img-2092-medium-68d8680401ba2.webp",
+           "/assets/products/dahlia set/img-5309-medium-68d868071924f.webp"
           ]
         },
         {
@@ -104,9 +101,7 @@
         "care": "Gentle machine wash."
       },
       "sizes": [
-        "S",
-        "M",
-        "L"
+        "One Size"
       ],
       "colors": [
         {
@@ -141,9 +136,7 @@
         "care": "Dry clean recommended."
       },
       "sizes": [
-        "M",
-        "L",
-        "XL"
+        "One Size"
       ],
       "colors": [
         {
@@ -171,10 +164,7 @@
         "care": "Machine wash warm."
       },
       "sizes": [
-        "S",
-        "M",
-        "L",
-        "XL"
+        "One Size"
       ],
       "colors": [
         {
@@ -244,9 +234,7 @@
         "care": "Machine wash cold."
       },
       "sizes": [
-        "S",
-        "M",
-        "L"
+        "One Size"
       ],
       "colors": [
         {
@@ -274,9 +262,7 @@
         "care": "Machine wash cold."
       },
       "sizes": [
-        "M",
-        "L",
-        "XL"
+        "One Size"
       ],
       "colors": [
         {
@@ -304,9 +290,7 @@
         "care": "Dry clean only."
       },
       "sizes": [
-        "S",
-        "M",
-        "L"
+        "One Size"
       ],
       "colors": [
         {
@@ -404,9 +388,7 @@
         "care": "Machine wash cold."
       },
       "sizes": [
-        "S",
-        "M",
-        "L"
+        "One Size"
       ],
       "colors": [
         {
@@ -434,10 +416,7 @@
         "care": "Gentle machine wash."
       },
       "sizes": [
-        "S",
-        "M",
-        "L",
-        "XL"
+        "One Size"
       ],
       "colors": [
         {
@@ -465,10 +444,7 @@
         "care": "Machine wash warm."
       },
       "sizes": [
-        "S",
-        "M",
-        "L",
-        "XL"
+        "One Size"
       ],
       "colors": [
         {
@@ -496,9 +472,7 @@
         "care": "Machine wash cold."
       },
       "sizes": [
-        "S",
-        "M",
-        "L"
+        "One Size"
       ],
       "colors": [
         {
