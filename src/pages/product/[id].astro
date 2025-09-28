@@ -37,10 +37,10 @@ const formatPrice = (price: number, currency = 'EGP') => {
             <div class="w-full lg:w-1/2">
                 <h1 class="text-4xl font-medium">{product.name}</h1>
                 <div class="text-2xl my-4">
-                    {product.discountPrice ? (
+                    {product.price < product.priceBefore ? (
                         <div class="flex items-center gap-2">
-                            <span class="text-red-500">{formatPrice(product.discountPrice)}</span>
-                            <span class="line-through text-base">{formatPrice(product.price)}</span>
+                            <span class="text-red-500">{formatPrice(product.price)}</span>
+                            <span class="line-through text-base">{formatPrice(product.priceBefore)}</span>
                         </div>
                     ) : (
                         <span>{formatPrice(product.price)}</span>

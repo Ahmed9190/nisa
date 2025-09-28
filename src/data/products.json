@@ -4,6 +4,7 @@
       "id": "abaya-01",
       "name": "Onyx cardigan ",
       "price": 1500,
+      "priceBefore": 1500,
       "currency": "EGP",
       "description": "Crafted from 100% cotton guipure lace.",
       "details": {
@@ -50,6 +51,7 @@
       "id": "hijab-01",
       "name": "dahlia set",
       "price": 1400,
+      "priceBefore": 1400,
       "currency": "EGP",
       "description": "Perfect for summer getaways, brunch dates, and laid-back elegant evenings. Style it with woven accessories or statement scarves for a dreamy look.",
       "details": {
@@ -92,7 +94,8 @@
     {
       "id": "dress-01",
       "name": "Modest Maxi Dress",
-      "price": 2100,
+      "price": 1800,
+      "priceBefore": 2100,
       "currency": "EGP",
       "description": "A flowing maxi dress with a defined waist and long sleeves. Perfect for special occasions or elegant everyday wear.",
       "details": {
@@ -128,6 +131,7 @@
       "id": "abaya-02",
       "name": "Embroidered Kimono Abaya",
       "price": 2500,
+      "priceBefore": 2500,
       "currency": "EGP",
       "description": "An open-front kimono style abaya with delicate embroidery on the sleeves. A true statement piece.",
       "details": {
@@ -155,7 +159,8 @@
     {
       "id": "tunic-01",
       "name": "High-Neck Tunic",
-      "price": 1200,
+      "price": 950,
+      "priceBefore": 1200,
       "currency": "EGP",
       "description": "A versatile high-neck tunic that can be dressed up or down. Features a relaxed fit and side slits for ease of movement.",
       "details": {
@@ -191,6 +196,7 @@
       "id": "hijab-02",
       "name": "Pleated Chiffon Hijab",
       "price": 650,
+      "priceBefore": 650,
       "currency": "EGP",
       "description": "Lightweight and elegant, this pleated chiffon hijab adds texture and sophistication to your look.",
       "details": {
@@ -226,6 +232,7 @@
       "id": "trousers-01",
       "name": "Crepe Wide-Leg Trousers",
       "price": 1400,
+      "priceBefore": 1400,
       "currency": "EGP",
       "description": "Effortlessly chic wide-leg trousers in a beautiful crepe fabric that drapes perfectly.",
       "details": {
@@ -254,6 +261,7 @@
       "id": "dress-02",
       "name": "Tiered Cotton Maxi Dress",
       "price": 2300,
+      "priceBefore": 2300,
       "currency": "EGP",
       "description": "A romantic and feminine tiered maxi dress made from soft, breathable cotton. Perfect for summer days.",
       "details": {
@@ -281,7 +289,8 @@
     {
       "id": "skirt-01",
       "name": "Pleated Satin Midi Skirt",
-      "price": 1600,
+      "price": 1400,
+      "priceBefore": 1600,
       "currency": "EGP",
       "description": "A luxurious pleated satin skirt with beautiful movement. Ideal for dressing up for any occasion.",
       "details": {
@@ -317,6 +326,7 @@
       "id": "abaya-03",
       "name": "Batwing Sleeve Abaya",
       "price": 2200,
+      "priceBefore": 2200,
       "currency": "EGP",
       "description": "A modern take on the classic abaya, featuring dramatic batwing sleeves for a contemporary silhouette.",
       "details": {
@@ -345,6 +355,7 @@
       "id": "hijab-03",
       "name": "Everyday Jersey Hijab",
       "price": 450,
+      "priceBefore": 450,
       "currency": "EGP",
       "description": "The perfect go-to hijab for daily wear. Made from soft, stretchy jersey for ultimate comfort.",
       "details": {
@@ -380,6 +391,7 @@
       "id": "tunic-02",
       "name": "Button-Front Linen Tunic",
       "price": 1350,
+      "priceBefore": 1350,
       "currency": "EGP",
       "description": "A classic button-front tunic in breathable linen. Can be worn as a shirt or a light outer layer.",
       "details": {
@@ -407,7 +419,8 @@
     {
       "id": "dress-03",
       "name": "Shirt Dress with Belt",
-      "price": 1950,
+      "price": 1750,
+      "priceBefore": 1950,
       "currency": "EGP",
       "description": "A smart and stylish shirt dress with a matching belt to cinch the waist. Perfect for a professional look.",
       "details": {
@@ -436,6 +449,7 @@
       "id": "trousers-02",
       "name": "Tailored Straight-Leg Trousers",
       "price": 1500,
+      "priceBefore": 1500,
       "currency": "EGP",
       "description": "Polished and professional, these straight-leg trousers are a wardrobe staple for the modern working woman.",
       "details": {
@@ -464,6 +478,7 @@
       "id": "skirt-02",
       "name": "Denim A-Line Maxi Skirt",
       "price": 1750,
+      "priceBefore": 1750,
       "currency": "EGP",
       "description": "A versatile and timeless A-line maxi skirt in a classic dark wash denim.",
       "details": {

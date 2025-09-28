@@ -253,8 +253,8 @@ class ShoppingCart {
         const existingItem = this.items.find(i => i.id === product.id && i.size === size && i.color.name === color.name);
         if (existingItem) { existingItem.quantity += quantity; }
         else {
-            const price = product.discountPrice ?? product.price;
-            this.items.push({ id: product.id, name: product.name, price, size, color, quantity, image: color.images[0] });
+            const price = product.price;
+            this.items.push({ id: product.id, name: product.name, price: product.price, priceBefore: product.priceBefore, size, color, quantity, image: color.images[0] });
         }
         this.save();
     }
@@ -296,14 +296,23 @@ class ShoppingCart {
             if (this.items.length === 0) {
                 itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
             } else {
-                itemsContainer.innerHTML = this.items.map(item => `
+                itemsContainer.innerHTML = this.items.map(item => {
+                    const isSale = item.price < item.priceBefore;
+                    return `
                     <div class="flex gap-4 mb-4">
                         <img src="${item.image}" alt="${item.name}" class="w-24 h-32 object-cover rounded-md">
                         <div class="flex-grow flex flex-col justify-between">
                             <div>
                                 <h4 class="font-medium">${item.name}</h4>
                                 <p class="text-sm text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
-                                <p class="font-medium mt-2">${formatPrice(item.price)}</p>
+                                <div class="font-medium mt-2">
+                                    ${isSale ? `
+                                        <span class="text-red-500">${formatPrice(item.price)}</span>
+                                        <span class="line-through text-sm text-gray-500 ml-2">${formatPrice(item.priceBefore)}</span>
+                                    ` : `
+                                        <span>${formatPrice(item.price)}</span>
+                                    `}
+                                </div>
                             </div>
                             <div class="flex items-center border border-gray-300 rounded w-max mt-2">
                                 <button class="px-2 py-1 cart-quantity-change" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}" data-amount="-1">-</button>
@@ -313,7 +322,7 @@ class ShoppingCart {
                         </div>
                         <button class="text-xs text-red-500 hover:underline remove-from-cart self-start" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}">Remove</button>
                     </div>
-                `).join('');
+                `}).join('');
             }
         }
         const cartSubtotal = document.getElementById('cart-subtotal');
@@ -370,7 +379,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(checkoutButton) checkoutButton.disabled = true;
                 showToast('Your cart is empty. Please add items to your cart before placing an order.', 'error');
             } else {
-                itemsContainer.innerHTML = cart.items.map(item => `
+                itemsContainer.innerHTML = cart.items.map(item => {
+                    const isSale = item.price < item.priceBefore;
+                    return `
                     <div class="flex gap-4 items-center">
                         <div class="relative">
                             <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-md">
@@ -379,23 +390,53 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="flex-grow">
                             <h4 class="font-medium text-sm">${item.name}</h4>
                             <p class="text-xs text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
+                            <p class="text-xs">${formatPrice(item.price)} each</p>
                         </div>
-                        <span class="text-sm font-medium">${formatPrice(item.price * item.quantity)}</span>
+                        <div class="text-sm font-medium text-right">
+                            ${isSale ? `
+                                <span class="text-red-500">${formatPrice(item.price * item.quantity)}</span>
+                                <br>
+                                <span class="line-through text-xs text-gray-500">${formatPrice(item.priceBefore * item.quantity)}</span>
+                            ` : `
+                                <span>${formatPrice(item.price * item.quantity)}</span>
+                            `}
+                        </div>
                     </div>
-                `).join('');
+                `}).join('');
             }
 
             const subtotal = cart.getTotal();
+            const subtotalBefore = cart.items.reduce((sum, item) => sum + (item.priceBefore * item.quantity), 0);
+            const totalSavings = subtotalBefore - subtotal;
+
             const total = subtotal + shippingCost;
             if(subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
             if(shippingEl) shippingEl.textContent = formatPrice(shippingCost);
             if(totalEl) totalEl.textContent = formatPrice(total);
 
+            const savingsEl = document.getElementById('checkout-savings');
+            const savingsContainerEl = document.getElementById('checkout-savings-container');
+
+            if (savingsEl && savingsContainerEl) {
+                if (totalSavings > 0) {
+                    savingsEl.textContent = `-${formatPrice(totalSavings)}`;
+                    savingsContainerEl.style.display = 'flex';
+                } else {
+                    savingsContainerEl.style.display = 'none';
+                }
+            }
+
             const orderSummaryInput = document.getElementById('order-summary-input');
             const orderTotalInput = document.getElementById('order-total-input');
 
             if (orderSummaryInput) {
-                const itemsSummary = cart.items.map(item => `${item.name} (${item.color.name} / ${item.size}) - Qty: ${item.quantity} - Price: ${formatPrice(item.price * item.quantity)}`).join('\n');
+                const itemsSummary = cart.items.map(item => {
+                    const isSale = item.price < item.priceBefore;
+                    const priceString = isSale
+                        ? `Price: ${formatPrice(item.price * item.quantity)} (was ${formatPrice(item.priceBefore * item.quantity)})`
+                        : `Price: ${formatPrice(item.price * item.quantity)}`;
+                    return `${item.name} (${item.color.name} / ${item.size}) - Qty: ${item.quantity} - ${priceString}`;
+                }).join('\n');
                 const shippingSummary = `Shipping: ${formatPrice(shippingCost)}`;
                 orderSummaryInput.value = `${itemsSummary}\n${shippingSummary}`;
             }
