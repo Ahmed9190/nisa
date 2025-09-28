@@ -53,12 +53,12 @@ const {
             font-size: 1em;
             line-height: 1em;
             font-weight: 500;
-            color: white;
+            color: #FFF5E0;
             cursor: pointer;
 
             /* Aesthetics */
             background-color: var(--blue);
-            border-radius: 32px;
+            border-radius: 6px;
             -webkit-tap-highlight-color: transparent;
             transition: box-shadow 0.2s ease, background-color 150ms ease;
         }
@@ -67,8 +67,13 @@ const {
             outline: none;
         }
         
-        #checkoutBtn:hover, #checkoutBtn:active {
+        #checkoutBtn:hover:not(:disabled), #checkoutBtn:active:not(:disabled) {
             background-color: var(--blue-light);
+        }
+
+        #checkoutBtn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
         }
 
         /* Cart Icon Styling */
@@ -133,6 +138,9 @@ const {
     </style>
 </head>
 <body class="antialiased">
+    <div id="toast" class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-md hidden" style="z-index: 9999;">
+        <span id="toast-message"></span>
+    </div>
     <Header />
     <main>
         <slot />
@@ -141,7 +149,7 @@ const {
 
     <!-- Cart Drawer -->
     <div id="cart-drawer-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
-    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-[#FFF5E0] shadow-2xl z-50 transform translate-x-full">
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-[#FFF5E0] z-50 transform translate-x-full">
         <div class="flex flex-col h-full">
             <div class="flex items-center justify-between p-6 border-b border-[#D4E4E8]">
                 <h2 class="text-2xl font-medium">Your Cart</h2>
@@ -267,9 +275,18 @@ class ShoppingCart {
     save() {
         localStorage.setItem('nisaCart', JSON.stringify(this.items));
         this.updateCartUI();
+        document.dispatchEvent(new CustomEvent('cart-updated'));
+    }
+    clear() {
+        this.items = [];
+        this.save();
     }
     updateCartUI() {
         const count = this.getItemCount();
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        if (checkoutBtn) {
+            checkoutBtn.disabled = count === 0;
+        }
         document.querySelectorAll('.cart-count').forEach(el => {
             el.textContent = count;
             el.style.display = count > 0 ? 'flex' : 'none';
@@ -351,12 +368,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
                 const checkoutButton = checkoutForm.querySelector('button[type="submit"]');
                 if(checkoutButton) checkoutButton.disabled = true;
+                showToast('Your cart is empty. Please add items to your cart before placing an order.', 'error');
             } else {
                 itemsContainer.innerHTML = cart.items.map(item => `
                     <div class="flex gap-4 items-center">
                         <div class="relative">
                             <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-md">
-                            <span class="absolute -top-2 -right-2 bg-[#BEE2E8] text-[#204566] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">${item.quantity}</span>
+                            <span class="absolute top-1 right-1 bg-[#BEE2E8] text-[#204566] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">${item.quantity}</span>
                         </div>
                         <div class="flex-grow">
                             <h4 class="font-medium text-sm">${item.name}</h4>
@@ -388,6 +406,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
         governorateSelect.addEventListener('change', updateTotals);
         updateTotals(); // Initial calculation
+
+        document.addEventListener('cart-updated', updateTotals);
+
+        checkoutForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formData = new FormData(checkoutForm);
+            const submitButton = checkoutForm.querySelector('button[type="submit"]');
+
+            if(submitButton) submitButton.disabled = true;
+
+            fetch(checkoutForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    cart.clear();
+                    window.location.href = '/?order=success';
+                } else {
+                    response.json().then(data => {
+                        if (Object.hasOwn(data, 'errors')) {
+                            alert(data["errors"].map(error => error["message"]).join(", "));
+                        } else {
+                            alert('Oops! There was a problem submitting your form');
+                        }
+                        if(submitButton) submitButton.disabled = false;
+                    })
+                }
+            }).catch(error => {
+                alert('Oops! There was a problem submitting your form');
+                if(submitButton) submitButton.disabled = false;
+            });
+        });
     }
 
     // --- EVENT LISTENERS ---
@@ -546,6 +599,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+</script>
+<script>
+  window.showToast = function(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    if (!toast || !toastMessage) return;
+
+    toastMessage.textContent = message;
+    if (type === 'error') {
+      toast.classList.remove('bg-green-500');
+      toast.classList.add('bg-red-500');
+    } else {
+      toast.classList.remove('bg-red-500');
+      toast.classList.add('bg-green-500');
+    }
+
+    toast.classList.remove('hidden');
+    setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 3000);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('order') && urlParams.get('order') === 'success') {
+      showToast('Order placed successfully!');
+      window.history.replaceState({}, document.title, "/");
+    }
+  });
 </script>
 </body>
 </html>
