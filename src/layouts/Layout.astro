@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import site from '../data/site.json';
 import products from '../data/products.json';
+import shipping from '../data/shipping.json';
 
 export interface Props {
 	title?: string;
@@ -214,13 +215,25 @@ const {
          </div>
     </div>
 
-    <script define:vars={{ products: products.products }} is:inline>
+    <script define:vars={{ products: products.products, shipping: shipping }} is:inline>
 // --- UTILS ---
 const formatPrice = (price, currency = 'EGP') => {
-    return new Intl.NumberFormat('en-US', {
+    // Format the price, then manually add a space if the currency symbol is at the beginning.
+    const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency', currency, minimumFractionDigits: 0
     }).format(price);
+
+    // Check if the first character is not a digit, which implies it's a currency symbol.
+    if (isNaN(parseInt(formatted[0], 10))) {
+        // Find the first digit's index
+        const firstDigitIndex = formatted.search(/\d/);
+        if (firstDigitIndex > 0) {
+            return formatted.slice(0, firstDigitIndex) + ' ' + formatted.slice(firstDigitIndex);
+        }
+    }
+    return formatted;
 };
+
 
 // --- CART ---
 class ShoppingCart {
@@ -320,39 +333,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initCheckoutPage() {
-        const itemsContainer = document.getElementById('checkout-items');
-        if (!itemsContainer) return;
+        const checkoutForm = document.getElementById('checkout-form');
+        if (!checkoutForm) return;
 
+        const itemsContainer = document.getElementById('checkout-items');
         const subtotalEl = document.getElementById('checkout-subtotal');
         const shippingEl = document.getElementById('checkout-shipping');
         const totalEl = document.getElementById('checkout-total');
-        const shippingCost = cart.items.length > 0 ? 50 : 0;
+        const governorateSelect = checkoutForm.querySelector('select[name="governorate"]');
 
-        if (cart.items.length === 0) {
-            itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
-            const checkoutButton = document.querySelector('#checkout-form button[type="submit"]');
-            if(checkoutButton) checkoutButton.disabled = true;
-        } else {
-            itemsContainer.innerHTML = cart.items.map(item => `
-                <div class="flex gap-4 items-center">
-                    <div class="relative">
-                        <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-md">
-                        <span class="absolute -top-2 -right-2 bg-[#BEE2E8] text-[#204566] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">${item.quantity}</span>
+        const updateTotals = () => {
+            const selectedGovernorate = governorateSelect.value;
+            const shippingInfo = shipping.find(s => s.city === selectedGovernorate);
+            const shippingCost = cart.items.length > 0 ? (shippingInfo ? shippingInfo.price : 50) : 0;
+
+            if (cart.items.length === 0) {
+                itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
+                const checkoutButton = checkoutForm.querySelector('button[type="submit"]');
+                if(checkoutButton) checkoutButton.disabled = true;
+            } else {
+                itemsContainer.innerHTML = cart.items.map(item => `
+                    <div class="flex gap-4 items-center">
+                        <div class="relative">
+                            <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-md">
+                            <span class="absolute -top-2 -right-2 bg-[#BEE2E8] text-[#204566] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">${item.quantity}</span>
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="font-medium text-sm">${item.name}</h4>
+                            <p class="text-xs text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
+                        </div>
+                        <span class="text-sm font-medium">${formatPrice(item.price * item.quantity)}</span>
                     </div>
-                    <div class="flex-grow">
-                        <h4 class="font-medium text-sm">${item.name}</h4>
-                        <p class="text-xs text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
-                    </div>
-                    <span class="text-sm font-medium">${formatPrice(item.price * item.quantity)}</span>
-                </div>
-            `).join('');
+                `).join('');
+            }
+
+            const subtotal = cart.getTotal();
+            const total = subtotal + shippingCost;
+            if(subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
+            if(shippingEl) shippingEl.textContent = formatPrice(shippingCost);
+            if(totalEl) totalEl.textContent = formatPrice(total);
+
+            const orderSummaryInput = document.getElementById('order-summary-input');
+            const orderTotalInput = document.getElementById('order-total-input');
+
+            if (orderSummaryInput) {
+                const itemsSummary = cart.items.map(item => `${item.name} (${item.color.name} / ${item.size}) - Qty: ${item.quantity} - Price: ${formatPrice(item.price * item.quantity)}`).join('\n');
+                const shippingSummary = `Shipping: ${formatPrice(shippingCost)}`;
+                orderSummaryInput.value = `${itemsSummary}\n${shippingSummary}`;
+            }
+            if (orderTotalInput) {
+                orderTotalInput.value = formatPrice(total);
+            }
         }
 
-        const subtotal = cart.getTotal();
-        const total = subtotal + shippingCost;
-        if(subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
-        if(shippingEl) shippingEl.textContent = formatPrice(shippingCost);
-        if(totalEl) totalEl.textContent = formatPrice(total);
+        governorateSelect.addEventListener('change', updateTotals);
+        updateTotals(); // Initial calculation
     }
 
     // --- EVENT LISTENERS ---

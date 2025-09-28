@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import shipping from '../data/shipping.json';
 ---
 
 <Layout title="Checkout - nisa">
@@ -14,6 +15,7 @@ import Layout from '../layouts/Layout.astro';
                     <div>
                         <h2 class="text-2xl font-medium mb-4">Contact Information</h2>
                         <input type="email" name="email" placeholder="Email Address" class="form-input" required>
+                        <input type="tel" name="phoneNumber" placeholder="Phone Number" class="form-input mt-4" required>
                     </div>
                     <!-- Shipping Address -->
                     <div>
@@ -25,10 +27,7 @@ import Layout from '../layouts/Layout.astro';
                             <input type="text" name="city" placeholder="City" class="form-input" required>
                             <select name="governorate" class="form-input" required>
                                 <option disabled selected value="">Governorate</option>
-                                <option>Cairo</option>
-                                <option>Giza</option>
-                                <option>Alexandria</option>
-                                <option>Qalyubia</option>
+                                {shipping.map(s => <option value={s.city}>{s.city}</option>)}
                             </select>
                             <textarea name="deliveryInstructions" placeholder="Landmark or special delivery instructions" rows="3" class="form-input sm:col-span-2"></textarea>
                         </div>
