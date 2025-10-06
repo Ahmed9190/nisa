@@ -4,7 +4,7 @@
       "id": "abaya-01",
       "name": "Onyx cardigan ",
       "price": 1500,
-      "priceBefore": 1500,
+      "priceBefore": 1800,
       "currency": "EGP",
       "description": "Crafted from 100% cotton guipure lace.",
       "details": {
@@ -18,7 +18,7 @@
       "colors": [
         {
           "name": "Dark Tan",
-          "code": "a25936",
+          "code": "#a25936",
           "images": [
             "/assets/products/onyx-cardigan/dsc-0022-medium-68d6ea37b6b6d.webp",
             "/assets/products/onyx-cardigan/dsc-0031-medium-68d6ea5556fe9.webp",
@@ -51,7 +51,7 @@
       "id": "hijab-01",
       "name": "dahlia set",
       "price": 1400,
-      "priceBefore": 1400,
+      "priceBefore": 1700,
       "currency": "EGP",
       "description": "Perfect for summer getaways, brunch dates, and laid-back elegant evenings. Style it with woven accessories or statement scarves for a dreamy look.",
       "details": {
@@ -72,17 +72,21 @@
           ]
         },
         {
-          "name": "Midnight Blue",
-          "code": "#003366",
+          "name": "Bone",
+          "code": "#bccfdf",
           "images": [
-            "https://picsum.photos/seed/hijab-blue/600/800"
-          ]
+"/assets/products/dahlia set/img-2049-medium-68d867ff7d9b3.webp", 
+"/assets/products/dahlia set/img-2050-medium-68d868003de76.webp",
+"/assets/products/dahlia set/img-2162-medium-68d86806c24e1.webp"
+]
         },
         {
-          "name": "Emerald",
-          "code": "#50C878",
+          "name": "black",
+          "code": "#000000",
           "images": [
-            "https://picsum.photos/seed/hijab-emerald/600/800"
+            "/assets/products/dahlia set/9c2ca0f9-423a-482e-9c39-36fc0f4d266d-medium-68d867fbc7313.webp",
+            "/assets/products/dahlia set/9c2ca0f9-423a-482e-9c39-36fc0f4d266d-medium-68d867fbc7313.webp"
+            
           ]
         }
       ],
@@ -93,35 +97,46 @@
     },
     {
       "id": "dress-01",
-      "name": "Modest Maxi Dress",
-      "price": 1800,
-      "priceBefore": 2100,
+      "name": "aurora chemise dress",
+      "price": 1200,
+      "priceBefore": 1400,
       "currency": "EGP",
-      "description": "A flowing maxi dress with a defined waist and long sleeves. Perfect for special occasions or elegant everyday wear.",
+      "description": "Perfect for formal occasions, work settings, or elegant casual wear. Pair with structured pants or flowy skirts for a sophisticated modest look.",
       "details": {
-        "fabric": "Viscose-Crepe Blend",
-        "fit": "A-line silhouette, fitted waist",
-        "care": "Gentle machine wash."
+        "fabric": "100% Premium Cotton,Structured and crisp for an elegant. formal silhouette.Breathable yet firm.designed to hold its shape perfectly.Requires proper ironing to maintain its polished look.",
+        "fit": "Versatile Styling Options:Tie the two straps at the front for a classic open-front look.Or wrap them through the hidden slit for a fully closed, sleek fit.Midi length, full sleeves with refined cuffs for an elevated modest appeal.Tailored to create an elongated and graceful figure",
+        "Care Instructions": "Machine wash cold with similar colors.Use mild detergent.Do not bleach.Iron while damp for best results.Hang to dry to preserve its shape."
       },
       "sizes": [
         "One Size"
       ],
       "colors": [
         {
-          "name": "Sage Green",
-          "code": "#B2AC88",
+          "name": "Cinder",
+          "code": "#29262e",
           "images": [
-            "https://picsum.photos/seed/dress-sage/600/800"
+            "/assets/products/aurora chemise dress/5657376f-c5d9-4722-85ae-3fb2899e67b2-medium-68e15ae6516aa.webp",
+            "/assets/products/aurora chemise dress/abaya-01-medium-68e15ae6506cb.webp"
+            
           ]
         },
         {
-          "name": "Terracotta",
-          "code": "#E2725B",
+          "name": "Olive Green",
+          "code": "#4f422d",
           "images": [
-            "https://picsum.photos/seed/dress-terracotta/600/800"
+            "/assets/products/aurora chemise dress/img-5308-medium-68e15aeead33e.webp"
+          ]
+        },
+        {
+          "name": "Pure White",
+          "code": "#fffdf5",
+          "images": [
+            "/assets/products/aurora chemise dress/dsc-0344-medium-68e15ae9374b6.webp",
+            "/assets/products/aurora chemise dress/dsc-0351-medium-68e15ae9374b6.webp"
           ]
         }
       ],
+      
       "category": "dresses",
       "featured": true,
       "inStock": true,
@@ -129,25 +144,43 @@
     },
     {
       "id": "abaya-02",
-      "name": "Embroidered Kimono Abaya",
-      "price": 2500,
-      "priceBefore": 2500,
+      "name": "Thuraya Abaya",
+      "price": 1900,
+      "priceBefore": 2200,
       "currency": "EGP",
       "description": "An open-front kimono style abaya with delicate embroidery on the sleeves. A true statement piece.",
       "details": {
-        "fabric": "Nida Fabric",
+        "fabric": "Made from premium treated pure linen.Soft on the skin, non-irritating, breathable,Characterized by fine black pinstripes adding depth and a heritage-inspired pattern",
         "fit": "Open front, wide sleeves",
-        "care": "Dry clean recommended."
+        "care": "Hand wash separately in cold water with mild detergent.Do not wring or twist to preserve the delicate lace.Air dry flat in shade.Low-temperature steam if needed"
+
       },
       "sizes": [
         "One Size"
       ],
       "colors": [
         {
-          "name": "Black",
-          "code": "#000000",
+          "name": "Noir Stripe",
+          "code": "180f0b",
           "images": [
-            "https://picsum.photos/seed/abaya-black/600/800"
+            "/assets/products/thorya arabian abaya/dsc-0114-medium-68e15a1d2adb3.webp",
+             "/assets/products/thorya arabian abaya/dsc-0119-medium-68e15a2110d8f.webp"
+          ]
+        },
+        {
+          "name": "Beige Stripe",
+          "code": "#e0d5c4",
+          "images": [
+            "/assets/products/thorya arabian abaya/dsc-0131-medium-68e15a2194ca2.webp"
+          ]
+        },
+        {
+          "name": "White Stripe",
+          "code": "#ffffff",
+          "images": [
+            "/assets/products/thorya arabian abaya/dsc-0230-medium-68e15a2ac7d4f.webp",
+            "/assets/products/thorya arabian abaya/dsc-0210edited-medium-68e15a28139b6.webp"
+            
           ]
         }
       ],
@@ -158,32 +191,31 @@
     },
     {
       "id": "tunic-01",
-      "name": "High-Neck Tunic",
-      "price": 950,
-      "priceBefore": 1200,
+      "name": "Opal Linen Cardigan",
+      "price":1500,
+      "priceBefore": 1850,
       "currency": "EGP",
-      "description": "A versatile high-neck tunic that can be dressed up or down. Features a relaxed fit and side slits for ease of movement.",
+      "description": "An iconic piece for formal evenings, cultural gatherings, and refined casual looks. Pair it with silk scarves or minimal accessories for a timeless statement.",
       "details": {
-        "fabric": "Cotton Poplin",
-        "fit": "Relaxed fit",
-        "care": "Machine wash warm."
+        "fabric": "100% Pure Linen: heavyweight, structured, and long-lasting.Firm yet breathable weave that holds its shape elegantly.Hand-stitched embroidery in soft baby tones for a refined, artistic touch.Despite its strength, it feels smooth and gentle on the skin",
+
+        
+        "fit": "Versatile wrap design: wear it as a belted robe for a sophisticated silhouette or leave it open like an abaya for flowing grace.Full-length coverage ensures modesty with a modern twist.Designed for women who value quiet luxury and effortless elegance",
+        "care": "Dry clean recommended to preserve embroidery.If washing at home: hand wash in cold water, mild detergent.Do not bleach.Iron on low heat while damp for best finish.Avoid wringing to maintain linen structure"
       },
       "sizes": [
         "One Size"
       ],
       "colors": [
         {
-          "name": "White",
-          "code": "#FFFFFF",
+          "name": "Classic Beige",
+          "code": "f0f0e7",
           "images": [
-            "https://picsum.photos/seed/tunic-white/600/800"
-          ]
-        },
-        {
-          "name": "Beige",
-          "code": "#F5F5DC",
-          "images": [
-            "https://picsum.photos/seed/tunic-beige/600/800"
+            "/assets/products/opal cardigan/816df0a0-3e30-4ce4-8c6a-1cbd49eaf4f61-medium-68d72c785a9a8.webp",
+             "/assets/products/opal cardigan/dsc-0283-medium-68d72c78609d4.webp",
+             "/assets/products/opal cardigan/img-1669-medium-68d72c481a29e.webp",
+             "/assets/products/opal cardigan/img-1674-medium-68d72c4547021.webp"
+          
           ]
         }
       ],
@@ -194,32 +226,44 @@
     },
     {
       "id": "hijab-02",
-      "name": "Pleated Chiffon Hijab",
-      "price": 650,
-      "priceBefore": 650,
+      "name": "Dove shirt dress/ Cardigan",
+      "price": 1400,
+      "priceBefore": 1650,
       "currency": "EGP",
       "description": "Lightweight and elegant, this pleated chiffon hijab adds texture and sophistication to your look.",
       "details": {
-        "fabric": "Polyester Chiffon",
-        "fit": "Standard rectangle (180cm x 70cm)",
-        "care": "Hand wash recommended."
+        "fabric":"100% Premium Cotton Lace (Rocama).Delicate eyelet embroidery in floral patterns for a light, airy texture.Naturally breathable and soft on the skin, perfect for warm seasons.A fabric that evokes peace, charm, and feminine elegance",
+        "fit": "Two-in-One Design:Wear it fully buttoned as a modest shirt dress.Or leave it open as a flowy cardigan for layering.Relaxed A-line silhouette with full-length sleeves and elegant cuffs.Perfect for cozy chic styling with a romantic, countryside touch",
+        "care": "Hand wash recommended to maintain the delicate lace.Use cold water and a mild detergent.Avoid bleach.Dry flat to prevent stretching.Iron on low heat if needed"
       },
       "sizes": [
         "One Size"
       ],
       "colors": [
         {
-          "name": "Mauve",
-          "code": "#E0B0FF",
+          "name": "mint green",
+          "code": "#d4e0d6",
           "images": [
-            "https://picsum.photos/seed/hijab-mauve/600/800"
+            "/assets/products/Dove petal/IMG_1500 (Medium).webp"
+            
+            
           ]
         },
         {
-          "name": "Navy",
-          "code": "#000080",
+          "name": "Lavender",
+          "code": "#d1c4cf",
           "images": [
-            "https://picsum.photos/seed/hijab-navy/600/800"
+            "/assets/products/Dove petal/img-1539-medium-68dc38e78cf8d.webp",
+            "/assets/products/Dove petal/img-1569-medium-68dc38fb10fab.webp"
+            
+          ]
+        },
+        {
+          "name": "Pure White",
+          "code": "#e1e7f9",
+          "images": [
+            "/assets/products/Dove petal/img-42351-medium-68dc390028d4a.webp",
+          "assets/products/Dove petal/img-4332-medium-68dc390ac5762.webp"
           ]
         }
       ],
@@ -230,25 +274,40 @@
     },
     {
       "id": "trousers-01",
-      "name": "Crepe Wide-Leg Trousers",
-      "price": 1400,
-      "priceBefore": 1400,
+      "name": "Basic linen dress",
+      "price": 950,
+      "priceBefore": 1100,
       "currency": "EGP",
-      "description": "Effortlessly chic wide-leg trousers in a beautiful crepe fabric that drapes perfectly.",
+      "description": "The foundation of every modest wardrobe – pairs seamlessly with your favorite cardigans, kimonos, or skirts for effortless elegance and layering perfection.",
       "details": {
-        "fabric": "Polyester Crepe",
-        "fit": "High-waisted, wide-leg",
-        "care": "Machine wash cold."
+        "fabric": "100% Pure Linen, straight from nature to your skin Naturally breathable, moisture-absorbing, and gentle on the skin.The white color is fully lined to ensure perfect opacity.Designed for a luxurious yet natural feel",
+        "fit": "Straight Fit for a clean, modest silhouette.Half sleeves for versatile layering.Ideal for completing your modest elegant look under open cardigans, sheer pieces, or alone for a minimal chic style",
+        "care": "Hand wash or machine wash cold on a gentle cycle.Do not bleach.Iron on low heat while slightly damp.Avoid tumble drying; air dry for fabric longevity"
       },
       "sizes": [
         "One Size"
       ],
       "colors": [
         {
-          "name": "Camel",
-          "code": "#C19A6B",
+          "name": "Soft Beige ",
+          "code": "#e5d6c0",
           "images": [
-            "https://picsum.photos/seed/trousers-camel/600/800"
+            "/assets/products/Basic linen dress/IMG_2722 (Medium).webp"
+            
+          ]
+        },
+        {
+          "name": "Pure White ",
+          "code": "#eef0f2",
+          "images": [
+            "/assets/products/Basic linen dress/IMG_2773 (Medium).webp"
+          ]
+        },
+        {
+          "name": "black",
+          "code": "#000000",
+          "images": [
+            "/assets/products/Basic linen dress/IMG_2780 (Medium).webp"
           ]
         }
       ],
@@ -261,7 +320,7 @@
       "id": "dress-02",
       "name": "Tiered Cotton Maxi Dress",
       "price": 2300,
-      "priceBefore": 2300,
+      "priceBefore": 2800,
       "currency": "EGP",
       "description": "A romantic and feminine tiered maxi dress made from soft, breathable cotton. Perfect for summer days.",
       "details": {
@@ -326,7 +385,7 @@
       "id": "abaya-03",
       "name": "Batwing Sleeve Abaya",
       "price": 2200,
-      "priceBefore": 2200,
+      "priceBefore": 2650,
       "currency": "EGP",
       "description": "A modern take on the classic abaya, featuring dramatic batwing sleeves for a contemporary silhouette.",
       "details": {
@@ -355,7 +414,7 @@
       "id": "hijab-03",
       "name": "Everyday Jersey Hijab",
       "price": 450,
-      "priceBefore": 450,
+      "priceBefore": 550,
       "currency": "EGP",
       "description": "The perfect go-to hijab for daily wear. Made from soft, stretchy jersey for ultimate comfort.",
       "details": {
@@ -391,7 +450,7 @@
       "id": "tunic-02",
       "name": "Button-Front Linen Tunic",
       "price": 1350,
-      "priceBefore": 1350,
+      "priceBefore": 1600,
       "currency": "EGP",
       "description": "A classic button-front tunic in breathable linen. Can be worn as a shirt or a light outer layer.",
       "details": {
@@ -449,7 +508,7 @@
       "id": "trousers-02",
       "name": "Tailored Straight-Leg Trousers",
       "price": 1500,
-      "priceBefore": 1500,
+      "priceBefore": 1800,
       "currency": "EGP",
       "description": "Polished and professional, these straight-leg trousers are a wardrobe staple for the modern working woman.",
       "details": {
@@ -478,7 +537,7 @@
       "id": "skirt-02",
       "name": "Denim A-Line Maxi Skirt",
       "price": 1750,
-      "priceBefore": 1750,
+      "priceBefore": 2100,
       "currency": "EGP",
       "description": "A versatile and timeless A-line maxi skirt in a classic dark wash denim.",
       "details": {

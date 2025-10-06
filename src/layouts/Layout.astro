@@ -67,7 +67,8 @@ const {
             outline: none;
         }
         
-        #checkoutBtn:hover:not(:disabled), #checkoutBtn:active:not(:disabled) {
+        html:not(.checked-out) #checkoutBtn:hover:not(:disabled),
+        html:not(.checked-out) #checkoutBtn:active:not(:disabled) {
             background-color: var(--blue-light);
         }
 
