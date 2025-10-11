@@ -8,7 +8,7 @@
     "featuredCollection": {
       "title": "Featured Collection",
       "buttonText": "Shop The Full Collection",
-      "featuredProductIds": ["abaya-01", "hijab-01", "dress-03"]
+      "featuredProductIds": ["abaya-01", "hijab-01", "abaya-02"]
     }
   },
   "about": {
