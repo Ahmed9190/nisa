@@ -2,110 +2,110 @@
 [
   {
     "city": "Alexandria",
-    "price": 40.0
+    "price": 90.0
   },
   {
     "city": "Aswan",
-    "price": 60.0
+    "price": 130.0
   },
   {
     "city": "Asyut",
-    "price": 60.0
+    "price": 130.0
   },
   {
     "city": "Beheira",
-    "price": 50.0
+    "price": 85.0
   },
   {
     "city": "Beni Suef",
-    "price": 50.0
+    "price": 85.0
   },
   {
     "city": "Cairo",
-    "price": 35.0
+    "price": 85.0
   },
   {
     "city": "Dakahlia",
-    "price": 50.0
+    "price": 85.0
   },
   {
     "city": "Damietta",
-    "price": 50.0
+    "price": 85.0
   },
   {
     "city": "Faiyum",
-    "price": 50.0
+    "price": 85.0
   },
   {
     "city": "Gharbia",
-    "price": 50.0
+    "price": 85.0
   },
   {
     "city": "Giza",
-    "price": 35.0
+    "price": 80.0
   },
   {
     "city": "Ismailia",
-    "price": 45.0
+    "price": 85.0
   },
   {
     "city": "Kafr el-Sheikh",
-    "price": 50.0
+    "price": 85.0
   },
   {
     "city": "Luxor",
-    "price": 60.0
+    "price": 130.0
   },
   {
     "city": "Matrouh",
-    "price": 60.0
+    "price": 130.0
   },
   {
     "city": "Minya",
-    "price": 60.0
+    "price": 130.0
   },
   {
     "city": "Monufia",
-    "price": 50.0
+    "price": 85.0
   },
   {
     "city": "New Valley",
-    "price": 70.0
+    "price": 85.0
   },
   {
     "city": "North Sinai",
-    "price": 70.0
+    "price": 130.0
   },
   {
     "city": "Port Said",
-    "price": 45.0
+    "price": 85.0
   },
   {
     "city": "Qalyubia",
-    "price": 40.0
+    "price": 85.0
   },
   {
     "city": "Qena",
-    "price": 60.0
+    "price": 130.0
   },
   {
     "city": "Red Sea",
-    "price": 65.0
+    "price": 130.0
   },
   {
     "city": "Sharqia",
-    "price": 50.0
+    "price": 85.0
   },
   {
     "city": "Sohag",
-    "price": 60.0
+    "price": 130.0
   },
   {
     "city": "South Sinai",
-    "price": 70.0
+    "price": 130.0
   },
   {
     "city": "Suez",
-    "price": 45.0
+    "price": 95.0
   }
 ]
