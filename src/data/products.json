@@ -330,6 +330,7 @@
       "id": "winter-item-1",
       "name": "Elif",
       "price": 2980,
+      "priceBefore": 2980,
       "currency": "EGP",
       "description": "A reinterpretation of the timeless cape silhouette — minimalist, elegant, and functional. Balanced between warmth and movement, Elif shifts naturally between casual and formal — a statement of subtle strength.",
 "details": {
@@ -386,6 +387,7 @@
       "id": "winter-item-2",
       "name": "Ivory",
       "price": 3980,
+      "priceBefore": 3980,
       "currency": "EGP",
       "description": "The most luxurious and timeless piece in the collection — Ivory redefines the winter coat with fluid femininity. Cut in a full-circle (cloche) silhouette with no belt, it flows naturally around the body, emphasizing freedom and grace. Hidden snap buttons crafted from the same fabric keep the design pure and uninterrupted. Comes with a wide matching shawl that can be styled in multiple ways — draped, wrapped, or left to fall effortlessly. Every fold, every seam, whispers quiet elegance and lasting sophistication.",
 "details": {
@@ -450,6 +452,7 @@
       "id": "winter-item-3",
       "name": "Juna",
       "price": 3200,
+      "priceBefore": 3200,
       "currency": "EGP",
       "description": "A long shirt dress crafted from heavy natural wool with a soft hairy texture that radiates warmth and authenticity. Designed with puffy sleeves gathered at the wrists with elastic, and large buttons down the full length for versatile styling — open or closed. Casual, 1950s-inspired, and full of winter soul.",
 "details": {
@@ -510,6 +513,7 @@
       "id": "winter-item-4",
       "name": "Lela",
       "price": 2250,
+      "priceBefore": 2250,
       "currency": "EGP",
      "description": "A unique pleated dress with a tailored silhouette and a refined wool shawl draped elegantly over the shoulders, covering the chest and falling gently across the back. The structure is formal yet fluid, offering a timeless, graceful movement. Designed in deep black — a symbol of mystery and quiet luxury — this piece evokes both strength and femininity.",
 "details": {
@@ -566,39 +570,32 @@
     {
       "id": "winter-item-5",
       "name": "Pleated Cape Abaya",
-      "price": 1750,
-      "priceBefore": 2300,
+      "price": 0,
+      "priceBefore": 0,
       "currency": "EGP",
-      "description": "This is a placeholder description for a winter item.",
+      "description": "Coming Soon",
       "details": {
-        "fabric": "Placeholder fabric details.",
-        "fit": "Placeholder fit details.",
-        "care": "Placeholder care details."
+        "fabric": "",
+        "fit": "",
+        "care": ""
       },
       "sizes": [
         "One Size"
       ],
       "colors": [
         {
-          "name": "Color 1",
-          "code": "#FFFF00",
-          "images": []
-        },
-        {
-          "name": "Color 2",
-          "code": "#FF00FF",
-          "images": []
-        },
-        {
-          "name": "Color 3",
-          "code": "#00FFFF",
-          "images": []
+          "name": "Coming Soon",
+          "code": "#000000",
+          "images": [
+            "/assets/products/pleated cape abaya _/color1/1.webp"
+          ]
         }
       ],
       "category": "winter-collection",
       "featured": false,
-      "inStock": true,
-      "sku": "NSA-012"
+      "inStock": false,
+      "comingSoon": true,
+      "sku": "NSA-013"
     }
   ]
 }

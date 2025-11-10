@@ -12,6 +12,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
+  priceBefore?: number;
   discountPrice?: number;
   currency: string;
   description: string;
@@ -30,6 +31,7 @@ export interface Product {
   featured: boolean;
   inStock: boolean;
   sku: string;
+  comingSoon?: boolean;
 }
 
 export interface Content {
