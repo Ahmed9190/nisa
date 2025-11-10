@@ -42,7 +42,7 @@
           ]
         }
       ],
-      "category": "abayas",
+      "category": "autumn-collection",
       "featured": true,
       "inStock": true,
       "sku": "NSA-001"
@@ -95,7 +95,7 @@
           ]
         }
       ],
-      "category": "hijabs",
+      "category": "autumn-collection",
       "featured": true,
       "inStock": true,
       "sku": "NSA-002"
@@ -142,7 +142,7 @@
         }
       ],
       
-      "category": "dresses",
+      "category": "autumn-collection",
       "featured": true,
       "inStock": true,
       "sku": "NSA-003"
@@ -190,7 +190,7 @@
           ]
         }
       ],
-      "category": "abayas",
+      "category": "autumn-collection",
       "featured": false,
       "inStock": true,
       "sku": "NSA-004"
@@ -204,8 +204,6 @@
       "description": "An iconic piece for formal evenings, cultural gatherings, and refined casual looks. Pair it with silk scarves or minimal accessories for a timeless statement.",
       "details": {
         "fabric": "100% Pure Linen: heavyweight, structured, and long-lasting.Firm yet breathable weave that holds its shape elegantly.Hand-stitched embroidery in soft baby tones for a refined, artistic touch.Despite its strength, it feels smooth and gentle on the skin",
-
-        
         "fit": "Versatile wrap design: wear it as a belted robe for a sophisticated silhouette or leave it open like an abaya for flowing grace.Full-length coverage ensures modesty with a modern twist.Designed for women who value quiet luxury and effortless elegance",
         "care": "Dry clean recommended to preserve embroidery.If washing at home: hand wash in cold water, mild detergent.Do not bleach.Iron on low heat while damp for best finish.Avoid wringing to maintain linen structure"
       },
@@ -225,7 +223,7 @@
           ]
         }
       ],
-      "category": "tunics",
+      "category": "autumn-collection",
       "featured": false,
       "inStock": true,
       "sku": "NSA-005"
@@ -279,7 +277,7 @@
           ]
         }
       ],
-      "category": "hijabs",
+      "category": "autumn-collection",
       "featured": false,
       "inStock": true,
       "sku": "NSA-006"
@@ -323,10 +321,284 @@
           ]
         }
       ],
-      "category": "trousers",
+      "category": "autumn-collection",
       "featured": false,
       "inStock": true,
       "sku": "NSA-007"
+    },
+    {
+      "id": "winter-item-1",
+      "name": "Elif",
+      "price": 2980,
+      "currency": "EGP",
+      "description": "A reinterpretation of the timeless cape silhouette — minimalist, elegant, and functional. Balanced between warmth and movement, Elif shifts naturally between casual and formal — a statement of subtle strength.",
+"details": {
+  "fabric": "Pure natural wool lined with soft melton fabric — structured, warm, and beautifully weighty.",
+  "fit": "Minimalist cape silhouette; drapes naturally; versatile between casual and formal.",
+  "care": "• Dry clean only.\n• Do not wash or tumble dry.\n• Steam gently at low distance — never press directly.\n• Store folded or on a wide hanger to preserve its drape."
+
+      },
+      "sizes": [
+        "One Size"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "code": "#000000",
+          "images": [
+            "/assets/products/winter-section/elif/black/1.webp",
+            "/assets/products/winter-section/elif/black/2.webp",
+            "/assets/products/winter-section/elif/black/3.webp",
+            "/assets/products/winter-section/elif/black/4.webp",
+            "/assets/products/winter-section/elif/black/5.webp"
+          ]
+        },
+        {
+          "name": "Chocolate Brown",
+          "code": "#b69e92",
+          "images": [
+            "/assets/products/winter-section/elif/chocolate brown/1.webp",
+            "/assets/products/winter-section/elif/chocolate brown/2.webp",
+            "/assets/products/winter-section/elif/chocolate brown/3.webp",
+            "/assets/products/winter-section/elif/chocolate brown/4.webp",
+            "/assets/products/winter-section/elif/chocolate brown/5.webp"
+          ]
+        },
+        {
+          "name": "Medium Grey",
+          "code": "#808080",
+          "images": [
+           "/assets/products/winter-section/elif/medium grey/1 (1).webp",
+             "/assets/products/winter-section/elif/medium grey/2 (1).webp",
+             "/assets/products/winter-section/elif/medium grey/3 (2).webp",
+             "/assets/products/winter-section/elif/medium grey/4 (1).webp",
+             "/assets/products/winter-section/elif/medium grey/6 (1).webp",
+             "/assets/products/winter-section/elif/medium grey/7 (1).webp"
+          ]
+        }
+      ],
+      "category": "winter-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-008"
+    },
+    {
+      "id": "winter-item-2",
+      "name": "Ivory",
+      "price": 3980,
+      "currency": "EGP",
+      "description": "The most luxurious and timeless piece in the collection — Ivory redefines the winter coat with fluid femininity. Cut in a full-circle (cloche) silhouette with no belt, it flows naturally around the body, emphasizing freedom and grace. Hidden snap buttons crafted from the same fabric keep the design pure and uninterrupted. Comes with a wide matching shawl that can be styled in multiple ways — draped, wrapped, or left to fall effortlessly. Every fold, every seam, whispers quiet elegance and lasting sophistication.",
+"details": {
+  "fabric": "Ultra-soft natural wool, lined with a silky, fluid layer that enhances both warmth and movement. A texture so gentle it feels like snow against the skin.",
+  "fit": "Full-circle (cloche) silhouette with no belt; flows naturally around the body for a feminine and graceful drape.",
+  "care": "• Dry clean only.\n• Avoid heat and direct sunlight.\n• Steam at a distance to refresh texture.\n• Store in a cool, dry place on a padded hanger."
+      },
+      "sizes": [
+        "One Size"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "code": "#000000",
+          "images": [
+            "/assets/products/winter-section/ivory_/black/1.webp",
+             "/assets/products/winter-section/ivory_/black/2 (2).webp",
+             "/assets/products/winter-section/ivory_/black/3 (2).webp",
+             "/assets/products/winter-section/ivory_/black/4.webp",
+             "/assets/products/winter-section/ivory_/black/5.webp",
+             "/assets/products/winter-section/ivory_/black/6.webp",
+             "/assets/products/winter-section/ivory_/black/7 (2).webp",
+             "/assets/products/winter-section/ivory_/black/8.webp"
+          ]
+        },
+        {
+          "name": "Greige",
+          "code": "#948586",
+          "images": [
+            "/assets/products/winter-section/ivory_/greige/1.webp",
+             "/assets/products/winter-section/ivory_/greige/2.webp",
+             "/assets/products/winter-section/ivory_/greige/3.webp",
+             "/assets/products/winter-section/ivory_/greige/4.webp",
+             "/assets/products/winter-section/ivory_/greige/5.webp",
+             "/assets/products/winter-section/ivory_/greige/6.webp"
+          ]
+        },
+        {
+          "name": "Off White",
+          "code": "#d0d0d0",
+          "images": [
+            "/assets/products/winter-section/ivory_/off white_/1.webp",
+           "/assets/products/winter-section/ivory_/off white_/2.webp",
+            "/assets/products/winter-section/ivory_/off white_/3.webp",
+            "/assets/products/winter-section/ivory_/off white_/4.webp",
+            "/assets/products/winter-section/ivory_/off white_/5.webp",
+            "/assets/products/winter-section/ivory_/off white_/6.webp",
+            "/assets/products/winter-section/ivory_/off white_/7.webp",
+            "/assets/products/winter-section/ivory_/off white_/8.webp",
+            "/assets/products/winter-section/ivory_/off white_/9.webp",
+            "/assets/products/winter-section/ivory_/off white_/10.webp",
+            "/assets/products/winter-section/ivory_/off white_/11.webp"
+          ]
+        }
+      ],
+      "category": "winter-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-009"
+    },
+    {
+      "id": "winter-item-3",
+      "name": "Juna",
+      "price": 3200,
+      "currency": "EGP",
+      "description": "A long shirt dress crafted from heavy natural wool with a soft hairy texture that radiates warmth and authenticity. Designed with puffy sleeves gathered at the wrists with elastic, and large buttons down the full length for versatile styling — open or closed. Casual, 1950s-inspired, and full of winter soul.",
+"details": {
+  "fabric": "Natural brushed wool, thick and deeply warm — just like nature itself.",
+  "fit": "Long shirt dress with puffy sleeves gathered at the wrists; versatile styling with large buttons along full length.",
+  "care": "• Dry clean only.\n• Avoid exposure to direct sunlight for long periods.\n• Do not iron; use steam at a distance to refresh.\n• Store in a breathable cotton garment bag."
+
+      },
+      "sizes": [
+        "One Size"
+      ],
+      "colors": [
+        {
+          "name": "Deep Grey ",
+          "code": "#858a8e",
+          "images": ["/assets/products/winter-section/juna/Deep Grey/1 (2).webp",
+            "/assets/products/winter-section/juna/Deep Grey/2_.webp",
+            "/assets/products/winter-section/juna/Deep Grey/3 (2).webp",
+            "/assets/products/winter-section/juna/Deep Grey/4 (1).webp",
+            "/assets/products/winter-section/juna/Deep Grey/5 (1).webp",
+            "/assets/products/winter-section/juna/Deep Grey/6 (1).webp",
+            "/assets/products/winter-section/juna/Deep Grey/7 (1).webp",
+            "/assets/products/winter-section/juna/Deep Grey/8.webp"
+          ]
+        },
+        {
+          "name": "Olive Beige",
+          "code": "#90795a",
+          "images": ["/assets/products/winter-section/juna/Olive Beige/1.webp",
+            "/assets/products/winter-section/juna/Olive Beige/2.webp",
+            "/assets/products/winter-section/juna/Olive Beige/3.webp",
+            "/assets/products/winter-section/juna/Olive Beige/4.webp",
+            "/assets/products/winter-section/juna/Olive Beige/5.webp",
+            "/assets/products/winter-section/juna/Olive Beige/6(1).webp",
+            "/assets/products/winter-section/juna/Olive Beige/7(1).webp"
+          ]
+        },
+        {
+          "name": "Light Beige",
+          "code": "#ffe0c5",
+          "images": ["/assets/products/winter-section/juna/Light Beige/1 (1).webp",
+            "/assets/products/winter-section/juna/Light Beige/2 (1).webp",
+            "/assets/products/winter-section/juna/Light Beige/3 (1).webp",
+            "/assets/products/winter-section/juna/Light Beige/4(1).webp",
+            "/assets/products/winter-section/juna/Light Beige/5(1).webp",
+            "/assets/products/winter-section/juna/Light Beige/5 (2).webp",
+            "/assets/products/winter-section/juna/Light Beige/6.webp",
+            "/assets/products/winter-section/juna/Light Beige/7.webp"
+          ]
+        }
+      ],
+      "category": "winter-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-010"
+    },
+    {
+      "id": "winter-item-4",
+      "name": "Lela",
+      "price": 2250,
+      "currency": "EGP",
+     "description": "A unique pleated dress with a tailored silhouette and a refined wool shawl draped elegantly over the shoulders, covering the chest and falling gently across the back. The structure is formal yet fluid, offering a timeless, graceful movement. Designed in deep black — a symbol of mystery and quiet luxury — this piece evokes both strength and femininity.",
+"details": {
+  "fabric": "Soft natural wool with a delicate texture that flows gracefully. The fabric offers warmth, comfort, and a touch of sophistication perfect for formal evenings.",
+  "fit": "Tailored pleated dress with a draped wool shawl; formal yet fluid, allowing graceful movement.",
+  "care": "• Dry clean only.\n• Avoid wringing or ironing directly.\n• Store folded or on a padded hanger to preserve the shape."
+
+},
+      "sizes": [
+        "One Size"
+      ],
+      "colors": [
+        {
+          "name": "Olive",
+          "code": "#221f14",
+          "images": ["/assets/products/winter-section/lela_/army_/1.webp",
+            "/assets/products/winter-section/lela_/army_/2.webp",
+            "/assets/products/winter-section/lela_/army_/3.webp",
+            "/assets/products/winter-section/lela_/army_/4 (2).webp",
+            "/assets/products/winter-section/lela_/army_/5 (2).webp",
+            "/assets/products/winter-section/lela_/army_/6.webp"
+            
+          ]
+        },
+        {
+          "name": "Black",
+          "code": "#000000",
+          "images": ["/assets/products/winter-section/lela_/black_/1.webp",
+            "/assets/products/winter-section/lela_/black_/2.webp",
+            "/assets/products/winter-section/lela_/black_/3.webp",
+            "/assets/products/winter-section/lela_/black_/4.webp",
+            "/assets/products/winter-section/lela_/black_/5.webp",
+            "/assets/products/winter-section/lela_/black_/6.webp",
+            "/assets/products/winter-section/lela_/black_/7.webp"
+          ]
+        },
+        {
+          "name": "Brown",
+          "code": "#4c302c",
+          "images": ["/assets/products/winter-section/lela_/brown_/1.webp",
+            "/assets/products/winter-section/lela_/brown_/2.webp",
+            "/assets/products/winter-section/lela_/brown_/3.webp",
+            "/assets/products/winter-section/lela_/brown_/4.webp",
+            "/assets/products/winter-section/lela_/brown_/5.webp",
+            "/assets/products/winter-section/lela_/brown_/6.webp"
+          ]
+        }
+      ],
+      "category": "winter-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-011"
+    },
+    {
+      "id": "winter-item-5",
+      "name": "Pleated Cape Abaya",
+      "price": 1750,
+      "priceBefore": 2300,
+      "currency": "EGP",
+      "description": "This is a placeholder description for a winter item.",
+      "details": {
+        "fabric": "Placeholder fabric details.",
+        "fit": "Placeholder fit details.",
+        "care": "Placeholder care details."
+      },
+      "sizes": [
+        "One Size"
+      ],
+      "colors": [
+        {
+          "name": "Color 1",
+          "code": "#FFFF00",
+          "images": []
+        },
+        {
+          "name": "Color 2",
+          "code": "#FF00FF",
+          "images": []
+        },
+        {
+          "name": "Color 3",
+          "code": "#00FFFF",
+          "images": []
+        }
+      ],
+      "category": "winter-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-012"
     }
   ]
 }
