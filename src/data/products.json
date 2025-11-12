@@ -141,7 +141,6 @@
           ]
         }
       ],
-      
       "category": "autumn-collection",
       "featured": true,
       "inStock": true,
@@ -460,7 +459,7 @@
   "fit": "Long shirt dress with puffy sleeves gathered at the wrists; versatile styling with large buttons along full length.",
   "care": "• Dry clean only.\n• Avoid exposure to direct sunlight for long periods.\n• Do not iron; use steam at a distance to refresh.\n• Store in a breathable cotton garment bag."
 
-      },
+},
       "sizes": [
         "One Size"
       ],
@@ -529,7 +528,7 @@
         {
           "name": "Olive",
           "code": "#221f14",
-          "images": ["/assets/products/winter-section/lela_/army_/1.webp",
+          "images": [
             "/assets/products/winter-section/lela_/army_/2.webp",
             "/assets/products/winter-section/lela_/army_/3.webp",
             "/assets/products/winter-section/lela_/army_/4 (2).webp",
@@ -570,32 +569,35 @@
     {
       "id": "winter-item-5",
       "name": "Pleated Cape Abaya",
-      "price": 0,
-      "priceBefore": 0,
-      "currency": "EGP",
-      "description": "Coming Soon",
+      "description": "This is a placeholder description for a winter item.",
       "details": {
-        "fabric": "",
-        "fit": "",
-        "care": ""
+        "fabric": "Placeholder fabric details.",
+        "fit": "Placeholder fit details.",
+        "care": "Placeholder care details."
       },
       "sizes": [
         "One Size"
       ],
       "colors": [
         {
-          "name": "Coming Soon",
-          "code": "#000000",
-          "images": [
-            "/assets/products/pleated cape abaya _/color1/1.webp"
-          ]
+          "name": "Color 1",
+          "code": "#FFFF00",
+          "images": []
+        },
+        {
+          "name": "Color 2",
+          "code": "#FF00FF",
+          "images": []
+        },
+        {
+          "name": "Color 3",
+          "code": "#00FFFF",
+          "images": []
         }
       ],
       "category": "winter-collection",
-      "featured": false,
-      "inStock": false,
-      "comingSoon": true,
-      "sku": "NSA-013"
+      "sku": "NSA-012",
+      "comingSoon": true
     }
   ]
 }
