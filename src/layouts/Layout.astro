@@ -1,306 +1,408 @@
 ---
-import Seo from '../components/Seo.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import site from '../data/site.json';
-import products from '../data/products.json';
-import shipping from '../data/shipping.json';
+import Seo from "../components/Seo.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import site from "../data/site.json";
+import products from "../data/products.json";
+import shipping from "../data/shipping.json";
+import { TapCheckout } from "../types";
 
 export interface Props {
-	title?: string;
-	description?: string;
+  title?: string;
+  description?: string;
 }
 
-const { 
-    title = site.title, 
-    description = site.description 
-} = Astro.props;
+const { title = site.title, description = site.description } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
+  <head>
     <Seo title={title} description={description} />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style is:global>
-        body {
-            font-family: 'Noto Sans Arabic', sans-serif;
-            background-color: #fffaf0;
-            color: #204566;
+      body {
+        font-family: "Noto Sans Arabic", sans-serif;
+        background-color: #fffaf0;
+        color: #204566;
+      }
+
+      /* Animated Checkout Button */
+      #checkoutBtn {
+        --blue: #204566; /* Project's primary color */
+        --blue-light: #1a3a57; /* A slightly darker shade for hover */
+        --green: #20bf6b; /* Success color */
+
+        /* Reset appearances */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: 0;
+
+        /* Positioning and Layout */
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Center content horizontally */
+        padding: 16px 20px 16px 15px;
+        height: 56px;
+        position: relative; /* Important for absolute checkmark */
+
+        /* Typography */
+        font-family: inherit;
+        font-size: 1em;
+        line-height: 1em;
+        font-weight: 500;
+        color: #fffaf0;
+        cursor: pointer;
+
+        /* Aesthetics */
+        background-color: var(--blue);
+        border-radius: 6px;
+        -webkit-tap-highlight-color: transparent;
+        transition:
+          box-shadow 0.2s ease,
+          background-color 150ms ease;
+      }
+
+      #checkoutBtn:focus {
+        outline: none;
+      }
+
+      html:not(.checked-out) #checkoutBtn:hover:not(:disabled),
+      html:not(.checked-out) #checkoutBtn:active:not(:disabled) {
+        background-color: var(--blue-light);
+      }
+
+      #checkoutBtn:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+
+      /* Cart Icon Styling */
+      #checkoutBtn #cart {
+        margin-right: 12px;
+        transform-origin: 20% 100%;
+        opacity: 1;
+      }
+
+      /* Checkmark Icon Styling */
+      #checkoutBtn #check {
+        position: absolute;
+        left: calc(50% - 12px); /* Center the checkmark */
+      }
+
+      /* Checkmark path for stroke animation */
+      #checkoutBtn #check path {
+        stroke-dasharray: 26px;
+        stroke-dashoffset: 26px; /* Start hidden */
+      }
+
+      /* ANIMATIONS */
+      @keyframes slide-up-fade {
+        from {
+          transform: translateY(0);
+          opacity: 1;
         }
-
-        /* Animated Checkout Button */
-        #checkoutBtn {
-            --blue: #204566; /* Project's primary color */
-            --blue-light: #1a3a57; /* A slightly darker shade for hover */
-            --green: #20bf6b; /* Success color */
-
-            /* Reset appearances */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            border: 0;
-
-            /* Positioning and Layout */
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Center content horizontally */
-            padding: 16px 20px 16px 15px;
-            height: 56px;
-            position: relative; /* Important for absolute checkmark */
-            
-            /* Typography */
-            font-family: inherit;
-            font-size: 1em;
-            line-height: 1em;
-            font-weight: 500;
-            color: #fffaf0;
-            cursor: pointer;
-
-            /* Aesthetics */
-            background-color: var(--blue);
-            border-radius: 6px;
-            -webkit-tap-highlight-color: transparent;
-            transition: box-shadow 0.2s ease, background-color 150ms ease;
+        to {
+          transform: translateY(-16px);
+          opacity: 0;
         }
+      }
 
-        #checkoutBtn:focus {
-            outline: none;
+      @keyframes roll-out {
+        0% {
+          transform: translate(0) rotate(0);
         }
-        
-        html:not(.checked-out) #checkoutBtn:hover:not(:disabled),
-        html:not(.checked-out) #checkoutBtn:active:not(:disabled) {
-            background-color: var(--blue-light);
+        20% {
+          transform: translate(0) rotate(-70deg);
+          opacity: 1;
         }
+        50% {
+          transform: translate(0) rotate(-45deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(140px) rotate(-47deg);
+          opacity: 0;
+        }
+      }
 
-        #checkoutBtn:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
+      @keyframes checkmark {
+        from {
+          stroke-dashoffset: 26px;
         }
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
 
-        /* Cart Icon Styling */
-        #checkoutBtn #cart {
-            margin-right: 12px;
-            transform-origin: 20% 100%;
-            opacity: 1;
-        }
+      /* .checked-out STATE */
+      html.checked-out #checkoutBtn span {
+        animation: slide-up-fade 150ms 1;
+        animation-fill-mode: both;
+      }
 
-        /* Checkmark Icon Styling */
-        #checkoutBtn #check {
-            position: absolute;
-            left: calc(50% - 12px); /* Center the checkmark */
-        }
+      html.checked-out #checkoutBtn #cart {
+        animation: roll-out 1s 1 150ms;
+        animation-timing-function: ease-in;
+        animation-fill-mode: both;
+      }
 
-        /* Checkmark path for stroke animation */
-        #checkoutBtn #check path {
-            stroke-dasharray: 26px;
-            stroke-dashoffset: 26px; /* Start hidden */
-        }
+      html.checked-out #checkoutBtn {
+        background-color: var(--green);
+        transition-delay: 1150ms;
+      }
 
-        /* ANIMATIONS */
-        @keyframes slide-up-fade {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-16px); opacity: 0; }
-        }
-
-        @keyframes roll-out {
-            0% { transform: translate(0) rotate(0); }
-            20% { transform: translate(0) rotate(-70deg); opacity: 1; }
-            50% { transform: translate(0) rotate(-45deg); opacity: 1; }
-            100% { transform: translate(140px) rotate(-47deg); opacity: 0; }
-        }
-
-        @keyframes checkmark {
-            from { stroke-dashoffset: 26px; }
-            to { stroke-dashoffset: 0; }
-        }
-
-        /* .checked-out STATE */
-        html.checked-out #checkoutBtn span {
-            animation: slide-up-fade 150ms 1;
-            animation-fill-mode: both;
-        }
-
-        html.checked-out #checkoutBtn #cart {
-            animation: roll-out 1s 1 150ms;
-            animation-timing-function: ease-in;
-            animation-fill-mode: both;
-        }
-
-        html.checked-out #checkoutBtn {
-            background-color: var(--green);
-            transition-delay: 1150ms;
-        }
-
-        html.checked-out #checkoutBtn #check path {
-            animation: checkmark 150ms 1 1150ms;
-            animation-timing-function: ease-in;
-            animation-fill-mode: both;
-        }
+      html.checked-out #checkoutBtn #check path {
+        animation: checkmark 150ms 1 1150ms;
+        animation-timing-function: ease-in;
+        animation-fill-mode: both;
+      }
     </style>
-</head>
-<body class="antialiased">
-    <div id="toast" class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-md hidden" style="z-index: 9999;">
-        <span id="toast-message"></span>
+  </head>
+  <body class="antialiased">
+    <div
+      id="toast"
+      class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-md hidden"
+      style="z-index: 9999;"
+    >
+      <span id="toast-message"></span>
     </div>
     <Header />
     <main>
-        <slot />
+      <slot />
     </main>
     <Footer />
 
     <!-- Cart Drawer -->
-    <div id="cart-drawer-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
-    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-[#fffaf0] z-50 transform translate-x-full">
-        <div class="flex flex-col h-full">
-            <div class="flex items-center justify-between p-6 border-b border-[#D4E4E8]">
-                <h2 class="text-2xl font-medium">Your Cart</h2>
-                <button id="close-cart-button" class="text-3xl">&times;</button>
-            </div>
-            <div id="cart-items" class="flex-grow p-6 overflow-y-auto">
-                <!-- Cart items will be injected here -->
-                <p class="text-center text-[#6B7B8C]">Your cart is empty.</p>
-            </div>
-            <div class="p-6 border-t border-[#D4E4E8]">
-                <div class="flex justify-between items-center text-xl font-medium mb-4">
-                    <span>Subtotal</span>
-                    <span id="cart-subtotal">EGP 0</span>
-                </div>
-                <button id="checkoutBtn" class="w-full">
-                    <svg style="width:24px;height:24px" viewBox="0 0 24 24" id="cart">
-                        <path fill="#fff" d="M17,18A2,2 0 0,1 19,20A2,2,0 0,1 17,22C15.89,22 15,21.1 15,20C15,18.89 15.89,18 17,18M1,2H4.27L5.21,4H20A1,1 0 0,1 21,5C21,5.17 20.95,5.34 20.88,5.5L17.3,11.97C16.96,12.58 16.3,13 15.55,13H8.1L7.2,14.63L7.17,14.75A0.25,0.25 0 0,0 7.42,15H19V17H7C5.89,17 5,16.1 5,15C5,14.65 5.09,14.32 5.24,14.04L6.6,11.59L3,4H1V2M7,18A2,2 0 0,1 9,20A2,2 0 0,1 7,22C5.89,22 5,21.1 5,20C5,18.89 5.89,18 7,18M16,11L18.78,6H6.14L8.5,11H16Z" />
-                    </svg>
-                    <span>Proceed to Checkout</span>
-                    <svg id="check" style="width:24px;height:24px" viewBox="0 0 24 24">
-                        <path stroke-width="2" fill="none" stroke="#ffffff" d="M 3,12 l 6,6 l 12, -12"/>
-                    </svg>
-                </button>
-            </div>
+    <div
+      id="cart-drawer-overlay"
+      class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"
+    >
+    </div>
+    <div
+      id="cart-drawer"
+      class="fixed top-0 right-0 h-full w-full max-w-md bg-[#fffaf0] z-50 transform translate-x-full"
+    >
+      <div class="flex flex-col h-full">
+        <div
+          class="flex items-center justify-between p-6 border-b border-[#D4E4E8]"
+        >
+          <h2 class="text-2xl font-medium">Your Cart</h2>
+          <button id="close-cart-button" class="text-3xl">&times;</button>
         </div>
+        <div id="cart-items" class="flex-grow p-6 overflow-y-auto">
+          <!-- Cart items will be injected here -->
+          <p class="text-center text-[#6B7B8C]">Your cart is empty.</p>
+        </div>
+        <div class="p-6 border-t border-[#D4E4E8]">
+          <div
+            class="flex justify-between items-center text-xl font-medium mb-4"
+          >
+            <span>Subtotal</span>
+            <span id="cart-subtotal">EGP 0</span>
+          </div>
+          <button id="checkoutBtn" class="w-full">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24" id="cart">
+              <path
+                fill="#fff"
+                d="M17,18A2,2 0 0,1 19,20A2,2,0 0,1 17,22C15.89,22 15,21.1 15,20C15,18.89 15.89,18 17,18M1,2H4.27L5.21,4H20A1,1 0 0,1 21,5C21,5.17 20.95,5.34 20.88,5.5L17.3,11.97C16.96,12.58 16.3,13 15.55,13H8.1L7.2,14.63L7.17,14.75A0.25,0.25 0 0,0 7.42,15H19V17H7C5.89,17 5,16.1 5,15C5,14.65 5.09,14.32 5.24,14.04L6.6,11.59L3,4H1V2M7,18A2,2 0 0,1 9,20A2,2 0 0,1 7,22C5.89,22 5,21.1 5,20C5,18.89 5.89,18 7,18M16,11L18.78,6H6.14L8.5,11H16Z"
+              ></path>
+            </svg>
+            <span>Proceed to Checkout</span>
+            <svg id="check" style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path
+                stroke-width="2"
+                fill="none"
+                stroke="#ffffff"
+                d="M 3,12 l 6,6 l 12, -12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Size Guide Modal -->
-    <div id="size-guide-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"></div>
-    <div id="size-guide-modal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#fffaf0] shadow-2xl z-50 rounded-lg p-8 w-11/12 max-w-2xl hidden">
-         <button id="close-size-guide-button" class="absolute top-4 right-4 text-3xl">&times;</button>
-         <h2 class="text-2xl font-medium mb-4 text-center">Size Guide</h2>
-         <p class="text-center text-[#6B7B8C] mb-6">All measurements are in centimeters (cm).</p>
-         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="border-b border-[#D4E4E8]">
-                        <th class="py-2 px-4">Size</th>
-                        <th class="py-2 px-4">Bust</th>
-                        <th class="py-2 px-4">Waist</th>
-                        <th class="py-2 px-4">Hips</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="border-b border-[#D4E4E8]">
-                        <td class="py-2 px-4 font-medium">S</td>
-                        <td class="py-2 px-4">86-89</td>
-                        <td class="py-2 px-4">69-71</td>
-                        <td class="py-2 px-4">94-97</td>
-                    </tr>
-                    <tr class="border-b border-[#D4E4E8]">
-                        <td class="py-2 px-4 font-medium">M</td>
-                        <td class="py-2 px-4">91-94</td>
-                        <td class="py-2 px-4">74-76</td>
-                        <td class="py-2 px-4">99-102</td>
-                    </tr>
-                     <tr class="border-b border-[#D4E4E8]">
-                        <td class="py-2 px-4 font-medium">L</td>
-                        <td class="py-2 px-4">98-102</td>
-                        <td class="py-2 px-4">80-84</td>
-                        <td class="py-2 px-4">105-109</td>
-                    </tr>
-                     <tr>
-                        <td class="py-2 px-4 font-medium">XL</td>
-                        <td class="py-2 px-4">105-109</td>
-                        <td class="py-2 px-4">88-92</td>
-                        <td class="py-2 px-4">113-117</td>
-                    </tr>
-                </tbody>
-            </table>
-         </div>
+    <div
+      id="size-guide-modal-overlay"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"
+    >
+    </div>
+    <div
+      id="size-guide-modal"
+      class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#fffaf0] shadow-2xl z-50 rounded-lg p-8 w-11/12 max-w-2xl hidden"
+    >
+      <button
+        id="close-size-guide-button"
+        class="absolute top-4 right-4 text-3xl">&times;</button
+      >
+      <h2 class="text-2xl font-medium mb-4 text-center">Size Guide</h2>
+      <p class="text-center text-[#6B7B8C] mb-6">
+        All measurements are in centimeters (cm).
+      </p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-[#D4E4E8]">
+              <th class="py-2 px-4">Size</th>
+              <th class="py-2 px-4">Bust</th>
+              <th class="py-2 px-4">Waist</th>
+              <th class="py-2 px-4">Hips</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-[#D4E4E8]">
+              <td class="py-2 px-4 font-medium">S</td>
+              <td class="py-2 px-4">86-89</td>
+              <td class="py-2 px-4">69-71</td>
+              <td class="py-2 px-4">94-97</td>
+            </tr>
+            <tr class="border-b border-[#D4E4E8]">
+              <td class="py-2 px-4 font-medium">M</td>
+              <td class="py-2 px-4">91-94</td>
+              <td class="py-2 px-4">74-76</td>
+              <td class="py-2 px-4">99-102</td>
+            </tr>
+            <tr class="border-b border-[#D4E4E8]">
+              <td class="py-2 px-4 font-medium">L</td>
+              <td class="py-2 px-4">98-102</td>
+              <td class="py-2 px-4">80-84</td>
+              <td class="py-2 px-4">105-109</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4 font-medium">XL</td>
+              <td class="py-2 px-4">105-109</td>
+              <td class="py-2 px-4">88-92</td>
+              <td class="py-2 px-4">113-117</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <script define:vars={{ products: products.products, shipping: shipping }} is:inline>
-// --- UTILS ---
-const formatPrice = (price, currency = 'EGP') => {
-    // Format the price, then manually add a space if the currency symbol is at the beginning.
-    const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency', currency, minimumFractionDigits: 0
-    }).format(price);
+    <script
+      define:vars={{ products: products.products, shipping: shipping }}
+      is:inline
+    >
+      // --- UTILS ---
+      const formatPrice = (price, currency = "EGP") => {
+        // Format the price, then manually add a space if the currency symbol is at the beginning.
+        const formatted = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency,
+          minimumFractionDigits: 0,
+        }).format(price);
 
-    // Check if the first character is not a digit, which implies it's a currency symbol.
-    if (isNaN(parseInt(formatted[0], 10))) {
-        // Find the first digit's index
-        const firstDigitIndex = formatted.search(/\d/);
-        if (firstDigitIndex > 0) {
-            return formatted.slice(0, firstDigitIndex) + ' ' + formatted.slice(firstDigitIndex);
+        // Check if the first character is not a digit, which implies it's a currency symbol.
+        if (isNaN(parseInt(formatted[0], 10))) {
+          // Find the first digit's index
+          const firstDigitIndex = formatted.search(/\d/);
+          if (firstDigitIndex > 0) {
+            return (
+              formatted.slice(0, firstDigitIndex) +
+              " " +
+              formatted.slice(firstDigitIndex)
+            );
+          }
         }
-    }
-    return formatted;
-};
+        return formatted;
+      };
 
-
-// --- CART ---
-class ShoppingCart {
-    constructor() {
-        this.items = JSON.parse(localStorage.getItem('nisaCart')) || [];
-        this.updateCartUI();
-    }
-    addItem(product, color, size, quantity = 1) {
-        const existingItem = this.items.find(i => i.id === product.id && i.size === size && i.color.name === color.name);
-        if (existingItem) { existingItem.quantity += quantity; }
-        else {
+      // --- CART ---
+      class ShoppingCart {
+        constructor() {
+          this.items = JSON.parse(localStorage.getItem("nisaCart")) || [];
+          this.updateCartUI();
+        }
+        addItem(product, color, size, quantity = 1) {
+          const existingItem = this.items.find(
+            i =>
+              i.id === product.id &&
+              i.size === size &&
+              i.color.name === color.name
+          );
+          if (existingItem) {
+            existingItem.quantity += quantity;
+          } else {
             const price = product.price;
-            this.items.push({ id: product.id, name: product.name, price: product.price, priceBefore: product.priceBefore, size, color, quantity, image: color.images[0] });
+            this.items.push({
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              priceBefore: product.priceBefore,
+              size,
+              color,
+              quantity,
+              image: color.images[0],
+            });
+          }
+          this.save();
         }
-        this.save();
-    }
-    removeItem(itemId, colorName, size) {
-        this.items = this.items.filter(i => !(i.id === itemId && i.color.name === colorName && i.size === size));
-        this.save();
-    }
-    updateQuantity(itemId, colorName, size, newQuantity) {
-        const item = this.items.find(i => i.id === itemId && i.color.name === colorName && i.size === size);
-        if (item) {
-            if (newQuantity > 0) { item.quantity = newQuantity; }
-            else { this.removeItem(itemId, colorName, size); }
+        removeItem(itemId, colorName, size) {
+          this.items = this.items.filter(
+            i =>
+              !(
+                i.id === itemId &&
+                i.color.name === colorName &&
+                i.size === size
+              )
+          );
+          this.save();
         }
-        this.save();
-    }
-    getTotal() { return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0); }
-    getItemCount() { return this.items.reduce((sum, item) => sum + item.quantity, 0); }
-    save() {
-        localStorage.setItem('nisaCart', JSON.stringify(this.items));
-        this.updateCartUI();
-        document.dispatchEvent(new CustomEvent('cart-updated'));
-    }
-    clear() {
-        this.items = [];
-        this.save();
-    }
-    updateCartUI() {
-        const count = this.getItemCount();
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        if (checkoutBtn) {
-            checkoutBtn.disabled = count === 0;
-        }
-        document.querySelectorAll('.cart-count').forEach(el => {
-            el.textContent = count;
-            el.style.display = count > 0 ? 'flex' : 'none';
-        });
-        const itemsContainer = document.getElementById('cart-items');
-        if (itemsContainer) {
-            if (this.items.length === 0) {
-                itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
+        updateQuantity(itemId, colorName, size, newQuantity) {
+          const item = this.items.find(
+            i =>
+              i.id === itemId && i.color.name === colorName && i.size === size
+          );
+          if (item) {
+            if (newQuantity > 0) {
+              item.quantity = newQuantity;
             } else {
-                itemsContainer.innerHTML = this.items.map(item => {
-                    const isSale = item.price < item.priceBefore;
-                    return `
+              this.removeItem(itemId, colorName, size);
+            }
+          }
+          this.save();
+        }
+        getTotal() {
+          return this.items.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+          );
+        }
+        getItemCount() {
+          return this.items.reduce((sum, item) => sum + item.quantity, 0);
+        }
+        save() {
+          localStorage.setItem("nisaCart", JSON.stringify(this.items));
+          this.updateCartUI();
+          document.dispatchEvent(new CustomEvent("cart-updated"));
+        }
+        clear() {
+          this.items = [];
+          this.save();
+        }
+        updateCartUI() {
+          const count = this.getItemCount();
+          const checkoutBtn = document.getElementById("checkoutBtn");
+          if (checkoutBtn) {
+            checkoutBtn.disabled = count === 0;
+          }
+          document.querySelectorAll(".cart-count").forEach(el => {
+            el.textContent = count;
+            el.style.display = count > 0 ? "flex" : "none";
+          });
+          const itemsContainer = document.getElementById("cart-items");
+          if (itemsContainer) {
+            if (this.items.length === 0) {
+              itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
+            } else {
+              itemsContainer.innerHTML = this.items
+                .map(item => {
+                  const isSale = item.price < item.priceBefore;
+                  return `
                     <div class="flex gap-4 mb-4">
                         <img src="${item.image}" alt="${item.name}" class="w-24 h-32 object-cover rounded-md">
                         <div class="flex-grow flex flex-col justify-between">
@@ -308,12 +410,16 @@ class ShoppingCart {
                                 <h4 class="font-medium">${item.name}</h4>
                                 <p class="text-sm text-[#6B7B8C]">${item.color.name} / ${item.size}</p>
                                 <div class="font-medium mt-2">
-                                    ${isSale ? `
+                                    ${
+                                      isSale
+                                        ? `
                                         <span class="text-red-500">${formatPrice(item.price)}</span>
                                         <span class="line-through text-sm text-gray-500 ml-2">${formatPrice(item.priceBefore)}</span>
-                                    ` : `
+                                    `
+                                        : `
                                         <span>${formatPrice(item.price)}</span>
-                                    `}
+                                    `
+                                    }
                                 </div>
                             </div>
                             <div class="flex items-center border border-gray-300 rounded w-max mt-2">
@@ -324,66 +430,86 @@ class ShoppingCart {
                         </div>
                         <button class="text-xs text-red-500 hover:underline remove-from-cart self-start" data-id="${item.id}" data-color="${item.color.name}" data-size="${item.size}">Remove</button>
                     </div>
-                `}).join('');
+                `;
+                })
+                .join("");
             }
-        }
-        const cartSubtotal = document.getElementById('cart-subtotal');
-        if(cartSubtotal) {
+          }
+          const cartSubtotal = document.getElementById("cart-subtotal");
+          if (cartSubtotal) {
             cartSubtotal.textContent = formatPrice(this.getTotal());
+          }
         }
-    }
-}
+      }
 
-const cart = new ShoppingCart();
+      const cart = new ShoppingCart();
 
-// --- UI INTERACTIONS ---
-document.addEventListener('DOMContentLoaded', () => {
-    // Global elements
-    const body = document.body;
+      // --- UI INTERACTIONS ---
+      document.addEventListener("DOMContentLoaded", () => {
+        // Global elements
+        const body = document.body;
 
-    // State for product page
-    let product;
-    let selectedColor;
-    let selectedSize;
+        // State for product page
+        let product;
+        let selectedColor;
+        let selectedSize;
 
-    // --- INITIALIZATION ---
-    function initProductPage() {
-        const productPageContainer = document.getElementById('add-to-cart-product-page-btn');
-        if (!productPageContainer) return;
+        // --- INITIALIZATION ---
+        function initProductPage() {
+          const productPageContainer = document.getElementById(
+            "add-to-cart-product-page-btn"
+          );
+          if (!productPageContainer) return;
 
-        const productId = productPageContainer.dataset.productId;
-        product = products.find(p => p.id === productId);
-        if (!product) return;
+          const productId = productPageContainer.dataset.productId;
+          product = products.find(p => p.id === productId);
+          if (!product) return;
 
-        selectedColor = product.colors[0];
-        selectedSize = product.sizes[0];
-        updateGallery(selectedColor.images);
-    }
+          selectedColor = product.colors[0];
+          selectedSize = product.sizes[0];
+          updateGallery(selectedColor.images);
+        }
 
-    function initCheckoutPage() {
-        const checkoutForm = document.getElementById('checkout-form');
-        if (!checkoutForm) return;
+        function initCheckoutPage() {
+          const checkoutForm = document.getElementById("checkout-form");
+          if (!checkoutForm) return;
 
-        const itemsContainer = document.getElementById('checkout-items');
-        const subtotalEl = document.getElementById('checkout-subtotal');
-        const shippingEl = document.getElementById('checkout-shipping');
-        const totalEl = document.getElementById('checkout-total');
-        const governorateSelect = checkoutForm.querySelector('select[name="governorate"]');
+          const itemsContainer = document.getElementById("checkout-items");
+          const subtotalEl = document.getElementById("checkout-subtotal");
+          const shippingEl = document.getElementById("checkout-shipping");
+          const totalEl = document.getElementById("checkout-total");
+          const governorateSelect = checkoutForm.querySelector(
+            'select[name="governorate"]'
+          );
+          let totalAmount;
 
-        const updateTotals = () => {
+          const updateTotals = () => {
             const selectedGovernorate = governorateSelect.value;
-            const shippingInfo = shipping.find(s => s.city === selectedGovernorate);
-            const shippingCost = cart.items.length > 0 ? (shippingInfo ? shippingInfo.price : 50) : 0;
+            const shippingInfo = shipping.find(
+              s => s.city === selectedGovernorate
+            );
+            const shippingCost =
+              cart.items.length > 0
+                ? shippingInfo
+                  ? shippingInfo.price
+                  : 50
+                : 0;
 
             if (cart.items.length === 0) {
-                itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
-                const checkoutButton = checkoutForm.querySelector('button[type="submit"]');
-                if(checkoutButton) checkoutButton.disabled = true;
-                showToast('Your cart is empty. Please add items to your cart before placing an order.', 'error');
+              itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
+              const checkoutButton = checkoutForm.querySelector(
+                'button[type="submit"]'
+              );
+              if (checkoutButton) checkoutButton.disabled = true;
+              showToast(
+                "Your cart is empty. Please add items to your cart before placing an order.",
+                "error"
+              );
             } else {
-                itemsContainer.innerHTML = cart.items.map(item => {
-                    const isSale = item.price < item.priceBefore;
-                    return `
+              itemsContainer.innerHTML = cart.items
+                .map(item => {
+                  const isSale = item.price < item.priceBefore;
+                  return `
                     <div class="flex gap-4 items-center">
                         <div class="relative">
                             <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-md">
@@ -395,282 +521,365 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p class="text-xs">${formatPrice(item.price)} each</p>
                         </div>
                         <div class="text-sm font-medium text-right">
-                            ${isSale ? `
+                            ${
+                              isSale
+                                ? `
                                 <span class="text-red-500">${formatPrice(item.price * item.quantity)}</span>
                                 <br>
                                 <span class="line-through text-xs text-gray-500">${formatPrice(item.priceBefore * item.quantity)}</span>
-                            ` : `
+                            `
+                                : `
                                 <span>${formatPrice(item.price * item.quantity)}</span>
-                            `}
+                            `
+                            }
                         </div>
                     </div>
-                `}).join('');
+                `;
+                })
+                .join("");
             }
 
             const subtotal = cart.getTotal();
-            const subtotalBefore = cart.items.reduce((sum, item) => sum + (item.priceBefore * item.quantity), 0);
+            const subtotalBefore = cart.items.reduce(
+              (sum, item) => sum + item.priceBefore * item.quantity,
+              0
+            );
             const totalSavings = subtotalBefore - subtotal;
 
             const total = subtotal + shippingCost;
-            if(subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
-            if(shippingEl) shippingEl.textContent = formatPrice(shippingCost);
-            if(totalEl) totalEl.textContent = formatPrice(total);
+            totalAmount = total;
+            if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
+            if (shippingEl) shippingEl.textContent = formatPrice(shippingCost);
+            if (totalEl) totalEl.textContent = formatPrice(total);
 
-            const savingsEl = document.getElementById('checkout-savings');
-            const savingsContainerEl = document.getElementById('checkout-savings-container');
+            const savingsEl = document.getElementById("checkout-savings");
+            const savingsContainerEl = document.getElementById(
+              "checkout-savings-container"
+            );
 
             if (savingsEl && savingsContainerEl) {
-                if (totalSavings > 0) {
-                    savingsEl.textContent = `-${formatPrice(totalSavings)}`;
-                    savingsContainerEl.style.display = 'flex';
-                } else {
-                    savingsContainerEl.style.display = 'none';
-                }
+              if (totalSavings > 0) {
+                savingsEl.textContent = `-${formatPrice(totalSavings)}`;
+                savingsContainerEl.style.display = "flex";
+              } else {
+                savingsContainerEl.style.display = "none";
+              }
             }
 
-            const orderSummaryInput = document.getElementById('order-summary-input');
-            const orderTotalInput = document.getElementById('order-total-input');
+            const orderSummaryInput = document.getElementById(
+              "order-summary-input"
+            );
+            const orderTotalInput =
+              document.getElementById("order-total-input");
 
             if (orderSummaryInput) {
-                const itemsSummary = cart.items.map(item => {
-                    const isSale = item.price < item.priceBefore;
-                    const priceString = isSale
-                        ? `Price: ${formatPrice(item.price * item.quantity)} (was ${formatPrice(item.priceBefore * item.quantity)})`
-                        : `Price: ${formatPrice(item.price * item.quantity)}`;
-                    return `${item.name} (${item.color.name} / ${item.size}) - Qty: ${item.quantity} - ${priceString}`;
-                }).join('\n');
-                const shippingSummary = `Shipping: ${formatPrice(shippingCost)}`;
-                orderSummaryInput.value = `${itemsSummary}\n${shippingSummary}`;
+              const itemsSummary = cart.items
+                .map(item => {
+                  const isSale = item.price < item.priceBefore;
+                  const priceString = isSale
+                    ? `Price: ${formatPrice(item.price * item.quantity)} (was ${formatPrice(item.priceBefore * item.quantity)})`
+                    : `Price: ${formatPrice(item.price * item.quantity)}`;
+                  return `${item.name} (${item.color.name} / ${item.size}) - Qty: ${item.quantity} - ${priceString}`;
+                })
+                .join("\n");
+              const shippingSummary = `Shipping: ${formatPrice(shippingCost)}`;
+              orderSummaryInput.value = `${itemsSummary}\n${shippingSummary}`;
             }
             if (orderTotalInput) {
-                orderTotalInput.value = formatPrice(total);
+              orderTotalInput.value = formatPrice(total);
             }
-        }
+          };
 
-        governorateSelect.addEventListener('change', updateTotals);
-        updateTotals(); // Initial calculation
+          governorateSelect.addEventListener("change", updateTotals);
+          updateTotals(); // Initial calculation
 
-        document.addEventListener('cart-updated', updateTotals);
+          document.addEventListener("cart-updated", updateTotals);
 
-        checkoutForm.addEventListener('submit', (event) => {
+          checkoutForm.addEventListener("submit", async event => {
             event.preventDefault();
             const formData = new FormData(checkoutForm);
-            const submitButton = checkoutForm.querySelector('button[type="submit"]');
+            const submitButton = checkoutForm.querySelector(
+              'button[type="submit"]'
+            );
+            if (submitButton) submitButton.disabled = true;
+            const selectedCurrency = formData.get("currency");
 
-            if(submitButton) submitButton.disabled = true;
+            console.log(totalAmount);
+            const tapCheckout = {
+              amount: totalAmount,
+              currency: selectedCurrency || "EGP",
+              customer: {
+                email: formData.get("email"),
+                first_name: formData.get("fullName"),
+              },
+              source: { id: "src_card" },
+              redirect: { url: "http://localhost:4321/checkout-complete" },
+              description: formData.get("deliveryInstructions"),
+            };
 
-            fetch(checkoutForm.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
+            console.log("Sending to backend:", tapCheckout);
+
+            try {
+              const response = await fetch(
+                "http://localhost:3000/api/create-charge",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(tapCheckout),
                 }
-            }).then(response => {
-                if (response.ok) {
-                    cart.clear();
-                    window.location.href = '/?order=success';
-                } else {
-                    response.json().then(data => {
-                        if (Object.hasOwn(data, 'errors')) {
-                            alert(data["errors"].map(error => error["message"]).join(", "));
-                        } else {
-                            alert('Oops! There was a problem submitting your form');
-                        }
-                        if(submitButton) submitButton.disabled = false;
-                    })
-                }
-            }).catch(error => {
-                alert('Oops! There was a problem submitting your form');
-                if(submitButton) submitButton.disabled = false;
-            });
-        });
-    }
+              );
 
-    // --- EVENT LISTENERS ---
-    body.addEventListener('click', e => {
-        // Cart
-        if (e.target.closest('#cart-button')) toggleCartDrawer(true);
-        if (e.target.closest('#close-cart-button')) toggleCartDrawer(false);
-        if (e.target.closest('#cart-drawer-overlay')) toggleCartDrawer(false);
+              console.log("Response status:", response.status);
 
-        // Add to Cart (Card)
-        const addToCartCardBtn = e.target.closest('.add-to-cart-card-btn');
-        if (addToCartCardBtn) {
+              if (!response.ok) {
+                const errorData = await response.text();
+                console.error("Backend error:", errorData);
+                alert(`Backend error: ${response.status} - ${errorData}`);
+                return;
+              }
+
+              const paymentResponse = await response.json();
+              console.log("Payment response:", paymentResponse);
+
+              if (
+                !paymentResponse.success ||
+                !paymentResponse.data?.redirect_url
+              ) {
+                console.error("Invalid payment response:", paymentResponse);
+                alert("Payment failed: Invalid response");
+                return;
+              }
+              localStorage.setItem(
+                "orderData",
+                JSON.stringify({
+                  email: formData.get("email"),
+                  fullName: formData.get("fullName"),
+                  phoneNumber: formData.get("phoneNumber"),
+                  streetAddress: formData.get("streetAddress"),
+                  apartment: formData.get("apartment"),
+                  city: formData.get("city"),
+                  governorate: formData.get("governorate"),
+                  deliveryInstructions: formData.get("deliveryInstructions"),
+                  currency: selectedCurrency,
+                  chargeId: paymentResponse.data.id,
+                })
+              );
+
+              window.location.href = paymentResponse.data.redirect_url;
+            } catch (error) {
+              console.error("Fetch error:", error);
+              alert("Payment server error: " + error.message);
+            }
+          });
+        }
+
+        // --- EVENT LISTENERS ---
+        body.addEventListener("click", e => {
+          // Cart
+          if (e.target.closest("#cart-button")) toggleCartDrawer(true);
+          if (e.target.closest("#close-cart-button")) toggleCartDrawer(false);
+          if (e.target.closest("#cart-drawer-overlay")) toggleCartDrawer(false);
+
+          // Add to Cart (Card)
+          const addToCartCardBtn = e.target.closest(".add-to-cart-card-btn");
+          if (addToCartCardBtn) {
             const productId = addToCartCardBtn.dataset.productId;
             const p = products.find(p => p.id === productId);
             if (p && p.inStock) {
-                cart.addItem(p, p.colors[0], p.sizes[0]);
-                toggleCartDrawer(true);
+              cart.addItem(p, p.colors[0], p.sizes[0]);
+              toggleCartDrawer(true);
             }
-        }
+          }
 
-        // Add to Cart (Product Page)
-        const addToCartPageBtn = e.target.closest('#add-to-cart-product-page-btn');
-        if (addToCartPageBtn) {
+          // Add to Cart (Product Page)
+          const addToCartPageBtn = e.target.closest(
+            "#add-to-cart-product-page-btn"
+          );
+          if (addToCartPageBtn) {
             cart.addItem(product, selectedColor, selectedSize);
             toggleCartDrawer(true);
-        }
+          }
 
-        // Cart item quantity
-        const quantityChangeBtn = e.target.closest('.cart-quantity-change');
-        if (quantityChangeBtn) {
+          // Cart item quantity
+          const quantityChangeBtn = e.target.closest(".cart-quantity-change");
+          if (quantityChangeBtn) {
             const { id, color, size, amount } = quantityChangeBtn.dataset;
-            const item = cart.items.find(i => i.id === id && i.color.name === color && i.size === size);
-            if (item) cart.updateQuantity(id, color, size, item.quantity + parseInt(amount));
-        }
+            const item = cart.items.find(
+              i => i.id === id && i.color.name === color && i.size === size
+            );
+            if (item)
+              cart.updateQuantity(
+                id,
+                color,
+                size,
+                item.quantity + parseInt(amount)
+              );
+          }
 
-        // Remove from cart
-        const removeFromCartBtn = e.target.closest('.remove-from-cart');
-        if (removeFromCartBtn) {
+          // Remove from cart
+          const removeFromCartBtn = e.target.closest(".remove-from-cart");
+          if (removeFromCartBtn) {
             const { id, color, size } = removeFromCartBtn.dataset;
             cart.removeItem(id, color, size);
-        }
+          }
 
-        // Mobile Menu
-        if (e.target.closest('#mobile-menu-button')) {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        }
+          // Mobile Menu
+          if (e.target.closest("#mobile-menu-button")) {
+            document.getElementById("mobile-menu").classList.toggle("hidden");
+          }
 
-        // Size Guide
-        if (e.target.closest('#size-guide-btn')) toggleSizeGuideModal(true);
-        if (e.target.closest('#close-size-guide-button')) toggleSizeGuideModal(false);
-        if (e.target.closest('#size-guide-modal-overlay')) toggleSizeGuideModal(false);
+          // Size Guide
+          if (e.target.closest("#size-guide-btn")) toggleSizeGuideModal(true);
+          if (e.target.closest("#close-size-guide-button"))
+            toggleSizeGuideModal(false);
+          if (e.target.closest("#size-guide-modal-overlay"))
+            toggleSizeGuideModal(false);
 
-        // Product Page: Color Swatch
-        const colorSwatch = e.target.closest('.color-swatch');
-        if (colorSwatch) {
-            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('border-[#204566]'));
-            colorSwatch.classList.add('border-[#204566]');
+          // Product Page: Color Swatch
+          const colorSwatch = e.target.closest(".color-swatch");
+          if (colorSwatch) {
+            document
+              .querySelectorAll(".color-swatch")
+              .forEach(s => s.classList.remove("border-[#204566]"));
+            colorSwatch.classList.add("border-[#204566]");
             const colorIndex = parseInt(colorSwatch.dataset.colorIndex);
             selectedColor = product.colors[colorIndex];
             updateGallery(selectedColor.images);
-        }
+          }
 
-        // Product Page: Size Button
-        const sizeBtn = e.target.closest('.size-btn');
-        if (sizeBtn) {
-            document.querySelectorAll('.size-btn').forEach(b => {
-                b.classList.remove('bg-[#204566]', 'text-white');
-                b.classList.add('bg-transparent');
+          // Product Page: Size Button
+          const sizeBtn = e.target.closest(".size-btn");
+          if (sizeBtn) {
+            document.querySelectorAll(".size-btn").forEach(b => {
+              b.classList.remove("bg-[#204566]", "text-white");
+              b.classList.add("bg-transparent");
             });
-            sizeBtn.classList.remove('bg-transparent');
-            sizeBtn.classList.add('bg-[#204566]', 'text-white');
+            sizeBtn.classList.remove("bg-transparent");
+            sizeBtn.classList.add("bg-[#204566]", "text-white");
             selectedSize = sizeBtn.innerText;
-        }
+          }
 
-        // Product Page: Gallery
-        if (e.target.closest('#prev-image')) updateGalleryByOffset(-1);
-        if (e.target.closest('#next-image')) updateGalleryByOffset(1);
-        const thumb = e.target.closest('#thumbnail-container img');
-        if (thumb) {
+          // Product Page: Gallery
+          if (e.target.closest("#prev-image")) updateGalleryByOffset(-1);
+          if (e.target.closest("#next-image")) updateGalleryByOffset(1);
+          const thumb = e.target.closest("#thumbnail-container img");
+          if (thumb) {
             const index = parseInt(thumb.dataset.index);
             updateGallery(null, index);
-        }
-    });
+          }
+        });
 
-    // --- HELPER FUNCTIONS ---
-    function toggleCartDrawer(open) {
-        const drawer = document.getElementById('cart-drawer');
-        const overlay = document.getElementById('cart-drawer-overlay');
-        if (drawer && overlay) {
+        // --- HELPER FUNCTIONS ---
+        function toggleCartDrawer(open) {
+          const drawer = document.getElementById("cart-drawer");
+          const overlay = document.getElementById("cart-drawer-overlay");
+          if (drawer && overlay) {
             if (open) {
-                overlay.classList.remove('hidden');
-                drawer.classList.remove('translate-x-full');
+              overlay.classList.remove("hidden");
+              drawer.classList.remove("translate-x-full");
             } else {
-                overlay.classList.add('hidden');
-                drawer.classList.add('translate-x-full');
+              overlay.classList.add("hidden");
+              drawer.classList.add("translate-x-full");
             }
+          }
         }
-    }
 
-    function toggleSizeGuideModal(open) {
-        const modal = document.getElementById('size-guide-modal');
-        const overlay = document.getElementById('size-guide-modal-overlay');
-        if (modal && overlay) {
+        function toggleSizeGuideModal(open) {
+          const modal = document.getElementById("size-guide-modal");
+          const overlay = document.getElementById("size-guide-modal-overlay");
+          if (modal && overlay) {
             if (open) {
-                modal.classList.remove('hidden');
-                overlay.classList.remove('hidden');
+              modal.classList.remove("hidden");
+              overlay.classList.remove("hidden");
+            } else {
+              modal.classList.add("hidden");
+              overlay.classList.add("hidden");
             }
-            else {
-                modal.classList.add('hidden');
-                overlay.classList.add('hidden');
-            }
+          }
         }
-    }
 
-    let currentImages = [];
-    let currentImageIndex = 0;
+        let currentImages = [];
+        let currentImageIndex = 0;
 
-    function updateGallery(images, index) {
-        const mainImage = document.getElementById('main-product-image');
-        const galleryControls = document.getElementById('gallery-controls');
-        const thumbnailContainer = document.getElementById('thumbnail-container');
-        if (!mainImage || !galleryControls || !thumbnailContainer) return;
+        function updateGallery(images, index) {
+          const mainImage = document.getElementById("main-product-image");
+          const galleryControls = document.getElementById("gallery-controls");
+          const thumbnailContainer = document.getElementById(
+            "thumbnail-container"
+          );
+          if (!mainImage || !galleryControls || !thumbnailContainer) return;
 
-        if (images) currentImages = images;
-        if (index !== undefined) currentImageIndex = index;
-        
-        mainImage.src = currentImages[currentImageIndex];
+          if (images) currentImages = images;
+          if (index !== undefined) currentImageIndex = index;
 
-        galleryControls.style.display = currentImages.length > 1 ? 'flex' : 'none';
+          mainImage.src = currentImages[currentImageIndex];
 
-        thumbnailContainer.innerHTML = currentImages.map((image, i) => `
-            <img src="${image}" class="w-16 h-16 object-cover rounded-md cursor-pointer ${i === currentImageIndex ? 'border-2 border-[#204566]' : ''}" data-index="${i}">
-        `).join('');
-    }
+          galleryControls.style.display =
+            currentImages.length > 1 ? "flex" : "none";
 
-    function updateGalleryByOffset(offset) {
-        currentImageIndex = (currentImageIndex + offset + currentImages.length) % currentImages.length;
-        updateGallery(null, currentImageIndex);
-    }
+          thumbnailContainer.innerHTML = currentImages
+            .map(
+              (image, i) => `
+            <img src="${image}" class="w-16 h-16 object-cover rounded-md cursor-pointer ${i === currentImageIndex ? "border-2 border-[#204566]" : ""}" data-index="${i}">
+        `
+            )
+            .join("");
+        }
 
-    // --- RUN ON LOAD ---
-    initProductPage();
-    initCheckoutPage();
+        function updateGalleryByOffset(offset) {
+          currentImageIndex =
+            (currentImageIndex + offset + currentImages.length) %
+            currentImages.length;
+          updateGallery(null, currentImageIndex);
+        }
 
-    // Animated Checkout Button
-    const checkoutBtn = document.getElementById('checkoutBtn');
-    if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', () => {
+        // --- RUN ON LOAD ---
+        initProductPage();
+        initCheckoutPage();
+
+        // Animated Checkout Button
+        const checkoutBtn = document.getElementById("checkoutBtn");
+        if (checkoutBtn) {
+          checkoutBtn.addEventListener("click", () => {
             // Add class to html to trigger animations
-            document.documentElement.classList.add('checked-out');
+            document.documentElement.classList.add("checked-out");
 
             // Redirect to checkout page after animation completes
             setTimeout(() => {
-                window.location.href = '/checkout';
+              window.location.href = "/checkout";
             }, 1500); // Animation is ~1.3s, so 1.5s is a safe delay
-        });
-    }
-});
-</script>
-<script>
-  window.showToast = function(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toast-message');
-    if (!toast || !toastMessage) return;
+          });
+        }
+      });
+    </script>
+    <script>
+      window.showToast = function (message, type = "success") {
+        const toast = document.getElementById("toast");
+        const toastMessage = document.getElementById("toast-message");
+        if (!toast || !toastMessage) return;
 
-    toastMessage.textContent = message;
-    if (type === 'error') {
-      toast.classList.remove('bg-green-500');
-      toast.classList.add('bg-red-500');
-    } else {
-      toast.classList.remove('bg-red-500');
-      toast.classList.add('bg-green-500');
-    }
+        toastMessage.textContent = message;
+        if (type === "error") {
+          toast.classList.remove("bg-green-500");
+          toast.classList.add("bg-red-500");
+        } else {
+          toast.classList.remove("bg-red-500");
+          toast.classList.add("bg-green-500");
+        }
 
-    toast.classList.remove('hidden');
-    setTimeout(() => {
-      toast.classList.add('hidden');
-    }, 3000);
-  }
+        toast.classList.remove("hidden");
+        setTimeout(() => {
+          toast.classList.add("hidden");
+        }, 3000);
+      };
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('order') && urlParams.get('order') === 'success') {
-      showToast('Order placed successfully!');
-      window.history.replaceState({}, document.title, "/");
-    }
-  });
-</script>
-</body>
+      document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has("order") && urlParams.get("order") === "success") {
+          showToast("Order placed successfully!");
+          window.history.replaceState({}, document.title, "/");
+        }
+      });
+    </script>
+  </body>
 </html>
