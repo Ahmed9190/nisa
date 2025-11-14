@@ -99,9 +99,7 @@ import Layout from "../layouts/Layout.astro";
         timestamp: new Date().toISOString(),
       };
 
-      console.log("Sending to Formspree:", formspreeData);
-      // https://formspree.io/f/mwprdnqb
-      const formspreeResponse = await fetch("https://formspree.io/f/xzzydllr", {
+      const formspreeResponse = await fetch("https://formspree.io/f/mwprdnqb", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
