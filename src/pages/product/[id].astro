@@ -1,10 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import products from '../../data/products.json';
+import { getAllProducts, findProductById } from '../../utils/products';
 import type { Product } from '../../types';
 
 export async function getStaticPaths() {
-  return products.products.map(product => ({
+  const allProducts = getAllProducts();
+  return allProducts.map(product => ({
     params: { id: product.id },
     props: { product },
   }));
@@ -12,10 +13,30 @@ export async function getStaticPaths() {
 
 const { product } = Astro.props as { product: Product };
 
-const formatPrice = (price: number, currency = 'EGP') => {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency', currency, minimumFractionDigits: 0
-    }).format(price);
+// Serialize product data for client-side use
+const productData = {
+  id: product.id,
+  price: product.price,
+  priceBefore: product.priceBefore,
+  inStock: product.inStock,
+};
+
+declare global {
+  interface Window {
+    formatPrice?: (price: number, currency?: string) => string;
+    currentCurrency?: string;
+  }
+}
+
+const formatPrice = (price: number) => {
+  if (typeof window !== "undefined" && window.formatPrice) {
+    return window.formatPrice(price);
+  }
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "EGP",
+    minimumFractionDigits: 0,
+  }).format(price);
 };
 ---
 
@@ -37,13 +58,13 @@ const formatPrice = (price: number, currency = 'EGP') => {
             <div class="w-full lg:w-1/2">
                 <h1 class="text-4xl font-medium">{product.name}</h1>
                 <div class="text-2xl my-4">
-                    {product.price < product.priceBefore ? (
-                        <div class="flex items-center gap-2">
-                            <span class="text-red-500">{formatPrice(product.price)}</span>
-                            <span class="line-through text-base">{formatPrice(product.priceBefore)}</span>
+                    {product.priceBefore && product.price < product.priceBefore ? (
+                        <div class="flex items-center gap-2" id="price-container">
+                            <span class="text-red-500" id="price">{formatPrice(product.price)}</span>
+                            <span class="line-through text-base" id="price-before">{formatPrice(product.priceBefore)}</span>
                         </div>
                     ) : (
-                        <span>{formatPrice(product.price)}</span>
+                        <span id="price">{formatPrice(product.price)}</span>
                     )}
                 </div>
                 <p class="text-[#6B7B8C] leading-relaxed mb-6">{product.description}</p>
@@ -93,6 +114,61 @@ const formatPrice = (price: number, currency = 'EGP') => {
     </div>
 </Layout>
 
+<script>
+  // Function to get the current formatPrice function
+  function getFormatPrice() {
+    return (
+      window.formatPrice ||
+      function(price) {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'EGP',
+          minimumFractionDigits: 0,
+        }).format(price);
+      }
+    );
+  }
+
+  // Function to update prices when currency changes
+  function updatePrices() {
+    const formatPrice = getFormatPrice();
+    const priceElement = document.getElementById('price');
+    const priceBeforeElement = document.getElementById('price-before');
+    
+    if (priceElement) {
+      const price = parseFloat(priceElement.getAttribute('data-price') || '0');
+      priceElement.textContent = formatPrice(price);
+    }
+    
+    if (priceBeforeElement) {
+      const priceBefore = parseFloat(priceBeforeElement.getAttribute('data-price-before') || '0');
+      priceBeforeElement.textContent = formatPrice(priceBefore);
+    }
+  }
+
+  // Initialize prices with data attributes
+  document.addEventListener('DOMContentLoaded', () => {
+    const priceElement = document.getElementById('price');
+    const priceBeforeElement = document.getElementById('price-before');
+    
+    if (priceElement) {
+      const priceText = priceElement.textContent?.replace(/[^0-9.]/g, '') || '0';
+      priceElement.setAttribute('data-price', priceText);
+    }
+    
+    if (priceBeforeElement) {
+      const priceBeforeText = priceBeforeElement.textContent?.replace(/[^0-9.]/g, '') || '0';
+      priceBeforeElement.setAttribute('data-price-before', priceBeforeText);
+    }
+    
+    // Initial price update
+    updatePrices();
+    
+    // Listen for currency changes
+    document.addEventListener('currency-changed', updatePrices);
+  });
+</script>
+
 <style>
 .color-swatch {
     background-color: var(--swatch-color);
@@ -121,3 +197,4 @@ const formatPrice = (price: number, currency = 'EGP') => {
     cursor: not-allowed;
 }
 </style>
+

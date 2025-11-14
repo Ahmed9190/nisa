@@ -1,35 +1,57 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import content from '../data/content.json';
+import Layout from "../layouts/Layout.astro";
+import content from "../data/content.json";
 ---
 
 <Layout title="Contact Us - nisa">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-         <div class="max-w-xl mx-auto">
-            <h1 class="text-4xl font-medium text-center mb-8">{content.contact.title}</h1>
-            <form id="contact-form" action="https://formspree.io/f/xldpywlk" method="POST" class="space-y-6">
-                <div>
-                    <label for="name" class="block font-medium mb-2">Name</label>
-                    <input type="text" id="name" name="name" class="w-full p-3 border border-[#D4E4E8] rounded-md focus:border-[#204566] focus:ring focus:ring-[#204566]/20 outline-none transition">
-                </div>
-                 <div>
-                    <label for="email" class="block font-medium mb-2">Email</label>
-                    <input type="email" id="email" name="email" class="w-full p-3 border border-[#D4E4E8] rounded-md focus:border-[#204566] focus:ring focus:ring-[#204566]/20 outline-none transition">
-                </div>
-                 <div>
-                    <label for="message" class="block font-medium mb-2">Message</label>
-                    <textarea id="message" name="message" rows="5" class="w-full p-3 border border-[#D4E4E8] rounded-md focus:border-[#204566] focus:ring focus:ring-[#204566]/20 outline-none transition"></textarea>
-                </div>
-                <div class="text-center">
-                     <button type="submit" class="btn-primary">Send Message</button>
-                </div>
-            </form>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-xl mx-auto">
+      <h1 class="text-4xl font-medium text-center mb-8">
+        {content.contact.title}
+      </h1>
+      <form
+        id="contact-form"
+        action="https://formspree.io/f/xldpywlk"
+        method="POST"
+        class="space-y-6"
+      >
+        <div>
+          <label for="name" class="block font-medium mb-2">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="w-full p-3 border border-[#D4E4E8] rounded-md focus:border-[#204566] focus:ring focus:ring-[#204566]/20 outline-none transition"
+          />
         </div>
+        <div>
+          <label for="email" class="block font-medium mb-2">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="w-full p-3 border border-[#D4E4E8] rounded-md focus:border-[#204566] focus:ring focus:ring-[#204566]/20 outline-none transition"
+          />
+        </div>
+        <div>
+          <label for="message" class="block font-medium mb-2">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="5"
+            class="w-full p-3 border border-[#D4E4E8] rounded-md focus:border-[#204566] focus:ring focus:ring-[#204566]/20 outline-none transition"
+          ></textarea>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn-primary">Send Message</button>
+        </div>
+      </form>
     </div>
+  </div>
 </Layout>
 
 <style>
-.btn-primary {
+  .btn-primary {
     background-color: #204566;
     color: #fffaf0;
     padding: 1rem 2rem;
@@ -39,48 +61,103 @@ import content from '../data/content.json';
     cursor: pointer;
     transition: all 0.3s ease;
     letter-spacing: 0.5px;
-}
+  }
 
-.btn-primary:hover:not(:disabled) {
+  .btn-primary:hover:not(:disabled) {
     background-color: #163554;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(32, 69, 102, 0.3);
-}
+  }
 </style>
 
 <script>
-  const form = document.getElementById('contact-form');
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const formData = new FormData(form);
-    const submitButton = form.querySelector('button[type="submit"]');
+  // Toast notification function
+  function showToast(message: string, type: "success" | "error" = "success") {
+    // Create toast element if it doesn't exist
+    let toast = document.getElementById("toast-notification");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "toast-notification";
+      toast.className =
+        "fixed bottom-4 right-4 p-4 rounded-md text-white font-medium shadow-lg z-50 transition-all duration-300 transform translate-y-4 opacity-0";
+      document.body.appendChild(toast);
+    }
 
-    if(submitButton) submitButton.disabled = true;
+    // Set toast content and styles based on type
+    toast.textContent = message;
+    toast.className = `fixed bottom-4 right-4 p-4 rounded-md text-white font-medium shadow-lg z-50 transition-all duration-300 transform ${
+      type === "success" ? "bg-green-500" : "bg-red-500"
+    }`;
 
-    fetch(form.action, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).then(response => {
-      if (response.ok) {
-        form.reset();
-        showToast('Your message has been sent!');
-        if(submitButton) submitButton.disabled = false;
-      } else {
-        response.json().then(data => {
-          if (Object.hasOwn(data, 'errors')) {
-            alert(data["errors"].map(error => error["message"]).join(", "));
+    // Show toast
+    setTimeout(() => {
+      toast?.classList.remove("translate-y-4", "opacity-0");
+      toast?.classList.add("translate-y-0", "opacity-100");
+    }, 10);
+
+    // Hide toast after 5 seconds
+    setTimeout(() => {
+      toast?.classList.add("opacity-0");
+      setTimeout(() => {
+        toast?.remove();
+      }, 300);
+    }, 5000);
+  }
+
+  // Form submission handler
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById(
+      "contact-form"
+    ) as HTMLFormElement | null;
+    if (!form) return;
+
+    form.addEventListener("submit", (event: SubmitEvent) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const submitButton = form.querySelector<HTMLButtonElement>(
+        'button[type="submit"]'
+      );
+
+      if (submitButton) submitButton.disabled = true;
+
+      fetch(form.action, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      })
+        .then((response: Response) => {
+          if (response.ok) {
+            form.reset();
+            showToast("Your message has been sent!");
           } else {
-            showToast('Oops! There was a problem submitting your form', 'error');
+            response
+              .json()
+              .then((data: { errors?: Array<{ message: string }> }) => {
+                if (data.errors && Array.isArray(data.errors)) {
+                  alert(data.errors.map(error => error.message).join(", "));
+                } else {
+                  showToast(
+                    "Oops! There was a problem submitting your form",
+                    "error"
+                  );
+                }
+              })
+              .catch(() => {
+                showToast(
+                  "Oops! There was a problem processing the response",
+                  "error"
+                );
+              });
           }
-          if(submitButton) submitButton.disabled = false;
         })
-      }
-    }).catch(error => {
-      showToast('Oops! There was a problem submitting your form', 'error');
-      if(submitButton) submitButton.disabled = false;
+        .catch(() => {
+          showToast("Oops! There was a problem submitting your form", "error");
+        })
+        .finally(() => {
+          if (submitButton) submitButton.disabled = false;
+        });
     });
   });
 </script>

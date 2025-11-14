@@ -1,32 +1,35 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import ProductCard from '../components/ProductCard.astro';
-import content from '../data/content.json';
-import products from '../data/products.json';
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import ProductCard from "../components/ProductCard.astro";
+import content from "../data/content.json";
+import { findProductById } from "../utils/products";
+import type { Product } from "../types";
 
-const featuredProducts = content.home.featuredCollection.featuredProductIds.map(id => 
-    products.products.find(p => p.id === id)
-).filter(Boolean);
+const featuredProducts = content.home.featuredCollection.featuredProductIds
+  .map(id => findProductById(id))
+  .filter((p): p is Product => p !== undefined);
 ---
 
 <Layout>
-    <Hero />
-    <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-12">
-        <h2 class="text-3xl font-medium text-center mb-12">{content.home.featuredCollection.title}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.map(product => (
-                <ProductCard product={product} />
-            ))}
-        </div>
-         <div class="text-center mt-16">
-            <a href="/shop" class="btn-secondary text-lg">{content.home.featuredCollection.buttonText}</a>
-        </div>
-    </section>
+  <Hero />
+  <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-12">
+    <h2 class="text-3xl font-medium text-center mb-12">
+      {content.home.featuredCollection.title}
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {featuredProducts.map(product => <ProductCard product={product} />)}
+    </div>
+    <div class="text-center mt-16">
+      <a href="/shop" class="btn-secondary text-lg"
+        >{content.home.featuredCollection.buttonText}</a
+      >
+    </div>
+  </section>
 </Layout>
 
 <style>
-.btn-secondary {
+  .btn-secondary {
     background-color: transparent;
     color: #204566;
     border: 2px solid #204566;
@@ -35,10 +38,10 @@ const featuredProducts = content.home.featuredCollection.featuredProductIds.map(
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-}
+  }
 
-.btn-secondary:hover {
+  .btn-secondary:hover {
     background-color: #204566;
     color: #fffaf0;
-}
+  }
 </style>

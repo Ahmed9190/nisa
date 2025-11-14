@@ -5,19 +5,40 @@ export interface Props {
   product: Product;
 }
 
-const { product } = Astro.props;
+const { product } = Astro.props as { product: Product };
 
-const formatPrice = (price: number, currency = "EGP") => {
+// Serialize product data for client-side use
+const productData = {
+  id: product.id,
+  price: product.price,
+  priceBefore: product.priceBefore,
+  inStock: product.inStock,
+  comingSoon: product.comingSoon,
+};
+
+declare global {
+  interface Window {
+    formatPrice?: (price: number, currency?: string) => string;
+    currentCurrency?: string;
+  }
+}
+
+// Fallback formatPrice in case window.formatPrice isn't available yet
+const formatPrice = (price: number) => {
+  if (typeof window !== "undefined" && window.formatPrice) {
+    return window.formatPrice(price);
+  }
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency,
+    currency: "EGP",
     minimumFractionDigits: 0,
   }).format(price);
 };
 ---
 
 <div
-  class="product-card p-4 flex flex-col text-center border border-[#D4E4E8] rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"
+  class="product-card p-4 flex flex-col text-center border border-[#D4E4E8] rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 relative"
+  data-product-id={product.id}
 >
   {
     product.comingSoon && (
@@ -45,10 +66,13 @@ const formatPrice = (price: number, currency = "EGP") => {
   </a>
   <div class="flex-grow flex flex-col pt-4">
     <h3 class="text-xl font-medium">{product.name}</h3>
-    <div class="text-lg text-[#6B7B8C] mt-1 flex-grow">
+    <div
+      class="text-lg text-[#6B7B8C] mt-1 flex-grow"
+      id={`price-${product.id}`}
+    >
       {
         product.price > 0 ? (
-          product.price < product.priceBefore ? (
+          product.priceBefore && product.price < product.priceBefore ? (
             <div class="flex justify-center items-center gap-2">
               <span class="text-red-500">{formatPrice(product.price)}</span>
               <span class="line-through text-sm">
@@ -87,6 +111,75 @@ const formatPrice = (price: number, currency = "EGP") => {
     </div>
   </div>
 </div>
+
+<script define:vars={{ product: productData }}>
+  // Function to get the current formatPrice function
+  function getFormatPrice() {
+    return (
+      window.formatPrice ||
+      (price => {
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "EGP",
+          minimumFractionDigits: 0,
+        }).format(price);
+      })
+    );
+  }
+
+  // Function to update product price display
+  function updateProductPrice() {
+    const productCard = document.querySelector(
+      `[data-product-id="${product.id}"]`
+    );
+    if (!productCard) return;
+
+    const priceElement = productCard.querySelector(`#price-${product.id}`);
+    if (!priceElement) return;
+
+    const formatPrice = getFormatPrice();
+
+    if (product.price > 0) {
+      if (product.price < product.priceBefore) {
+        priceElement.innerHTML = `
+          <div class="flex justify-center items-center gap-2">
+            <span class="text-red-500">${formatPrice(product.price)}</span>
+            <span class="line-through text-sm">
+              ${formatPrice(product.priceBefore)}
+            </span>
+          </div>
+        `;
+      } else {
+        priceElement.innerHTML = `<span>${formatPrice(product.price)}</span>`;
+      }
+    } else {
+      priceElement.innerHTML =
+        '<span class="text-lg font-medium">Coming Soon</span>';
+    }
+  }
+
+  // Function to handle currency changes with a small delay to ensure window.formatPrice is updated
+  function handleCurrencyChange() {
+    // Small delay to ensure window.formatPrice has been updated
+    setTimeout(updateProductPrice, 50);
+  }
+
+  // Initial update when the component mounts
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      updateProductPrice();
+      // Add the event listener after the initial render
+      document.addEventListener("currency-changed", handleCurrencyChange);
+    });
+  } else {
+    // In case the DOM is already loaded
+    setTimeout(() => {
+      updateProductPrice();
+      // Add the event listener after the initial render
+      document.addEventListener("currency-changed", handleCurrencyChange);
+    }, 100);
+  }
+</script>
 
 <style>
   .btn-primary {

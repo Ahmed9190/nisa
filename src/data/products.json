@@ -3,7 +3,7 @@
     {
       "id": "abaya-01",
       "name": "Onyx Cardigan ",
-      "price":1700,
+      "price": 1700,
       "priceBefore": 1950,
       "currency": "EGP",
       "description": "Perfect for evening gatherings, special occasions, or layering over basic linen pieces for a sophisticated modest look.",
@@ -67,18 +67,18 @@
           "name": "Maize",
           "code": "#f3dc6b",
           "images": [
-           "/assets/products/dahlia set/img-2092-medium-68d8680401ba2.webp",
-           "/assets/products/dahlia set/img-5309-medium-68d868071924f.webp"
+            "/assets/products/dahlia set/img-2092-medium-68d8680401ba2.webp",
+            "/assets/products/dahlia set/img-5309-medium-68d868071924f.webp"
           ]
         },
         {
           "name": "Bone",
           "code": "#bccfdf",
           "images": [
-"/assets/products/dahlia set/img-2049-medium-68d867ff7d9b3.webp", 
-"/assets/products/dahlia set/img-2050-medium-68d868003de76.webp",
-"/assets/products/dahlia set/img-2162-medium-68d86806c24e1.webp"
-]
+            "/assets/products/dahlia set/img-2049-medium-68d867ff7d9b3.webp",
+            "/assets/products/dahlia set/img-2050-medium-68d868003de76.webp",
+            "/assets/products/dahlia set/img-2162-medium-68d86806c24e1.webp"
+          ]
         },
         {
           "name": "black",
@@ -122,7 +122,6 @@
           "images": [
             "/assets/products/aurora chemise dress/5657376f-c5d9-4722-85ae-3fb2899e67b2-medium-68e15ae6516aa.webp",
             "/assets/products/aurora chemise dress/abaya-01-medium-68e15ae6506cb.webp"
-            
           ]
         },
         {
@@ -136,7 +135,7 @@
           "name": "Pure White",
           "code": "#fffdf5",
           "images": [
-                       "/assets/products/aurora chemise dress/dsc-0351-medium-68e15ae960f71.webp",
+            "/assets/products/aurora chemise dress/dsc-0351-medium-68e15ae960f71.webp",
             "/assets/products/aurora chemise dress/dsc-0344-medium-68e15ae9374b6.webp"
           ]
         }
@@ -157,7 +156,6 @@
         "fabric": "Made from premium treated pure linen.Soft on the skin, non-irritating, breathable,Characterized by fine black pinstripes adding depth and a heritage-inspired pattern",
         "fit": "Open front, wide sleeves",
         "care": "Hand wash separately in cold water with mild detergent.Do not wring or twist to preserve the delicate lace.Air dry flat in shade.Low-temperature steam if needed"
-
       },
       "sizes": [
         "One Size"
@@ -168,7 +166,7 @@
           "code": "#000000",
           "images": [
             "/assets/products/thorya arabian abaya/dsc-0114-medium-68e15a1d2adb3.webp",
-             "/assets/products/thorya arabian abaya/dsc-0119-medium-68e15a2110d8f.webp"
+            "/assets/products/thorya arabian abaya/dsc-0119-medium-68e15a2110d8f.webp"
           ]
         },
         {
@@ -176,8 +174,7 @@
           "code": "#5c4d3e",
           "images": [
             "/assets/products/thorya arabian abaya/dsc-0131-medium-68e15a2194ca2.webp",
-            
-             "/assets/products/thorya arabian abaya/dsc-0142-medium-68e15a25099b9.webp"
+            "/assets/products/thorya arabian abaya/dsc-0142-medium-68e15a25099b9.webp"
           ]
         },
         {
@@ -197,7 +194,7 @@
     {
       "id": "tunic-01",
       "name": "Opal Linen Cardigan",
-      "price":1500,
+      "price": 1500,
       "priceBefore": 1850,
       "currency": "EGP",
       "description": "An iconic piece for formal evenings, cultural gatherings, and refined casual looks. Pair it with silk scarves or minimal accessories for a timeless statement.",
@@ -215,10 +212,8 @@
           "code": "#f0f0e7",
           "images": [
             "/assets/products/opal cardigan/816df0a0-3e30-4ce4-8c6a-1cbd49eaf4f61-medium-68d72c785a9a8.webp",
-        
-             "/assets/products/opal cardigan/img-1669-medium-68d72c481a29e.webp",
-             "/assets/products/opal cardigan/img-1674-medium-68d72c4547021.webp"
-          
+            "/assets/products/opal cardigan/img-1669-medium-68d72c481a29e.webp",
+            "/assets/products/opal cardigan/img-1674-medium-68d72c4547021.webp"
           ]
         }
       ],
@@ -235,7 +230,7 @@
       "currency": "EGP",
       "description": "Lightweight and elegant, this pleated chiffon hijab adds texture and sophistication to your look.",
       "details": {
-        "fabric":"100% Premium Cotton Lace (Rocama).Delicate eyelet embroidery in floral patterns for a light, airy texture.Naturally breathable and soft on the skin, perfect for warm seasons.A fabric that evokes peace, charm, and feminine elegance",
+        "fabric": "100% Premium Cotton Lace (Rocama).Delicate eyelet embroidery in floral patterns for a light, airy texture.Naturally breathable and soft on the skin, perfect for warm seasons.A fabric that evokes peace, charm, and feminine elegance",
         "fit": "Two-in-One Design:Wear it fully buttoned as a modest shirt dress.Or leave it open as a flowy cardigan for layering.Relaxed A-line silhouette with full-length sleeves and elegant cuffs.Perfect for cozy chic styling with a romantic, countryside touch",
         "care": "Hand wash recommended to maintain the delicate lace.Use cold water and a mild detergent.Avoid bleach.Dry flat to prevent stretching.Iron on low heat if needed"
       },
@@ -249,8 +244,6 @@
           "images": [
             "/assets/products/Dove petal/IMG_1500 (Medium).webp",
             "/assets/products/Dove petal/IMG_1509.webp"
-            
-            
           ]
         },
         {
@@ -261,8 +254,6 @@
             "/assets/products/Dove petal/IMG_2983.webp",
             "/assets/products/Dove petal/IMG_2984.webp",
             "/assets/products/Dove petal/img-1569-medium-68dc38fb10fab.webp"
-            
-            
           ]
         },
         {
@@ -270,9 +261,8 @@
           "code": "#e1e7f9",
           "images": [
             "/assets/products/Dove petal/img-42351-medium-68dc390028d4a.webp",
-           "/assets/products/Dove petal/IMG_4232.webp",
-           "/assets/products/Dove petal/img-4332-medium-68dc390ac5762.webp"
-            
+            "/assets/products/Dove petal/IMG_4232.webp",
+            "/assets/products/Dove petal/img-4332-medium-68dc390ac5762.webp"
           ]
         }
       ],
@@ -302,7 +292,6 @@
           "code": "#e5d6c0",
           "images": [
             "/assets/products/Basic linen dress/IMG_2722 (Medium).webp"
-            
           ]
         },
         {
@@ -332,11 +321,10 @@
       "priceBefore": 2980,
       "currency": "EGP",
       "description": "A reinterpretation of the timeless cape silhouette — minimalist, elegant, and functional. Balanced between warmth and movement, Elif shifts naturally between casual and formal — a statement of subtle strength.",
-"details": {
-  "fabric": "Pure natural wool lined with soft melton fabric — structured, warm, and beautifully weighty.",
-  "fit": "Minimalist cape silhouette; drapes naturally; versatile between casual and formal.",
-  "care": "• Dry clean only.\n• Do not wash or tumble dry.\n• Steam gently at low distance — never press directly.\n• Store folded or on a wide hanger to preserve its drape."
-
+      "details": {
+        "fabric": "Pure natural wool lined with soft melton fabric — structured, warm, and beautifully weighty.",
+        "fit": "Minimalist cape silhouette; drapes naturally; versatile between casual and formal.",
+        "care": "• Dry clean only.\n• Do not wash or tumble dry.\n• Steam gently at low distance — never press directly.\n• Store folded or on a wide hanger to preserve its drape."
       },
       "sizes": [
         "One Size"
@@ -368,12 +356,12 @@
           "name": "Medium Grey",
           "code": "#808080",
           "images": [
-           "/assets/products/winter-section/elif/medium grey/1 (1).webp",
-             "/assets/products/winter-section/elif/medium grey/2 (1).webp",
-             "/assets/products/winter-section/elif/medium grey/3 (2).webp",
-             "/assets/products/winter-section/elif/medium grey/4 (1).webp",
-             "/assets/products/winter-section/elif/medium grey/6 (1).webp",
-             "/assets/products/winter-section/elif/medium grey/7 (1).webp"
+            "/assets/products/winter-section/elif/medium grey/1 (1).webp",
+            "/assets/products/winter-section/elif/medium grey/2 (1).webp",
+            "/assets/products/winter-section/elif/medium grey/3 (2).webp",
+            "/assets/products/winter-section/elif/medium grey/4 (1).webp",
+            "/assets/products/winter-section/elif/medium grey/6 (1).webp",
+            "/assets/products/winter-section/elif/medium grey/7 (1).webp"
           ]
         }
       ],
@@ -389,10 +377,10 @@
       "priceBefore": 3980,
       "currency": "EGP",
       "description": "The most luxurious and timeless piece in the collection — Ivory redefines the winter coat with fluid femininity. Cut in a full-circle (cloche) silhouette with no belt, it flows naturally around the body, emphasizing freedom and grace. Hidden snap buttons crafted from the same fabric keep the design pure and uninterrupted. Comes with a wide matching shawl that can be styled in multiple ways — draped, wrapped, or left to fall effortlessly. Every fold, every seam, whispers quiet elegance and lasting sophistication.",
-"details": {
-  "fabric": "Ultra-soft natural wool, lined with a silky, fluid layer that enhances both warmth and movement. A texture so gentle it feels like snow against the skin.",
-  "fit": "Full-circle (cloche) silhouette with no belt; flows naturally around the body for a feminine and graceful drape.",
-  "care": "• Dry clean only.\n• Avoid heat and direct sunlight.\n• Steam at a distance to refresh texture.\n• Store in a cool, dry place on a padded hanger."
+      "details": {
+        "fabric": "Ultra-soft natural wool, lined with a silky, fluid layer that enhances both warmth and movement. A texture so gentle it feels like snow against the skin.",
+        "fit": "Full-circle (cloche) silhouette with no belt; flows naturally around the body for a feminine and graceful drape.",
+        "care": "• Dry clean only.\n• Avoid heat and direct sunlight.\n• Steam at a distance to refresh texture.\n• Store in a cool, dry place on a padded hanger."
       },
       "sizes": [
         "One Size"
@@ -403,13 +391,13 @@
           "code": "#000000",
           "images": [
             "/assets/products/winter-section/ivory_/black/1.webp",
-             "/assets/products/winter-section/ivory_/black/2 (2).webp",
-             "/assets/products/winter-section/ivory_/black/3 (2).webp",
-             "/assets/products/winter-section/ivory_/black/4.webp",
-             "/assets/products/winter-section/ivory_/black/5.webp",
-             "/assets/products/winter-section/ivory_/black/6.webp",
-             "/assets/products/winter-section/ivory_/black/7 (2).webp",
-             "/assets/products/winter-section/ivory_/black/8.webp"
+            "/assets/products/winter-section/ivory_/black/2 (2).webp",
+            "/assets/products/winter-section/ivory_/black/3 (2).webp",
+            "/assets/products/winter-section/ivory_/black/4.webp",
+            "/assets/products/winter-section/ivory_/black/5.webp",
+            "/assets/products/winter-section/ivory_/black/6.webp",
+            "/assets/products/winter-section/ivory_/black/7 (2).webp",
+            "/assets/products/winter-section/ivory_/black/8.webp"
           ]
         },
         {
@@ -417,11 +405,11 @@
           "code": "#948586",
           "images": [
             "/assets/products/winter-section/ivory_/greige/1.webp",
-             "/assets/products/winter-section/ivory_/greige/2.webp",
-             "/assets/products/winter-section/ivory_/greige/3.webp",
-             "/assets/products/winter-section/ivory_/greige/4.webp",
-             "/assets/products/winter-section/ivory_/greige/5.webp",
-             "/assets/products/winter-section/ivory_/greige/6.webp"
+            "/assets/products/winter-section/ivory_/greige/2.webp",
+            "/assets/products/winter-section/ivory_/greige/3.webp",
+            "/assets/products/winter-section/ivory_/greige/4.webp",
+            "/assets/products/winter-section/ivory_/greige/5.webp",
+            "/assets/products/winter-section/ivory_/greige/6.webp"
           ]
         },
         {
@@ -429,7 +417,7 @@
           "code": "#d0d0d0",
           "images": [
             "/assets/products/winter-section/ivory_/off white_/1.webp",
-           "/assets/products/winter-section/ivory_/off white_/2.webp",
+            "/assets/products/winter-section/ivory_/off white_/2.webp",
             "/assets/products/winter-section/ivory_/off white_/3.webp",
             "/assets/products/winter-section/ivory_/off white_/4.webp",
             "/assets/products/winter-section/ivory_/off white_/5.webp",
@@ -454,12 +442,11 @@
       "priceBefore": 3200,
       "currency": "EGP",
       "description": "A long shirt dress crafted from heavy natural wool with a soft hairy texture that radiates warmth and authenticity. Designed with puffy sleeves gathered at the wrists with elastic, and large buttons down the full length for versatile styling — open or closed. Casual, 1950s-inspired, and full of winter soul.",
-"details": {
-  "fabric": "Natural brushed wool, thick and deeply warm — just like nature itself.",
-  "fit": "Long shirt dress with puffy sleeves gathered at the wrists; versatile styling with large buttons along full length.",
-  "care": "• Dry clean only.\n• Avoid exposure to direct sunlight for long periods.\n• Do not iron; use steam at a distance to refresh.\n• Store in a breathable cotton garment bag."
-
-},
+      "details": {
+        "fabric": "Natural brushed wool, thick and deeply warm — just like nature itself.",
+        "fit": "Long shirt dress with puffy sleeves gathered at the wrists; versatile styling with large buttons along full length.",
+        "care": "• Dry clean only.\n• Avoid exposure to direct sunlight for long periods.\n• Do not iron; use steam at a distance to refresh.\n• Store in a breathable cotton garment bag."
+      },
       "sizes": [
         "One Size"
       ],
@@ -467,7 +454,8 @@
         {
           "name": "Deep Grey ",
           "code": "#858a8e",
-          "images": ["/assets/products/winter-section/juna/Deep Grey/1 (2).webp",
+          "images": [
+            "/assets/products/winter-section/juna/Deep Grey/1 (2).webp",
             "/assets/products/winter-section/juna/Deep Grey/2_.webp",
             "/assets/products/winter-section/juna/Deep Grey/3 (2).webp",
             "/assets/products/winter-section/juna/Deep Grey/4 (1).webp",
@@ -480,7 +468,8 @@
         {
           "name": "Olive Beige",
           "code": "#90795a",
-          "images": ["/assets/products/winter-section/juna/Olive Beige/1.webp",
+          "images": [
+            "/assets/products/winter-section/juna/Olive Beige/1.webp",
             "/assets/products/winter-section/juna/Olive Beige/2.webp",
             "/assets/products/winter-section/juna/Olive Beige/3.webp",
             "/assets/products/winter-section/juna/Olive Beige/4.webp",
@@ -492,7 +481,8 @@
         {
           "name": "Light Beige",
           "code": "#ffe0c5",
-          "images": ["/assets/products/winter-section/juna/Light Beige/1 (1).webp",
+          "images": [
+            "/assets/products/winter-section/juna/Light Beige/1 (1).webp",
             "/assets/products/winter-section/juna/Light Beige/2 (1).webp",
             "/assets/products/winter-section/juna/Light Beige/3 (1).webp",
             "/assets/products/winter-section/juna/Light Beige/4(1).webp",
@@ -514,13 +504,12 @@
       "price": 2250,
       "priceBefore": 2250,
       "currency": "EGP",
-     "description": "A unique pleated dress with a tailored silhouette and a refined wool shawl draped elegantly over the shoulders, covering the chest and falling gently across the back. The structure is formal yet fluid, offering a timeless, graceful movement. Designed in deep black — a symbol of mystery and quiet luxury — this piece evokes both strength and femininity.",
-"details": {
-  "fabric": "Soft natural wool with a delicate texture that flows gracefully. The fabric offers warmth, comfort, and a touch of sophistication perfect for formal evenings.",
-  "fit": "Tailored pleated dress with a draped wool shawl; formal yet fluid, allowing graceful movement.",
-  "care": "• Dry clean only.\n• Avoid wringing or ironing directly.\n• Store folded or on a padded hanger to preserve the shape."
-
-},
+      "description": "A unique pleated dress with a tailored silhouette and a refined wool shawl draped elegantly over the shoulders, covering the chest and falling gently across the back. The structure is formal yet fluid, offering a timeless, graceful movement. Designed in deep black — a symbol of mystery and quiet luxury — this piece evokes both strength and femininity.",
+      "details": {
+        "fabric": "Soft natural wool with a delicate texture that flows gracefully. The fabric offers warmth, comfort, and a touch of sophistication perfect for formal evenings.",
+        "fit": "Tailored pleated dress with a draped wool shawl; formal yet fluid, allowing graceful movement.",
+        "care": "• Dry clean only.\n• Avoid wringing or ironing directly.\n• Store folded or on a padded hanger to preserve the shape."
+      },
       "sizes": [
         "One Size"
       ],
@@ -534,13 +523,13 @@
             "/assets/products/winter-section/lela_/army_/4 (2).webp",
             "/assets/products/winter-section/lela_/army_/5 (2).webp",
             "/assets/products/winter-section/lela_/army_/6.webp"
-            
           ]
         },
         {
           "name": "Black",
           "code": "#000000",
-          "images": ["/assets/products/winter-section/lela_/black_/1.webp",
+          "images": [
+            "/assets/products/winter-section/lela_/black_/1.webp",
             "/assets/products/winter-section/lela_/black_/2.webp",
             "/assets/products/winter-section/lela_/black_/3.webp",
             "/assets/products/winter-section/lela_/black_/4.webp",
@@ -552,7 +541,8 @@
         {
           "name": "Brown",
           "code": "#4c302c",
-          "images": ["/assets/products/winter-section/lela_/brown_/1.webp",
+          "images": [
+            "/assets/products/winter-section/lela_/brown_/1.webp",
             "/assets/products/winter-section/lela_/brown_/2.webp",
             "/assets/products/winter-section/lela_/brown_/3.webp",
             "/assets/products/winter-section/lela_/brown_/4.webp",
@@ -569,14 +559,7 @@
     {
       "id": "winter-item-5",
       "name": "Pleated Cape Abaya",
-<<<<<<< HEAD
-      "price": 0,
-      "priceBefore": 0,
-      "currency": "EGP",
-      "description": "Coming Soon",
-=======
       "description": "This is a placeholder description for a winter item.",
->>>>>>> 40ef5a236843d6500fc694366f8c3d31db00030f
       "details": {
         "fabric": "",
         "fit": "",
@@ -595,15 +578,8 @@
         }
       ],
       "category": "winter-collection",
-<<<<<<< HEAD
-      "featured": false,
-      "inStock": false,
-      "comingSoon": true,
-      "sku": "NSA-013"
-=======
       "sku": "NSA-012",
       "comingSoon": true
->>>>>>> 40ef5a236843d6500fc694366f8c3d31db00030f
     }
   ]
 }

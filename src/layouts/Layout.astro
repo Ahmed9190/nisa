@@ -287,35 +287,103 @@ const { title = site.title, description = site.description } = Astro.props;
       define:vars={{ products: products.products, shipping: shipping }}
       is:inline
     >
-      // --- UTILS ---
-      const formatPrice = (price, currency = "EGP") => {
-        // Format the price, then manually add a space if the currency symbol is at the beginning.
-        const formatted = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency,
-          minimumFractionDigits: 0,
-        }).format(price);
-
-        // Check if the first character is not a digit, which implies it's a currency symbol.
-        if (isNaN(parseInt(formatted[0], 10))) {
-          // Find the first digit's index
-          const firstDigitIndex = formatted.search(/\d/);
-          if (firstDigitIndex > 0) {
-            return (
-              formatted.slice(0, firstDigitIndex) +
-              " " +
-              formatted.slice(firstDigitIndex)
-            );
-          }
-        }
-        return formatted;
+      // --- CURRENCY MANAGEMENT ---
+      const CURRENCIES = {
+        EGP: { symbol: "EGP", rate: 1, locale: "ar-EG" },
+        SAR: { symbol: "SAR", rate: 0.07944, locale: "ar-SA" },
       };
+
+      async function getCurrencyRate(toCurrency) {
+        if (toCurrency == CURRENCIES.EGP.symbol) return 1;
+        try {
+          const res = await fetch(`https://open.er-api.com/v6/latest/EGP`);
+          const data = await res.json();
+          console.log(data);
+          const liveRate = data.rates[toCurrency];
+          CURRENCIES[toCurrency].rate = liveRate;
+          return liveRate;
+        } catch (e) {
+          console.error("Failed to fetch rates", e);
+          return 1;
+        }
+      }
+
+      // Get saved currency or default to EGP
+      let currentCurrency = localStorage.getItem("currency") || "EGP";
+
+      // Format price function
+      const formatPrice = (price, currency = currentCurrency) => {
+        const currencyInfo = CURRENCIES[currency] || CURRENCIES.EGP;
+        const convertedPrice = price * currencyInfo.rate;
+
+        // Always format numbers using English digits
+        const numberFormatted = new Intl.NumberFormat("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        }).format(convertedPrice);
+
+        // Prefix with the currency code (EGP/SAR)
+        return `${currencyInfo.symbol} ${numberFormatted}`;
+      };
+
+      // Make formatPrice available globally for other components
+      window.formatPrice = formatPrice;
+
+      // Update currency display and trigger updates
+      async function updateCurrencyDisplay() {
+        const currencySelect = document.getElementById("currency-select");
+        if (currencySelect) {
+          currencySelect.value = currentCurrency;
+        }
+
+        const rate = await getCurrencyRate(currencySelect.value);
+        console.log("Rate", rate);
+        // Update all price displays
+        document.dispatchEvent(
+          new CustomEvent("currency-changed", {
+            detail: {
+              currency: currentCurrency,
+              rate,
+            },
+          })
+        );
+      }
+
+      // Initialize currency when DOM is loaded
+      async function initCurrency() {
+        await updateCurrencyDisplay();
+
+        // Handle currency selection
+        const currencySelect = document.getElementById("currency-select");
+        if (currencySelect) {
+          currencySelect.addEventListener("change", async e => {
+            currentCurrency = e.target.value;
+            localStorage.setItem("currency", currentCurrency);
+            await updateCurrencyDisplay();
+          });
+        }
+      }
+
+      // Initialize when DOM is ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initCurrency);
+      } else {
+        // In case the DOM is already loaded
+        setTimeout(initCurrency, 0);
+      }
+
+      // formatPrice function is defined above in the CURRENCY MANAGEMENT section
 
       // --- CART ---
       class ShoppingCart {
         constructor() {
           this.items = JSON.parse(localStorage.getItem("nisaCart")) || [];
           this.updateCartUI();
+
+          // Listen for currency changes
+          document.addEventListener("currency-changed", () => {
+            this.updateCartUI();
+          });
         }
         addItem(product, color, size, quantity = 1) {
           const existingItem = this.items.find(
@@ -595,6 +663,9 @@ const { title = site.title, description = site.description } = Astro.props;
 
           document.addEventListener("cart-updated", updateTotals);
 
+          // Recalculate totals when currency changes
+          document.addEventListener("currency-changed", updateTotals);
+
           checkoutForm.addEventListener("submit", async event => {
             event.preventDefault();
             const formData = new FormData(checkoutForm);
@@ -602,12 +673,14 @@ const { title = site.title, description = site.description } = Astro.props;
               'button[type="submit"]'
             );
             if (submitButton) submitButton.disabled = true;
-            const selectedCurrency = formData.get("currency");
+            // Format the amount based on the selected currency (without symbol)
+            const formattedAmount = (
+              totalAmount * CURRENCIES[currentCurrency].rate
+            ).toFixed(2);
 
-            console.log(totalAmount);
             const tapCheckout = {
-              amount: totalAmount,
-              currency: selectedCurrency || "EGP",
+              amount: Number(formattedAmount),
+              currency: currentCurrency,
               customer: {
                 email: formData.get("email"),
                 first_name: formData.get("fullName"),
@@ -616,8 +689,6 @@ const { title = site.title, description = site.description } = Astro.props;
               redirect: { url: "http://localhost:4321/checkout-complete" },
               description: formData.get("deliveryInstructions"),
             };
-
-            console.log("Sending to backend:", tapCheckout);
 
             try {
               const response = await fetch(
@@ -629,8 +700,6 @@ const { title = site.title, description = site.description } = Astro.props;
                 }
               );
 
-              console.log("Response status:", response.status);
-
               if (!response.ok) {
                 const errorData = await response.text();
                 console.error("Backend error:", errorData);
@@ -639,7 +708,6 @@ const { title = site.title, description = site.description } = Astro.props;
               }
 
               const paymentResponse = await response.json();
-              console.log("Payment response:", paymentResponse);
 
               if (
                 !paymentResponse.success ||
@@ -660,7 +728,7 @@ const { title = site.title, description = site.description } = Astro.props;
                   city: formData.get("city"),
                   governorate: formData.get("governorate"),
                   deliveryInstructions: formData.get("deliveryInstructions"),
-                  currency: selectedCurrency,
+                  currency: currentCurrency,
                   chargeId: paymentResponse.data.id,
                 })
               );
@@ -853,6 +921,13 @@ const { title = site.title, description = site.description } = Astro.props;
       });
     </script>
     <script>
+      // Declare showToast type globally
+      declare global {
+        interface Window {
+          showToast: (message: string, type?: "success" | "error") => void;
+        }
+      }
+
       window.showToast = function (message, type = "success") {
         const toast = document.getElementById("toast");
         const toastMessage = document.getElementById("toast-message");
@@ -876,7 +951,7 @@ const { title = site.title, description = site.description } = Astro.props;
       document.addEventListener("DOMContentLoaded", () => {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has("order") && urlParams.get("order") === "success") {
-          showToast("Order placed successfully!");
+          window.showToast("Order placed successfully!");
           window.history.replaceState({}, document.title, "/");
         }
       });
