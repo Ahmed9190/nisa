@@ -1,79 +1,161 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import shipping from '../data/shipping.json';
+import Layout from "../layouts/Layout.astro";
+import shipping from "../data/shipping.json";
 ---
 
 <Layout title="Checkout - nisa">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 class="text-4xl font-medium text-center mb-2">Checkout</h1>
-        <p class="text-center text-[#6B7B8C] mb-12">Complete your purchase</p>
-        <form id="checkout-form" action="https://formspree.io/f/mwprdnqb" method="POST" class="flex flex-col-reverse lg:flex-row gap-12">
-            <!-- Left Side: Form -->
-            <div class="w-full lg:w-3/5">
-                <div class="space-y-8">
-                    <!-- Contact Information -->
-                    <div>
-                        <h2 class="text-2xl font-medium mb-4">Contact Information</h2>
-                        <input type="email" name="email" placeholder="Email Address" class="form-input" required>
-                        <input type="tel" name="phoneNumber" placeholder="Phone Number" class="form-input mt-4" required>
-                    </div>
-                    <!-- Shipping Address -->
-                    <div>
-                        <h2 class="text-2xl font-medium mb-4">Shipping Address</h2>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input type="text" name="fullName" placeholder="Full Name" class="form-input sm:col-span-2" required>
-                            <input type="text" name="streetAddress" placeholder="Street Address" class="form-input sm:col-span-2" required>
-                            <input type="text" name="apartment" placeholder="Apartment, suite, etc. (optional)" class="form-input sm:col-span-2">
-                            <input type="text" name="city" placeholder="City" class="form-input" required>
-                            <select name="governorate" class="form-input" required>
-                                <option disabled selected value="">Governorate</option>
-                                {shipping.map(s => <option value={s.city}>{s.city}</option>)}
-                            </select>
-                            <textarea name="deliveryInstructions" placeholder="Landmark or special delivery instructions" rows="3" class="form-input sm:col-span-2"></textarea>
-                        </div>
-                    </div>
-                     <!-- Hidden fields for order data -->
-                    <input type="hidden" name="orderSummary" id="order-summary-input">
-                    <input type="hidden" name="orderTotal" id="order-total-input">
-                    <input type="hidden" name="_next" value="/">
-                </div>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-4xl font-medium text-center mb-2">Checkout</h1>
+    <p class="text-center text-[#6B7B8C] mb-12">Complete your purchase</p>
+    <form
+      id="checkout-form"
+      action="https://formspree.io/f/mwprdnqb"
+      method="POST"
+      class="flex flex-col-reverse lg:flex-row gap-12"
+    >
+      <!-- Left Side: Form -->
+      <div class="w-full lg:w-3/5">
+        <div class="space-y-8">
+          <!-- Contact Information -->
+          <div>
+            <h2 class="text-2xl font-medium mb-4">Contact Information</h2>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              class="form-input"
+              required
+            />
+            <input
+              type="tel"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              class="form-input mt-4"
+              required
+            />
+          </div>
+
+          <div>
+            <h2 class="text-2xl font-medium mb-4">Payment Details</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <select
+                name="currency"
+                id="currency-select"
+                class="form-input sm:col-span-2"
+                required
+              >
+                <option value="" disabled selected>Select Currency</option>
+                <option value="SAR">SAR - Saudi Riyal</option>
+                <option value="EGP">EGP - Egyptian Pound</option>
+                <option value="USD">USD - US Dollar</option>
+              </select>
             </div>
-            <!-- Right Side: Order Summary -->
-            <div class="w-full lg:w-2/5">
-                <div class="border border-[#D4E4E8] bg-white/50 rounded-lg p-6 sticky top-24">
-                    <h2 class="text-2xl font-medium mb-6">Order Summary</h2>
-                    <div id="checkout-items" class="space-y-4 max-h-64 overflow-y-auto mb-6 pr-2">
-                        <!-- Checkout items injected here -->
-                    </div>
-                    <div class="space-y-2 border-t border-[#D4E4E8] pt-4">
-                        <div class="flex justify-between text-[#6B7B8C]"><span>Subtotal</span><span id="checkout-subtotal"></span></div>
-                        <div id="checkout-savings-container" class="flex justify-between text-red-500" style="display: none;"><span>Savings</span><span id="checkout-savings"></span></div>
-                        <div class="flex justify-between text-[#6B7B8C]"><span>Shipping</span><span id="checkout-shipping"></span></div>
-                        <div class="flex justify-between font-bold text-lg border-t border-[#D4E4E8] pt-2 mt-2"><span>Total</span><span id="checkout-total"></span></div>
-                    </div>
-                    <button type="submit" class="btn-primary w-full mt-6">Place Order</button>
-                </div>
+          </div>
+          <!-- Shipping Address -->
+          <div>
+            <h2 class="text-2xl font-medium mb-4">Shipping Address</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Full Name"
+                class="form-input sm:col-span-2"
+                required
+              />
+              <input
+                type="text"
+                name="streetAddress"
+                placeholder="Street Address"
+                class="form-input sm:col-span-2"
+                required
+              />
+              <input
+                type="text"
+                name="apartment"
+                placeholder="Apartment, suite, etc. (optional)"
+                class="form-input sm:col-span-2"
+              />
+              <input
+                type="text"
+                name="city"
+                placeholder="City"
+                class="form-input"
+                required
+              />
+              <select name="governorate" class="form-input" required>
+                <option disabled selected value="">Governorate</option>
+                {shipping.map(s => <option value={s.city}>{s.city}</option>)}
+              </select>
+              <textarea
+                name="deliveryInstructions"
+                placeholder="Landmark or special delivery instructions"
+                rows="3"
+                class="form-input sm:col-span-2"></textarea>
             </div>
-        </form>
-    </div>
+          </div>
+          <!-- Hidden fields for order data -->
+          <input type="hidden" name="orderSummary" id="order-summary-input" />
+          <input type="hidden" name="orderTotal" id="order-total-input" />
+          <input type="hidden" name="_next" value="/" />
+        </div>
+      </div>
+      <!-- Right Side: Order Summary -->
+      <div class="w-full lg:w-2/5">
+        <div
+          class="border border-[#D4E4E8] bg-white/50 rounded-lg p-6 sticky top-24"
+        >
+          <h2 class="text-2xl font-medium mb-6">Order Summary</h2>
+          <div
+            id="checkout-items"
+            class="space-y-4 max-h-64 overflow-y-auto mb-6 pr-2"
+          >
+            <!-- Checkout items injected here -->
+          </div>
+          <div class="space-y-2 border-t border-[#D4E4E8] pt-4">
+            <div class="flex justify-between text-[#6B7B8C]">
+              <span>Subtotal</span><span id="checkout-subtotal"></span>
+            </div>
+            <div
+              id="checkout-savings-container"
+              class="flex justify-between text-red-500"
+              style="display: none;"
+            >
+              <span>Savings</span><span id="checkout-savings"></span>
+            </div>
+            <div class="flex justify-between text-[#6B7B8C]">
+              <span>Shipping</span><span id="checkout-shipping"></span>
+            </div>
+            <div
+              class="flex justify-between font-bold text-lg border-t border-[#D4E4E8] pt-2 mt-2"
+            >
+              <span>Total</span><span id="checkout-total"></span>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary w-full mt-6"
+            >Place Order</button
+          >
+        </div>
+      </div>
+    </form>
+  </div>
 </Layout>
 
 <style>
-.form-input {
-  border: 1px solid #D4E4E8;
-  background: #FFFFFF;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  font-size: 16px;
-  width: 100%;
-  transition: border-color 0.2s ease;
-}
-.form-input:focus {
-  border-color: #204566;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(32, 69, 102, 0.1);
-}
-.btn-primary {
+  .form-input {
+    border: 1px solid #d4e4e8;
+    background: #ffffff;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 100%;
+    transition: border-color 0.2s ease;
+  }
+  .form-input:focus {
+    border-color: #204566;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(32, 69, 102, 0.1);
+  }
+  .btn-primary {
     background-color: #204566;
     color: #fffaf0;
     padding: 1rem 2rem;
@@ -83,11 +165,11 @@ import shipping from '../data/shipping.json';
     cursor: pointer;
     transition: all 0.3s ease;
     letter-spacing: 0.5px;
-}
+  }
 
-.btn-primary:hover:not(:disabled) {
+  .btn-primary:hover:not(:disabled) {
     background-color: #163554;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(32, 69, 102, 0.3);
-}
+  }
 </style>

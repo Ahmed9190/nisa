@@ -12,6 +12,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
+  priceBefore?: number;
   discountPrice?: number;
   currency: string;
   description: string;
@@ -30,6 +31,7 @@ export interface Product {
   featured: boolean;
   inStock: boolean;
   sku: string;
+  comingSoon?: boolean;
 }
 
 export interface Content {
@@ -54,4 +56,21 @@ export interface Content {
   shop: {
     title: string;
   };
+}
+
+export interface TapCheckout {
+  amount: number;
+  currency: string;
+  customer: {
+    email: string;
+    first_name: string;
+    last_name?: string;
+    phone?: {
+      country_code: string;
+      number: string;
+    };
+  };
+  source: { id: string };
+  redirect: { url: string };
+  description: string;
 }

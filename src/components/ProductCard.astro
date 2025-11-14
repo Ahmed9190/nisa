@@ -15,27 +15,33 @@ const formatPrice = (price: number, currency = 'EGP') => {
 ---
 
 <div class="product-card p-4 flex flex-col text-center border border-[#D4E4E8] rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
-    { !product.inStock && <div class="absolute top-2 left-2 bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">Sold Out</div> }
-    <a href={`/product/${product.id}`}>
+    {product.comingSoon && <div class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">Coming Soon</div>}
+    { !product.inStock && !product.comingSoon && <div class="absolute top-2 left-2 bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">Sold Out</div> }
+    <a href={!product.comingSoon ? `/product/${product.id}` : '#'} class={product.comingSoon ? 'pointer-events-none' : ''}>
         <img src={product.colors[0].images[0]} alt={product.name} class="w-full h-auto object-cover rounded-md aspect-[3/4]">
     </a>
             <div class="flex-grow flex flex-col pt-4">
                 <h3 class="text-xl font-medium">{product.name}</h3>
                 <div class="text-lg text-[#6B7B8C] mt-1 flex-grow">
-                    {product.price < product.priceBefore ? (
-                        <div class="flex justify-center items-center gap-2">
-                            <span class="text-red-500">{formatPrice(product.price)}</span>
-                            <span class="line-through text-sm">{formatPrice(product.priceBefore)}</span>
-                        </div>
+                    {product.price > 0 ? (
+                        product.price < product.priceBefore ? (
+                            <div class="flex justify-center items-center gap-2">
+                                <span class="text-red-500">{formatPrice(product.price)}</span>
+                                <span class="line-through text-sm">{formatPrice(product.priceBefore)}</span>
+                            </div>
+                        ) : (
+                            <span>{formatPrice(product.price)}</span>
+                        )
                     ) : (
-                        <span>{formatPrice(product.price)}</span>
+                        <span class="text-lg font-medium">Coming Soon</span>
                     )}
                 </div>
-                <div class="mt-4 grid grid-cols-2 gap-2">            <a href={`/product/${product.id}`} class="btn-secondary py-2 px-4 text-sm">Details</a>
-            <button class="btn-primary py-2 px-4 text-sm add-to-cart-card-btn" data-product-id={product.id} disabled={!product.inStock}>
-                {product.inStock ? 'Add to Cart' : 'Sold Out'}
-            </button>
-        </div>
+                <div class="mt-4 grid grid-cols-2 gap-2">
+                    <a href={!product.comingSoon ? `/product/${product.id}` : '#'} class:list={["btn-secondary py-2 px-4 text-sm", { "opacity-50 cursor-not-allowed": product.comingSoon }]}>Details</a>
+                    <button class="btn-primary py-2 px-4 text-sm add-to-cart-card-btn" data-product-id={product.id} disabled={!product.inStock || product.comingSoon}>
+                        {product.inStock ? 'Add to Cart' : (product.comingSoon ? 'Coming Soon' : 'Sold Out')}
+                    </button>
+                </div>
     </div>
 </div>
 
