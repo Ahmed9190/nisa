@@ -44,8 +44,6 @@ import Layout from "../layouts/Layout.astro";
       const params = new URLSearchParams(window.location.search);
       const chargeId = params.get("tap_id"); // Tap uses 'tap_id' as the query param
 
-      console.log("Charge ID from URL:", chargeId);
-
       if (!chargeId) {
         throw new Error("No charge ID found in URL");
       }
@@ -53,7 +51,7 @@ import Layout from "../layouts/Layout.astro";
       messageDiv.textContent = "Verifying payment...";
 
       const verifyResponse = await fetch(
-        `http://localhost:3000/api/verify-payment?chargeId=${chargeId}`
+        `https://nisapayment.netlify.app/api/verify-payment?chargeId=${chargeId}`
       );
 
       if (!verifyResponse.ok) {
@@ -61,14 +59,12 @@ import Layout from "../layouts/Layout.astro";
       }
 
       const verifyData = await verifyResponse.json();
-      console.log("Payment verification response:", verifyData);
 
       if (!verifyData.success) {
         throw new Error("Payment verification failed");
       }
 
       const paymentStatus = verifyData.data?.status;
-      console.log("Payment status:", paymentStatus);
 
       if (paymentStatus !== "CAPTURED") {
         throw new Error(`Payment not completed. Status: ${paymentStatus}`);

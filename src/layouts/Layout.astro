@@ -298,7 +298,6 @@ const { title = site.title, description = site.description } = Astro.props;
         try {
           const res = await fetch(`https://open.er-api.com/v6/latest/EGP`);
           const data = await res.json();
-          console.log(data);
           const liveRate = data.rates[toCurrency];
           CURRENCIES[toCurrency].rate = liveRate;
           return liveRate;
@@ -337,7 +336,6 @@ const { title = site.title, description = site.description } = Astro.props;
         }
 
         const rate = await getCurrencyRate(currencySelect.value);
-        console.log("Rate", rate);
         // Update all price displays
         document.dispatchEvent(
           new CustomEvent("currency-changed", {
@@ -686,13 +684,15 @@ const { title = site.title, description = site.description } = Astro.props;
                 first_name: formData.get("fullName"),
               },
               source: { id: "src_card" },
-              redirect: { url: "http://localhost:4321/checkout-complete" },
+              redirect: {
+                url: "https://nisamodestwear.store/checkout-complete",
+              },
               description: formData.get("deliveryInstructions"),
             };
 
             try {
               const response = await fetch(
-                "http://localhost:3000/api/create-charge",
+                "https://nisapayment.netlify.app/api/create-charge",
                 {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
