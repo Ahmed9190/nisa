@@ -24,14 +24,7 @@ const formatPrice = (price: number, currency = 'EGP') => {
                 <h3 class="text-xl font-medium">{product.name}</h3>
                 <div class="text-lg text-[#6B7B8C] mt-1 flex-grow">
                     {product.price > 0 ? (
-                        product.price < product.priceBefore ? (
-                            <div class="flex justify-center items-center gap-2">
-                                <span class="text-red-500">{formatPrice(product.price)}</span>
-                                <span class="line-through text-sm">{formatPrice(product.priceBefore)}</span>
-                            </div>
-                        ) : (
-                            <span>{formatPrice(product.price)}</span>
-                        )
+                        <span>{formatPrice(product.price)}</span>
                     ) : (
                         <span class="text-lg font-medium">Coming Soon</span>
                     )}

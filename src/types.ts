@@ -26,6 +26,7 @@ export interface Product {
     name: string;
     code: string;
     images: string[];
+    inStock?: boolean;
   }[];
   category: string;
   featured: boolean;

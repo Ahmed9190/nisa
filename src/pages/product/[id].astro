@@ -21,7 +21,7 @@ const formatPrice = (price: number, currency = 'EGP') => {
 
 <Layout title={product.name + ' - nisa'}>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-         <div class="flex flex-col lg:flex-row gap-12">
+         <div class="product-main-layout flex flex-col lg:flex-row gap-12">
             <div class="w-full lg:w-1/2">
                 <div class="relative">
                     <img id="main-product-image" src={product.colors[0].images[0]} alt={product.name} class="w-full rounded-lg shadow-lg sticky top-24">
@@ -37,14 +37,7 @@ const formatPrice = (price: number, currency = 'EGP') => {
             <div class="w-full lg:w-1/2">
                 <h1 class="text-4xl font-medium">{product.name}</h1>
                 <div class="text-2xl my-4">
-                    {product.price < product.priceBefore ? (
-                        <div class="flex items-center gap-2">
-                            <span class="text-red-500">{formatPrice(product.price)}</span>
-                            <span class="line-through text-base">{formatPrice(product.priceBefore)}</span>
-                        </div>
-                    ) : (
-                        <span>{formatPrice(product.price)}</span>
-                    )}
+                    <span>{formatPrice(product.price)}</span>
                 </div>
                 <p class="text-[#6B7B8C] leading-relaxed mb-6">{product.description}</p>
 
@@ -52,7 +45,16 @@ const formatPrice = (price: number, currency = 'EGP') => {
                     <label class="block font-medium mb-2">Color</label>
                     <div class="flex gap-2">
                         {product.colors.map((color, index) => (
-                            <button class=`color-swatch border-2 rounded-full h-8 w-8 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#204566] ${index === 0 ? 'border-[#204566]' : 'border-transparent'}` style={`--swatch-color: ${color.code};`} data-images={JSON.stringify(color.images)} data-color-index={index}></button>
+                            <button
+                                class=`color-swatch border-2 rounded-full h-8 w-8 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#204566] ${index === 0 ? 'border-[#204566]' : 'border-transparent'} ${!(color.inStock ?? true) ? 'opacity-50 cursor-not-allowed relative' : ''}`
+                                style={`--swatch-color: ${color.code};`}
+                                data-images={JSON.stringify(color.images)}
+                                data-color-index={index}
+                                data-in-stock={color.inStock ?? true}
+                            >
+                                {!(color.inStock ?? true) && <div class="absolute inset-0 w-full h-full bg-white/70 rounded-full"></div>}
+                                {!(color.inStock ?? true) && <div class="absolute inset-0 w-full h-full" style="background: linear-gradient(to top right, transparent calc(50% - 1px), black, transparent calc(50% + 1px));"></div>}
+                            </button>
                         ))}
                     </div>
                 </div>
@@ -69,8 +71,8 @@ const formatPrice = (price: number, currency = 'EGP') => {
                     </div>
                 </div>
 
-                <button id="add-to-cart-product-page-btn" data-product-id={product.id} class="btn-primary w-full" disabled={!product.inStock}>
-                    {product.inStock ? 'Add to Cart' : 'Sold Out'}
+                <button id="add-to-cart-product-page-btn" data-product-id={product.id} class="btn-primary w-full" disabled={!(product.colors[0].inStock ?? true)}>
+                    {(product.colors[0].inStock ?? true) ? 'Add to Cart' : 'Sold Out'}
                 </button>
                 {!product.inStock && <p class="text-center mt-4 text-red-600 font-semibold">This product is currently sold out.</p>}
 
@@ -121,3 +123,40 @@ const formatPrice = (price: number, currency = 'EGP') => {
     cursor: not-allowed;
 }
 </style>
+<style>
+.product-main-layout {
+    /* Default to row for larger screens, handled by lg:flex-row in Tailwind */
+}
+
+@media (max-width: 1023px) { /* Tailwind's 'lg' breakpoint is 1024px */
+    .product-main-layout {
+        flex-direction: column;
+    }
+}
+</style>
+<script define:vars={{ product }}>
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    const addToCartBtn = document.getElementById('add-to-cart-product-page-btn');
+    const mainImage = document.getElementById('main-product-image');
+
+    colorSwatches.forEach(swatch => {
+        swatch.addEventListener('click', () => {
+            // Update active swatch border
+            colorSwatches.forEach(s => s.classList.remove('border-[#204566]'));
+            swatch.classList.add('border-[#204566]');
+
+            // Update main image
+            const images = JSON.parse(swatch.dataset.images);
+            if (images && images.length > 0) {
+                mainImage.src = images[0];
+            }
+
+            // Update add to cart button
+            const colorIndex = parseInt(swatch.dataset.colorIndex, 10);
+            const color = product.colors[colorIndex];
+            const inStock = color.inStock ?? true;
+            addToCartBtn.disabled = !inStock;
+            addToCartBtn.textContent = inStock ? 'Add to Cart' : 'Sold Out';
+        });
+    });
+</script>

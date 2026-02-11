@@ -5,6 +5,23 @@ import content from '../data/content.json';
 import products from '../data/products.json';
 
 const allColors = [...new Set(products.products.flatMap(p => p.colors.map(c => c.name)))];
+
+const groupedProducts = products.products.reduce((acc, product) => {
+    if (!acc[product.category]) {
+        acc[product.category] = [];
+    }
+    acc[product.category].push(product);
+    return acc;
+}, {});
+
+const categoryOrder = ['winter-collection', 'autumn-collection'];
+
+const orderedProducts = categoryOrder.map(category => {
+    return {
+        category: category,
+        products: groupedProducts[category] || []
+    }
+}).filter(group => group.products.length > 0);
 ---
 
 <Layout title="Shop - nisa">
@@ -12,17 +29,11 @@ const allColors = [...new Set(products.products.flatMap(p => p.colors.map(c => c
         <h1 class="text-4xl font-medium text-center mb-12">{content.shop.title}</h1>
         <div id="shop-products">
             {
-                Object.entries(products.products.reduce((acc, product) => {
-                    if (!acc[product.category]) {
-                        acc[product.category] = [];
-                    }
-                    acc[product.category].push(product);
-                    return acc;
-                }, {})).map(([category, products]) => (
+                orderedProducts.map(group => (
                     <div class="mb-12">
-                        <h2 class="text-2xl font-medium text-center mb-8 capitalize">{category.replace('-', ' ')}</h2>
+                        <h2 class="text-2xl font-medium text-center mb-8 capitalize">{group.category.replace('-', ' ')}</h2>
                         <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                            {products.map(product => (
+                            {group.products.map(product => (
                                 <ProductCard product={product} />
                             ))}
                         </div>
