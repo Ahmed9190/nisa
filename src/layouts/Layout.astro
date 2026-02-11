@@ -379,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 itemsContainer.innerHTML = `<p class="text-center text-[#6B7B8C]">Your cart is empty.</p>`;
                 const checkoutButton = checkoutForm.querySelector('button[type="submit"]');
                 if(checkoutButton) checkoutButton.disabled = true;
-                showToast('Your cart is empty. Please add items to your cart before placing an order.', 'error');
+
             } else {
                 itemsContainer.innerHTML = cart.items.map(item => {
                     const isSale = item.price < item.priceBefore;
@@ -468,7 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then(response => {
                 if (response.ok) {
                     cart.clear();
-                    window.location.href = '/?order=success';
+                    window.location.href = '/thank-you';
                 } else {
                     response.json().then(data => {
                         if (Object.hasOwn(data, 'errors')) {
