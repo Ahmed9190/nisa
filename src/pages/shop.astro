@@ -1,12 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProductCard from '../components/ProductCard.astro';
-import content from '../data/content.json';
-import products from '../data/products.json';
+import { getContentRepository, getProductRepository } from '../lib/services';
 
-const allColors = [...new Set(products.products.flatMap(p => p.colors.map(c => c.name)))];
+const contentRepo = await getContentRepository();
+const productRepo = await getProductRepository();
 
-const groupedProducts = products.products.reduce((acc, product) => {
+const content = await contentRepo.getShopContent();
+const allProducts = await productRepo.getAll();
+
+const allColors = [...new Set(allProducts.flatMap(p => p.colors.map(c => c.name)))];
+
+const groupedProducts = allProducts.reduce((acc, product) => {
     if (!acc[product.category]) {
         acc[product.category] = [];
     }
@@ -26,7 +31,7 @@ const orderedProducts = categoryOrder.map(category => {
 
 <Layout title="Shop - nisa">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 class="text-4xl font-medium text-center mb-12">{content.shop.title}</h1>
+        <h1 class="text-4xl font-medium text-center mb-12">{content.title}</h1>
         <div id="shop-products">
             {
                 orderedProducts.map(group => (

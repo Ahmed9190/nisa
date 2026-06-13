@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import shipping from '../data/shipping.json';
+import { getShippingRepository } from '../lib/services';
+
+const shippingRepo = await getShippingRepository();
+const shipping = await shippingRepo.getAllRates();
 ---
 
 <Layout title="Checkout - nisa">

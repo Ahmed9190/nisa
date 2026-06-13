@@ -1,10 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import products from '../../data/products.json';
+import { getProductRepository } from '../../lib/services';
 import type { Product } from '../../types';
 
 export async function getStaticPaths() {
-  return products.products.map(product => ({
+  const productRepo = await getProductRepository();
+  const allProducts = await productRepo.getAll();
+  return allProducts.map(product => ({
     params: { id: product.id },
     props: { product },
   }));

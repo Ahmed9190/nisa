@@ -1,12 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import content from '../data/content.json';
+import { getContentRepository } from '../lib/services';
+
+const contentRepo = await getContentRepository();
+const content = await contentRepo.getContactContent();
 ---
 
 <Layout title="Contact Us - nisa">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
          <div class="max-w-xl mx-auto">
-            <h1 class="text-4xl font-medium text-center mb-8">{content.contact.title}</h1>
+            <h1 class="text-4xl font-medium text-center mb-8">{content.title}</h1>
             <form id="contact-form" action="https://formspree.io/f/xldpywlk" method="POST" class="space-y-6">
                 <div>
                     <label for="name" class="block font-medium mb-2">Name</label>
