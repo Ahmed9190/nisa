@@ -1136,6 +1136,196 @@
       "featured": false,
       "inStock": true,
       "sku": "NSA-022"
+    },
+    {
+      "id": "proda",
+      "name": "ProdA",
+      "price": 99,
+      "currency": "EGP",
+      "description": "X",
+      "details": {
+        "fabric": "L",
+        "fit": "L",
+        "care": "L"
+      },
+      "sizes": [
+        "M"
+      ],
+      "colors": [
+        {
+          "name": "Red",
+          "code": "#ff0000",
+          "images": [
+            "/p.jpg"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "t",
+      "featured": false,
+      "inStock": true,
+      "sku": "PRD-001",
+      "comingSoon": false,
+      "nameAr": "ProdA",
+      "descriptionAr": "X",
+      "detailsAr": {
+        "fabric": "L",
+        "fit": "L",
+        "care": "L"
+      },
+      "updatedAt": "2026-06-13T16:55:37.888Z"
+    },
+    {
+      "id": "finaltest",
+      "name": "FinalTest",
+      "price": 49,
+      "currency": "EGP",
+      "description": "Verified",
+      "details": {
+        "fabric": "C",
+        "fit": "R",
+        "care": "M"
+      },
+      "sizes": [
+        "S"
+      ],
+      "colors": [
+        {
+          "name": "Green",
+          "code": "#00ff00",
+          "images": [
+            "/v.jpg"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "test",
+      "featured": false,
+      "inStock": true,
+      "sku": "FIN-001",
+      "comingSoon": false,
+      "nameAr": "FinalTest",
+      "descriptionAr": "Verified",
+      "detailsAr": {
+        "fabric": "C",
+        "fit": "R",
+        "care": "M"
+      },
+      "updatedAt": "2026-06-13T17:00:11.253Z"
+    },
+    {
+      "id": "css-test",
+      "name": "CSS Test",
+      "price": 49,
+      "currency": "EGP",
+      "description": "X",
+      "details": {
+        "fabric": "C",
+        "fit": "R",
+        "care": "M"
+      },
+      "sizes": [
+        "M"
+      ],
+      "colors": [
+        {
+          "name": "Blue",
+          "code": "#0000ff",
+          "images": [
+            "/v.jpg"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "test",
+      "featured": false,
+      "inStock": true,
+      "sku": "CSS-001",
+      "comingSoon": false,
+      "nameAr": "CSS Test",
+      "descriptionAr": "X",
+      "detailsAr": {
+        "fabric": "C",
+        "fit": "R",
+        "care": "M"
+      },
+      "updatedAt": "2026-06-13T17:17:40.093Z"
+    },
+    {
+      "id": "prodtest",
+      "name": "ProdTest",
+      "price": 49,
+      "currency": "EGP",
+      "description": "X",
+      "details": {
+        "fabric": "C",
+        "fit": "R",
+        "care": "M"
+      },
+      "sizes": [
+        "M"
+      ],
+      "colors": [
+        {
+          "name": "Green",
+          "code": "#00ff00",
+          "images": [
+            "/v.jpg"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "test",
+      "featured": false,
+      "inStock": true,
+      "sku": "PRD-002",
+      "comingSoon": false,
+      "nameAr": "ProdTest",
+      "descriptionAr": "X",
+      "detailsAr": {
+        "fabric": "C",
+        "fit": "R",
+        "care": "M"
+      },
+      "updatedAt": "2026-06-13T17:18:19.525Z"
+    },
+    {
+      "id": "fixtest",
+      "name": "FixTest",
+      "price": 49,
+      "currency": "EGP",
+      "description": "X",
+      "details": {
+        "fabric": "C",
+        "fit": "R",
+        "care": "M"
+      },
+      "sizes": [
+        "M"
+      ],
+      "colors": [
+        {
+          "name": "Red",
+          "code": "#ff0000",
+          "images": [
+            "/v.jpg"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "test",
+      "featured": false,
+      "inStock": true,
+      "sku": "FIX-001",
+      "comingSoon": false,
+      "nameAr": "FixTest",
+      "descriptionAr": "X",
+      "detailsAr": {
+        "fabric": "C",
+        "fit": "R",
+        "care": "M"
+      },
+      "updatedAt": "2026-06-13T17:34:32.391Z"
     }
   ]
 }

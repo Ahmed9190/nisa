@@ -1,0 +1,81 @@
+---
+interface Props {
+  title?: string;
+  message?: string;
+  confirmText?: string;
+}
+
+const {
+  title = 'Delete product?',
+  message = 'This action cannot be undone.',
+  confirmText = 'Delete',
+} = Astro.props;
+---
+
+<div class="admin-modal-backdrop" data-modal-backdrop hidden>
+  <div class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+    <h2 id="confirm-modal-title">{title}</h2>
+    <p>{message}</p>
+    <div class="admin-modal-actions">
+      <button type="button" data-modal-cancel>Cancel</button>
+      <button type="button" class="admin-danger" data-modal-confirm>{confirmText}</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const backdrop = document.querySelector('[data-modal-backdrop]');
+  const confirmButton = document.querySelector('[data-modal-confirm]');
+  const cancelButton = document.querySelector('[data-modal-cancel]');
+  let onConfirm = () => {};
+
+  window.openAdminConfirm = (title, message, confirmText, confirmAction) => {
+    if (!backdrop) return;
+    const modal = backdrop.querySelector('.admin-modal');
+    backdrop.querySelector('#confirm-modal-title').textContent = title;
+    backdrop.querySelector('p').textContent = message;
+    backdrop.querySelector('[data-modal-confirm]').textContent = confirmText;
+    onConfirm = confirmAction;
+    backdrop.hidden = false;
+    confirmButton?.focus();
+  };
+
+  window.closeAdminConfirm = () => {
+    if (!backdrop) return;
+    backdrop.hidden = true;
+    onConfirm = () => {};
+  };
+
+  confirmButton?.addEventListener('click', async () => {
+    await onConfirm();
+    window.closeAdminConfirm();
+  });
+
+  cancelButton?.addEventListener('click', window.closeAdminConfirm);
+
+  backdrop?.addEventListener('click', (event) => {
+    if (event.target === backdrop) {
+      window.closeAdminConfirm();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && backdrop && !backdrop.hidden) {
+      window.closeAdminConfirm();
+    }
+
+    if (event.key === 'Tab' && backdrop && !backdrop.hidden) {
+      const focusable = backdrop.querySelectorAll('button');
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  });
+</script>

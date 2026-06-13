@@ -11,12 +11,19 @@ export interface SiteConfig {
 export interface Product {
   id: string;
   name: string;
+  nameAr?: string;
   price: number;
   priceBefore?: number;
   discountPrice?: number;
   currency: string;
   description: string;
+  descriptionAr?: string;
   details: {
+    fabric: string;
+    fit: string;
+    care: string;
+  };
+  detailsAr?: {
     fabric: string;
     fit: string;
     care: string;
@@ -24,6 +31,7 @@ export interface Product {
   sizes: string[];
   colors: {
     name: string;
+    nameAr?: string;
     code: string;
     images: string[];
     inStock?: boolean;
@@ -33,6 +41,8 @@ export interface Product {
   inStock: boolean;
   sku: string;
   comingSoon?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Content {

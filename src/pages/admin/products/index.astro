@@ -1,0 +1,133 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { productStore } from '../../../lib/product-store';
+
+const products = await productStore.getAll();
+const searchQuery = Astro.url.searchParams.get('q') || '';
+const stockFilter = Astro.url.searchParams.get('status') || '';
+const sortColumn = Astro.url.searchParams.get('sort') || 'name';
+const sortDir = Astro.url.searchParams.get('dir') || 'asc';
+
+let filtered = products;
+
+if (searchQuery) {
+  const lower = searchQuery.toLowerCase();
+  filtered = filtered.filter((p) =>
+    p.name.toLowerCase().includes(lower) ||
+    (p.nameAr || '').toLowerCase().includes(lower)
+  );
+}
+
+if (stockFilter === 'in-stock') {
+  filtered = filtered.filter((p) => p.inStock && !p.comingSoon);
+} else if (stockFilter === 'out-of-stock') {
+  filtered = filtered.filter((p) => !p.inStock && !p.comingSoon);
+} else if (stockFilter === 'coming-soon') {
+  filtered = filtered.filter((p) => p.comingSoon);
+}
+
+filtered.sort((a, b) => {
+  const aValue = String(a[sortColumn] ?? '');
+  const bValue = String(b[sortColumn] ?? '');
+  const modifier = sortDir === 'desc' ? -1 : 1;
+  return aValue.localeCompare(bValue) * modifier;
+});
+
+function toggleDir(column: string): string {
+  if (column === sortColumn) {
+    return sortDir === 'asc' ? 'desc' : 'asc';
+  }
+  return 'asc';
+}
+
+function paramString(params: Record<string, string>): string {
+  const merged = new Map([
+    ['q', searchQuery],
+    ['status', stockFilter],
+    ['sort', params.sort || sortColumn],
+    ['dir', params.dir || 'asc'],
+  ]);
+  Object.entries(params).forEach(([k, v]) => merged.set(k, v));
+  return `?${Array.from(merged.entries()).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&')}`;
+}
+---
+
+<AdminLayout title="Products" active="products">
+  <div class="admin-toolbar">
+    <form class="admin-search" method="GET" action="/admin/products/">
+      <input type="text" name="q" placeholder="Search by name (EN/AR)" value={searchQuery} />
+      <select name="status">
+        <option value="">All status</option>
+        <option value="in-stock" selected={stockFilter === 'in-stock'}>In stock</option>
+        <option value="out-of-stock" selected={stockFilter === 'out-of-stock'}>Out of stock</option>
+        <option value="coming-soon" selected={stockFilter === 'coming-soon'}>Coming soon</option>
+      </select>
+      <button type="submit" class="admin-primary-button">Search</button>
+    </form>
+    <a class="admin-primary-button" href="/admin/products/new/">Add product</a>
+  </div>
+
+  <div class="admin-table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>
+            <a class="admin-sort-link" href={paramString({ sort: 'name', dir: toggleDir('name') })}>
+              Name {sortColumn === 'name' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+            </a>
+          </th>
+          <th>
+            <a class="admin-sort-link" href={paramString({ sort: 'price', dir: toggleDir('price') })}>
+              Price {sortColumn === 'price' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+            </a>
+          </th>
+          <th>Colors</th>
+          <th>Sizes</th>
+          <th>
+            <a class="admin-sort-link" href={paramString({ sort: 'category', dir: toggleDir('category') })}>
+              Category {sortColumn === 'category' ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+            </a>
+          </th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {filtered.map((product) => {
+          const preview = ((product.colors.find((c) => c.images?.length)?.images) || [])[0];
+          return (
+            <tr>
+              <td class="admin-thumb-col">
+                {preview ? <img class="admin-thumb" src={preview} alt="" /> : <span class="admin-no-thumb">—</span>}
+              </td>
+              <td>
+                <strong>{product.name}</strong>
+                {product.nameAr && <span class="admin-ar-name">{product.nameAr}</span>}
+              </td>
+              <td>EGP {product.price}</td>
+              <td>{product.colors.length}</td>
+              <td>{product.sizes.length}</td>
+              <td>{product.category}</td>
+              <td>
+                {product.comingSoon ? 'Coming soon' : product.inStock ? 'In stock' : 'Out of stock'}
+              </td>
+              <td class="admin-actions">
+                <a class="admin-secondary-button" href={`/admin/products/${product.id}/?returnUrl=${encodeURIComponent(`/admin/products/${product.id}/`)}`}>Edit</a>
+                <a class="admin-danger-button" href={`/admin/products/${product.id}/delete/`}>Delete</a>
+                <a class="admin-secondary-button" href={`/${product.id}/`} target="_blank">Preview</a>
+              </td>
+            </tr>
+          );
+        })}
+        {filtered.length === 0 && <tr><td colspan="8">No products found.</td></tr>}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="admin-toolbar" style="margin-top: 1rem;">
+    <label class="admin-checkbox">
+      <input type="checkbox" disabled /> Bulk delete selected <em>(Phase 1+)</em>
+    </label>
+  </div>
+</AdminLayout>

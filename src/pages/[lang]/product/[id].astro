@@ -21,6 +21,10 @@ const { product } = Astro.props as { product: Product };
 const { lang } = Astro.params as { lang: Locale };
 const locale = lang;
 
+if (!product) {
+  return Astro.redirect(`/${locale}/shop/`);
+}
+
 const formatPrice = (price: number, currency = 'EGP') => {
     return new Intl.NumberFormat('en-US', {
         style: 'currency', currency, minimumFractionDigits: 0

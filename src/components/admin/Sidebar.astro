@@ -1,0 +1,16 @@
+---
+interface Props {
+  active?: 'dashboard' | 'products';
+}
+
+const { active = 'dashboard' } = Astro.props;
+---
+
+<aside class="admin-sidebar" data-sidebar>
+  <a class="admin-logo" href="/admin/">Nisa Admin</a>
+  <nav class="admin-nav">
+    <a class:active={active === 'dashboard'} href="/admin/">Dashboard</a>
+    <a class:active={active === 'products'} href="/admin/products/">Products</a>
+  </nav>
+  <button class="admin-sidebar-close" type="button" data-close-sidebar>Close</button>
+</aside>

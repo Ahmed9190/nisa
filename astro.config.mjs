@@ -1,20 +1,15 @@
 import { defineConfig } from 'astro/config';
-import tailwind from "@astrojs/tailwind";
+import tailwind from '@astrojs/tailwind';
+import node from '@astrojs/node';
 
-// https://astro.build/config
 export default defineConfig({
   integrations: [tailwind()],
-  output: 'static',
+  adapter: node({ mode: 'standalone' }),
+  output: 'server',
   trailingSlash: 'always',
   vite: {
-    build: {
-      rollupOptions: {
-        output: {
-          assetFileNames: 'assets/asset.[hash][extname]',
-          chunkFileNames: 'assets/chunk.[hash].js',
-          entryFileNames: 'assets/entry.[hash].js',
-        },
-      },
+    server: {
+      allowedHosts: ['gorgeous-logically-lobster.ngrok-free.app'],
     },
   },
 });

@@ -80,7 +80,50 @@ To build a production-ready version of your site, run:
 npm run build
 ```
 
-This will generate a `dist/` directory with the optimized and bundled files for your site.
+This will generate a `dist/` directory with the optimized and bundled files for your site. In server mode, the output includes a Node.js server entrypoint.
+
+## Admin Panel
+
+Nisa includes a password-protected admin panel at `/admin/` for managing products visually. It is available only when running in server mode (`output: 'server'`).
+
+### Setup
+
+1. Set the `ADMIN_PASSWORD` environment variable in `.env` or in your hosting dashboard.
+2. Ensure `astro.config.mjs` has `output: 'server'` and the Node adapter is configured.
+3. Deploy to a Node.js hosting platform (see [Deployment Requirements](#deployment-requirements)).
+
+### Usage
+
+1. Navigate to `/admin/login` and enter the password.
+2. After login, the **Dashboard** shows product statistics.
+3. Use the **Products → Add product** button to create a new product.
+4. Click a product's **Edit** button to modify its fields, colors, sizes, and images.
+5. Click **Delete** to remove a product after confirmation.
+6. Logout via the button in the header.
+
+### Environment Variables
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `ADMIN_PASSWORD` | Yes | `changeme` | The password for the admin panel. Change this before production deployment. |
+
+### Image Size Recommendations
+
+- **Maximum file size**: 5 MB per image.
+- **Supported formats**: JPEG, PNG, WebP, GIF.
+- **Recommended dimensions**: At least 800×800px (1:1 aspect ratio) for sharp thumbnails. Larger images up to 2000×2000px work well for product detail views.
+- Images are stored in `public/images/products/` and referenced by relative paths in product JSON files. Large images may slow page load; optimize with a compression tool before uploading.
+
+### Deployment Requirements
+
+- **Node.js hosting**: The admin panel requires server-side rendering (SSR). Static-only hosts (Netlify static, GitHub Pages) **are not compatible**.
+- **Recommended platforms**:
+  - [Railway](https://railway.app/)
+  - [Render](https://render.com/)
+  - [Fly.io](https://fly.io/)
+  - Any VPS with Node.js (v18+) and a process manager (PM2, systemd)
+- **File-system writes**: The admin panel writes to `src/data/products-en.json` and `src/data/products-ar.json`. Ensure the hosting filesystem is writable.
+- **Session cookie**: The admin session cookie uses `Secure` flag, so HTTPS is required when not on localhost.
 
 ## Content Management
 

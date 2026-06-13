@@ -1,0 +1,105 @@
+---
+import type { Product } from '../../../types';
+
+interface Props {
+  colorIndex: number;
+  color: NonNullable<Product['colors']>[number];
+  errors?: Record<string, string>;
+}
+
+const { colorIndex, color, errors = {} } = Astro.props;
+---
+
+<div class="admin-image-uploader" data-image-uploader>
+  <div class="admin-image-list" data-image-list>
+    {color.images.map((image) => (
+      <div class="admin-image-thumb" draggable="true" data-image-path={image}>
+        <img src={image} alt="" />
+        <span>Drag to reorder</span>
+      </div>
+    ))}
+  </div>
+  <label class="admin-drop-zone" data-drop-zone>
+    <input type="file" name={`images[${colorIndex}]`} accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden />
+    <span>Drop images here or click to upload</span>
+    <small data-field-error={`colors.${colorIndex}.images`}>{errors[`colors.${colorIndex}.images`] || errors['colors.images']}</small>
+  </label>
+</div>
+
+<script is:inline>
+  const uploader = document.currentScript.closest('[data-image-uploader]');
+  const list = uploader.querySelector('[data-image-list]');
+  const label = uploader.querySelector('[data-drop-zone]');
+  const input = uploader.querySelector('input[type="file"]');
+
+  label.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    label.classList.add('is-dragging');
+  });
+
+  label.addEventListener('dragleave', () => {
+    label.classList.remove('is-dragging');
+  });
+
+  label.addEventListener('drop', (event) => {
+    event.preventDefault();
+    label.classList.remove('is-dragging');
+    const transfer = new DataTransfer();
+    Array.from(event.dataTransfer.files).forEach((file) => transfer.items.add(file));
+    input.files = transfer.files;
+    renderFiles(input.files);
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+
+  input.addEventListener('change', () => renderFiles(input.files));
+
+  function renderFiles(files) {
+    Array.from(files).forEach((file) => {
+      const thumb = document.createElement('div');
+      thumb.className = 'admin-image-thumb is-preview';
+      thumb.draggable = true;
+      const image = document.createElement('img');
+      image.src = URL.createObjectURL(file);
+      const caption = document.createElement('span');
+      caption.textContent = file.name;
+      thumb.append(image, caption);
+      list.appendChild(thumb);
+    });
+  }
+
+  let dragged;
+  list.addEventListener('dragstart', (event) => {
+    dragged = event.target.closest('[data-image-path], .is-preview');
+    dragged?.classList.add('is-dragging');
+  });
+
+  list.addEventListener('dragend', () => {
+    dragged?.classList.remove('is-dragging');
+    dragged = null;
+  });
+
+  list.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    const after = getDragAfterElement(list, event.clientY);
+    const current = dragged;
+    if (!current) return;
+    if (after == null) {
+      list.appendChild(current);
+    } else {
+      list.insertBefore(current, after);
+    }
+  });
+
+  function getDragAfterElement(container, y) {
+    return [...container.querySelectorAll('[data-image-path], .is-preview:not(.is-dragging)')]
+      .sort((a, b) => {
+        const aOffset = y - a.getBoundingClientRect().top;
+        const bOffset = y - b.getBoundingClientRect().top;
+        return aOffset - bOffset;
+      })
+      .find((element) => {
+        const offset = y - element.getBoundingClientRect().top;
+        return offset > 0 && offset < element.getBoundingClientRect().height;
+      });
+  }
+</script>

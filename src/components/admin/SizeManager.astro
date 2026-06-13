@@ -1,0 +1,52 @@
+---
+interface Props {
+  sizes: string[];
+}
+
+const { sizes } = Astro.props;
+---
+
+<section class="admin-form-section">
+  <div class="admin-section-heading">
+    <h2>Sizes</h2>
+    <button type="button" class="admin-secondary-button" data-add-size>Add Size</button>
+  </div>
+  <div class="admin-size-list" data-size-list>
+    {sizes.map((size) => (
+      <div class="admin-size-row">
+        <input name="sizes" value={size} required />
+        <button type="button" class="admin-danger-button" data-remove-size>Remove</button>
+      </div>
+    ))}
+  </div>
+  <small data-field-error="sizes"></small>
+</section>
+
+<template data-size-template>
+  <div class="admin-size-row">
+    <input name="sizes" required />
+    <button type="button" class="admin-danger-button" data-remove-size>Remove</button>
+  </div>
+</template>
+
+<script>
+  const list = document.querySelector('[data-size-list]');
+  const template = document.querySelector('[data-size-template]');
+  const addButton = document.querySelector('[data-add-size]');
+
+  addButton?.addEventListener('click', () => {
+    if (!list || !template) return;
+    list.appendChild(template.content.cloneNode(true));
+  });
+
+  list?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-remove-size]');
+    if (!button) return;
+    const row = button.closest('.admin-size-row');
+    if (list.querySelectorAll('.admin-size-row').length <= 1) {
+      window.showAdminToast?.('At least one size is required', 'error');
+      return;
+    }
+    row.remove();
+  });
+</script>

@@ -1,0 +1,20 @@
+---
+---
+
+<div class="admin-toast" data-toast hidden></div>
+
+<script>
+  const toast = document.querySelector('[data-toast]');
+  let timeout;
+
+  window.showAdminToast = (message, type = 'success') => {
+    if (!toast) return;
+    clearTimeout(timeout);
+    toast.textContent = message;
+    toast.dataset.type = type;
+    toast.hidden = false;
+    timeout = setTimeout(() => {
+      toast.hidden = true;
+    }, type === 'error' ? 5000 : 3000);
+  };
+</script>

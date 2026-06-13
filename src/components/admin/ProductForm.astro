@@ -1,0 +1,299 @@
+---
+import ColorManager from './ColorManager.astro';
+import SizeManager from './SizeManager.astro';
+import type { Product } from '../../../types';
+
+interface Props {
+  product?: Product;
+  action: 'create' | 'edit';
+  errors?: Record<string, string>;
+}
+
+const { product, action, errors = {} } = Astro.props;
+const defaultProduct: Product = {
+  id: '',
+  name: '',
+  nameAr: '',
+  price: 0,
+  currency: 'EGP',
+  description: '',
+  descriptionAr: '',
+  details: { fabric: '', fit: '', care: '' },
+  detailsAr: { fabric: '', fit: '', care: '' },
+  sizes: ['One Size'],
+  colors: [
+    {
+      name: '',
+      nameAr: '',
+      code: '#000000',
+      images: [],
+      inStock: true,
+    },
+  ],
+  category: '',
+  featured: false,
+  inStock: true,
+  sku: '',
+  comingSoon: false,
+};
+const initialProduct = product || defaultProduct;
+const initialJson = JSON.stringify(initialProduct).replace(/</g, '\\u003c');
+const submitLabel = action === 'create' ? 'Create product' : 'Save changes';
+const method = action === 'create' ? 'POST' : 'PUT';
+---
+
+<form class="admin-product-form" data-product-form data-action={Astro.url.pathname === '/admin/products/new/' ? '/admin/api/products/' : `/admin/api/products/${initialProduct.id}/`} data-method={method} data-initial={initialJson}>
+  <input type="hidden" name="product" value={initialJson} />
+
+  <section class="admin-form-grid">
+    <div class="admin-form-panel">
+      <h2>Basic information</h2>
+      <label>
+        Product ID
+        <input name="id" value={initialProduct.id} placeholder="Auto-generated if empty" />
+        <small data-field-error="id">{errors.id}</small>
+      </label>
+      <label>
+        English name
+        <input name="name" value={initialProduct.name} required />
+        <small data-field-error="name">{errors.name}</small>
+      </label>
+      <label>
+        Arabic name
+        <input name="nameAr" value={initialProduct.nameAr || ''} />
+      </label>
+      <label>
+        SKU
+        <input name="sku" value={initialProduct.sku} required />
+        <small data-field-error="sku">{errors.sku}</small>
+      </label>
+      <label>
+        Category
+        <input name="category" value={initialProduct.category} required />
+        <small data-field-error="category">{errors.category}</small>
+      </label>
+      <label>
+        Price
+        <input type="number" name="price" min="0" step="0.01" value={initialProduct.price} required />
+        <small data-field-error="price">{errors.price}</small>
+      </label>
+      <label>
+        Price before
+        <input type="number" name="priceBefore" min="0" step="0.01" value={initialProduct.priceBefore || ''} />
+        <small data-field-error="priceBefore">{errors.priceBefore}</small>
+      </label>
+      <label class="admin-checkbox">
+        <input type="checkbox" name="featured" checked={initialProduct.featured} />
+        Featured
+      </label>
+      <label class="admin-checkbox">
+        <input type="checkbox" name="inStock" checked={initialProduct.inStock} />
+        In stock
+      </label>
+      <label class="admin-checkbox">
+        <input type="checkbox" name="comingSoon" checked={initialProduct.comingSoon || false} />
+        Coming soon
+      </label>
+    </div>
+
+    <div class="admin-form-panel">
+      <h2>Descriptions</h2>
+      <label>
+        English description
+        <textarea name="description" required>{initialProduct.description}</textarea>
+        <small data-field-error="description">{errors.description}</small>
+      </label>
+      <label>
+        Arabic description
+        <textarea name="descriptionAr">{initialProduct.descriptionAr || ''}</textarea>
+      </label>
+      <label>
+        Fabric
+        <textarea name="details.fabric" required>{initialProduct.details.fabric}</textarea>
+        <small data-field-error="details.fabric">{errors['details.fabric']}</small>
+      </label>
+      <label>
+        Fit
+        <textarea name="details.fit" required>{initialProduct.details.fit}</textarea>
+        <small data-field-error="details.fit">{errors['details.fit']}</small>
+      </label>
+      <label>
+        Care
+        <textarea name="details.care" required>{initialProduct.details.care}</textarea>
+        <small data-field-error="details.care">{errors['details.care']}</small>
+      </label>
+      <label>
+        Arabic fabric
+        <textarea name="detailsAr.fabric">{initialProduct.detailsAr?.fabric || ''}</textarea>
+      </label>
+      <label>
+        Arabic fit
+        <textarea name="detailsAr.fit">{initialProduct.detailsAr?.fit || ''}</textarea>
+      </label>
+      <label>
+        Arabic care
+        <textarea name="detailsAr.care">{initialProduct.detailsAr?.care || ''}</textarea>
+      </label>
+    </div>
+  </section>
+
+  <SizeManager sizes={initialProduct.sizes} />
+  <ColorManager colors={initialProduct.colors} errors={errors} />
+
+  <div class="admin-form-actions">
+    <a class="admin-secondary-button" href="/admin/products/">Cancel</a>
+    <button class="admin-primary-button" type="submit">{submitLabel}</button>
+  </div>
+  <p class="admin-form-error" data-form-error hidden></p>
+</form>
+
+<script is:inline>
+  const form = document.querySelector('[data-product-form]');
+  const formError = form.querySelector('[data-form-error]');
+  let dirty = false;
+
+  form.addEventListener('input', () => markDirty());
+  form.addEventListener('change', () => markDirty());
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    formError.hidden = true;
+
+    if (!form.reportValidity()) {
+      return;
+    }
+
+    const payload = collectPayload();
+    form.querySelector('[name="product"]').value = JSON.stringify(payload);
+
+    const csrf = getCookie('csrf_token');
+    const response = await fetch(form.dataset.action, {
+      method: form.dataset.method,
+      headers: {
+        'x-csrf-token': csrf || '',
+      },
+      body: new FormData(form),
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      showValidationErrors(data.details || {});
+      formError.textContent = data.error || 'Request failed';
+      formError.hidden = false;
+      window.showAdminToast?.(data.error || 'Product was not saved', 'error');
+      return;
+    }
+
+    dirty = false;
+    window.showAdminToast?.('Product saved', 'success');
+    if (form.dataset.action.includes('/new/')) {
+      setTimeout(() => {
+        window.location.href = '/admin/products/';
+      }, 500);
+    }
+  });
+
+  document.querySelectorAll('a[href^="/admin/"]:not([href="/admin/logout"])').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (!dirty) return;
+      if (!window.confirm('Leave site? Changes may not be saved')) {
+        event.preventDefault();
+      }
+    });
+  });
+
+  window.addEventListener('beforeunload', (event) => {
+    if (!dirty) return;
+    event.preventDefault();
+    event.returnValue = '';
+  });
+
+  function markDirty() {
+    dirty = true;
+  }
+
+  function collectPayload() {
+    const payload = JSON.parse(form.querySelector('[name="product"]').value || '{}');
+
+    set(payload, 'id', value('id'));
+    set(payload, 'name', value('name'));
+    set(payload, 'nameAr', value('nameAr'));
+    set(payload, 'sku', value('sku'));
+    set(payload, 'category', value('category'));
+    set(payload, 'price', numberValue('price'));
+    set(payload, 'priceBefore', optionalNumber('priceBefore'));
+    set(payload, 'currency', 'EGP');
+    set(payload, 'description', value('description'));
+    set(payload, 'descriptionAr', value('descriptionAr'));
+    set(payload, 'details.fabric', value('details.fabric'));
+    set(payload, 'details.fit', value('details.fit'));
+    set(payload, 'details.care', value('details.care'));
+    set(payload, 'detailsAr.fabric', value('detailsAr.fabric'));
+    set(payload, 'detailsAr.fit', value('detailsAr.fit'));
+    set(payload, 'detailsAr.care', value('detailsAr.care'));
+    set(payload, 'featured', checked('featured'));
+    set(payload, 'inStock', checked('inStock'));
+    set(payload, 'comingSoon', checked('comingSoon'));
+    set(payload, 'sizes', [...form.querySelectorAll('[name="sizes"]')].map((input) => input.value).filter(Boolean));
+
+    const colors = [...form.querySelectorAll('[data-color-row]')].map((row, index) => {
+      const images = [...row.querySelectorAll('[data-image-path]')].map((image) => image.dataset.imagePath);
+      const getName = (field) => row.querySelector(`[name="colors[${index}].${field}"]`)?.value || '';
+      const getCheck = (field) => Boolean(row.querySelector(`[name="colors[${index}].${field}"]`)?.checked);
+      return {
+        name: getName('name'),
+        nameAr: getName('nameAr'),
+        code: getName('code'),
+        images,
+        inStock: getCheck('inStock'),
+      };
+    });
+
+    set(payload, 'colors', colors);
+    return payload;
+  }
+
+  function value(name) {
+    return form.querySelector(`[name="${name}"]`)?.value || '';
+  }
+
+  function numberValue(name) {
+    return Number(value(name) || 0);
+  }
+
+  function optionalNumber(name) {
+    const value = form.querySelector(`[name="${name}"]`)?.value;
+    return value ? Number(value) : undefined;
+  }
+
+  function checked(name) {
+    return Boolean(form.querySelector(`[name="${name}"]`)?.checked);
+  }
+
+  function set(object, path, value) {
+    const parts = path.split('.');
+    let cursor = object;
+    parts.slice(0, -1).forEach((part) => {
+      cursor[part] = cursor[part] || {};
+      cursor = cursor[part];
+    });
+    cursor[parts.at(-1)] = value;
+  }
+
+  function showValidationErrors(details) {
+    form.querySelectorAll('[data-field-error]').forEach((element) => {
+      element.textContent = '';
+    });
+    Object.entries(details).forEach(([path, message]) => {
+      const element = form.querySelector(`[data-field-error="${path}"]`);
+      if (element) {
+        element.textContent = message;
+      }
+    });
+  }
+
+  function getCookie(name) {
+    return document.cookie.split('; ').find((cookie) => cookie.startsWith(`${name}=`))?.split('=')[1] || '';
+  }
+</script>

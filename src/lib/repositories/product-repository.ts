@@ -7,4 +7,7 @@ export interface ProductRepository {
   getFeatured(): Promise<Product[]>;
   search(query: string): Promise<Product[]>;
   getAllIds(): Promise<string[]>;
+  create(productData: Partial<Product>): Promise<Product>;
+  update(id: string, productData: Partial<Product>): Promise<Product | null>;
+  delete(id: string): Promise<boolean>;
 }

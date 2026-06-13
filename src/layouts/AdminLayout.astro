@@ -1,0 +1,104 @@
+---
+import '../styles/admin.css';
+
+interface Props {
+  title: string;
+  active?: 'dashboard' | 'products';
+}
+
+const { title, active = 'dashboard' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} — Nisa Admin</title>
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="admin-sidebar" data-sidebar>
+      <a class="admin-logo" href="/admin/">Nisa Admin</a>
+      <nav class="admin-nav">
+        <a class:list={['dashboard'].includes(active)} href="/admin/">Dashboard</a>
+        <a class:list={['products'].includes(active)} href="/admin/products/">Products</a>
+      </nav>
+      <button class="admin-sidebar-close" type="button" data-close-sidebar>Close</button>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-header">
+        <button class="admin-menu-button" type="button" data-open-sidebar aria-label="Open menu">☰</button>
+        <div class="admin-header-spacer"></div>
+        <a class="admin-logout" href="/admin/logout">Logout</a>
+      </header>
+      <section class="admin-content">
+        <div class="admin-page-heading">
+          <div>
+            <p class="admin-eyebrow">Admin</p>
+            <h1>{title}</h1>
+          </div>
+        </div>
+        <slot />
+      </section>
+    </main>
+  </div>
+
+  <div class="admin-toast" data-toast hidden></div>
+  <div class="admin-modal-backdrop" data-modal-backdrop hidden>
+    <div class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+      <h2 id="confirm-modal-title">Delete product?</h2>
+      <p>This action cannot be undone.</p>
+      <div class="admin-modal-actions">
+        <button type="button" data-modal-cancel>Cancel</button>
+        <button type="button" class="admin-danger" data-modal-confirm>Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    const sidebar = document.querySelector('[data-sidebar]');
+    const openButton = document.querySelector('[data-open-sidebar]');
+    const closeButton = document.querySelector('[data-close-sidebar]');
+    const modalBackdrop = document.querySelector('[data-modal-backdrop]');
+    const modalCancel = document.querySelector('[data-modal-cancel]');
+    const modalConfirm = document.querySelector('[data-modal-confirm]');
+
+    openButton?.addEventListener('click', () => sidebar?.classList.add('is-open'));
+    closeButton?.addEventListener('click', () => sidebar?.classList.remove('is-open'));
+
+    function closeModal() {
+      if (modalBackdrop) modalBackdrop.hidden = true;
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        sidebar?.classList.remove('is-open');
+        closeModal();
+      }
+    });
+
+    modalCancel?.addEventListener('click', closeModal);
+    modalConfirm?.addEventListener('click', closeModal);
+    modalBackdrop?.addEventListener('click', (event) => {
+      if (event.target === modalBackdrop) closeModal();
+    });
+
+    window.showAdminConfirm = (message, onConfirm) => {
+      if (modalBackdrop) {
+        const title = modalBackdrop.querySelector('#confirm-modal-title');
+        const msg = modalBackdrop.querySelector('p');
+        if (title) title.textContent = 'Delete product?';
+        if (msg) msg.textContent = message || 'This action cannot be undone.';
+        modalBackdrop.hidden = false;
+        const handler = () => {
+          closeModal();
+          modalConfirm?.removeEventListener('click', handler);
+          onConfirm?.();
+        };
+        modalConfirm?.addEventListener('click', handler, { once: true });
+      }
+    };
+  </script>
+</body>
+</html>

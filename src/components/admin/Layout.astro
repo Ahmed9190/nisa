@@ -1,0 +1,46 @@
+---
+import Sidebar from './Sidebar.astro';
+import Header from './Header.astro';
+import Toast from './Toast.astro';
+import ConfirmModal from './ConfirmModal.astro';
+import '../../styles/admin.css';
+
+interface Props {
+  title: string;
+  active?: 'dashboard' | 'products';
+}
+
+const { title, active = 'dashboard' } = Astro.props;
+---
+
+<div class="admin-shell">
+  <Sidebar active={active} />
+  <main class="admin-main">
+    <Header />
+    <section class="admin-content">
+      <div class="admin-page-heading">
+        <div>
+          <p class="admin-eyebrow">Admin</p>
+          <h1>{title}</h1>
+        </div>
+      </div>
+      <slot />
+    </section>
+  </main>
+</div>
+
+<Toast />
+<ConfirmModal />
+
+<script is:inline>
+  const sidebar = document.querySelector('[data-sidebar]');
+  const openButton = document.querySelector('[data-open-sidebar]');
+  const closeButton = document.querySelector('[data-close-sidebar]');
+
+  openButton?.addEventListener('click', () => sidebar?.classList.add('is-open'));
+  closeButton?.addEventListener('click', () => sidebar?.classList.remove('is-open'));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') sidebar?.classList.remove('is-open');
+  });
+</script>

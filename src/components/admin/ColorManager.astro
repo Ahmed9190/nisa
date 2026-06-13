@@ -1,0 +1,104 @@
+---
+import ImageUploader from './ImageUploader.astro';
+import type { Product } from '../../../types';
+
+interface Props {
+  colors: NonNullable<Product['colors']>;
+  errors?: Record<string, string>;
+}
+
+const { colors, errors = {} } = Astro.props;
+---
+
+<section class="admin-form-section">
+  <div class="admin-section-heading">
+    <h2>Colors</h2>
+    <button type="button" class="admin-secondary-button" data-add-color>Add Color</button>
+  </div>
+  <div class="admin-color-list" data-color-list>
+    {colors.map((color, index) => (
+      <div class="admin-color-row" data-color-row>
+        <div class="admin-color-fields">
+          <label>
+            Color name
+            <input name={`colors[${index}].name`} value={color.name} required />
+            <small data-field-error={`colors.${index}.name`}>{errors[`colors.${index}.name`] || errors['colors.name']}</small>
+          </label>
+          <label>
+            Arabic color name
+            <input name={`colors[${index}].nameAr`} value={color.nameAr || ''} />
+          </label>
+          <label>
+            Hex
+            <input name={`colors[${index}].code`} value={color.code} pattern="#[0-9a-fA-F]{6}" required />
+            <small data-field-error={`colors.${index}.code`}>{errors[`colors.${index}.code`] || errors['colors.code']}</small>
+          </label>
+          <label class="admin-checkbox">
+            <input type="checkbox" name={`colors[${index}].inStock`} checked={Boolean(color.inStock)} />
+            In stock
+          </label>
+        </div>
+        <ImageUploader colorIndex={index} color={color} errors={errors} />
+        <button type="button" class="admin-danger-button" data-remove-color>Remove</button>
+      </div>
+    ))}
+  </div>
+</section>
+
+<template data-color-template>
+  <div class="admin-color-row" data-color-row>
+    <div class="admin-color-fields">
+      <label>
+        Color name
+        <input name="colors[0].name" required />
+        <small data-field-error="colors.0.name"></small>
+      </label>
+      <label>
+        Arabic color name
+        <input name="colors[0].nameAr" />
+      </label>
+      <label>
+        Hex
+        <input name="colors[0].code" pattern="#[0-9a-fA-F]{6}" required />
+        <small data-field-error="colors.0.code"></small>
+      </label>
+      <label class="admin-checkbox">
+        <input type="checkbox" name="colors[0].inStock" checked />
+        In stock
+      </label>
+    </div>
+    <div data-image-uploader></div>
+    <button type="button" class="admin-danger-button" data-remove-color>Remove</button>
+  </div>
+</template>
+
+<script>
+  const list = document.querySelector('[data-color-list]');
+  const template = document.querySelector('[data-color-template]');
+  const addButton = document.querySelector('[data-add-color]');
+
+  addButton?.addEventListener('click', () => {
+    if (!list || !template) return;
+    const clone = template.content.cloneNode(true);
+    const index = list.querySelectorAll('[data-color-row]').length;
+    clone.querySelectorAll('input').forEach((input) => {
+      input.name = input.name.replace('colors[0]', `colors[${index}]`);
+      const error = input.nextElementSibling;
+      if (error?.matches('[data-field-error]')) {
+        error.dataset.fieldError = error.dataset.fieldError.replace('colors.0', `colors.${index}`);
+      }
+    });
+    list.appendChild(clone);
+  });
+
+  list?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-remove-color]');
+    if (!button) return;
+    const row = button.closest('[data-color-row]');
+    if (list.querySelectorAll('[data-color-row]').length <= 1) {
+      window.showAdminToast?.('At least one color is required', 'error');
+      return;
+    }
+    row.remove();
+  });
+</script>

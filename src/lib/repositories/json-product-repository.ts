@@ -1,8 +1,10 @@
 import type { ProductRepository } from './product-repository';
 import type { Product } from '../../types';
 import type { Locale } from '../../i18n';
+import { ProductStore, clearProductCache } from '../product-store';
 
 const cachedProducts = new Map<Locale, Product[]>();
+const productStore = new ProductStore();
 
 async function loadProducts(locale: Locale): Promise<Product[]> {
   if (cachedProducts.has(locale)) {
@@ -53,7 +55,9 @@ export class JsonProductRepository implements ProductRepository {
     const lowerQuery = query.toLowerCase();
     return products.filter(p => 
       p.name.toLowerCase().includes(lowerQuery) ||
+      p.nameAr?.toLowerCase().includes(lowerQuery) ||
       p.description.toLowerCase().includes(lowerQuery) ||
+      p.descriptionAr?.toLowerCase().includes(lowerQuery) ||
       p.category.toLowerCase().includes(lowerQuery)
     );
   }
@@ -61,5 +65,23 @@ export class JsonProductRepository implements ProductRepository {
   async getAllIds(): Promise<string[]> {
     const products = await loadProducts(this.locale);
     return products.map(p => p.id);
+  }
+
+  async create(productData: Parameters<ProductRepository['create']>[0]): Promise<Product> {
+    const product = await productStore.create(productData);
+    clearProductCache();
+    return product;
+  }
+
+  async update(id: string, productData: Parameters<ProductRepository['update']>[1]): Promise<Product | null> {
+    const product = await productStore.update(id, productData);
+    clearProductCache();
+    return product;
+  }
+
+  async delete(id: string): Promise<boolean> {
+    const deleted = await productStore.delete(id);
+    clearProductCache();
+    return deleted;
   }
 }
