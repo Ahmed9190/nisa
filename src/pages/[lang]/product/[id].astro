@@ -1,0 +1,180 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import type { Product } from '../../../types';
+import type { Locale } from '../../../i18n';
+import { locales, t } from '../../../i18n';
+import { getProductRepository } from '../../../lib/services';
+
+export async function getStaticPaths() {
+  const paths: { params: { lang: string; id: string }; props: { product: Product } }[] = [];
+  for (const lang of locales) {
+    const productRepo = await getProductRepository(lang as Locale);
+    const langProducts = await productRepo.getAll();
+    for (const product of langProducts) {
+      paths.push({ params: { lang, id: product.id }, props: { product } });
+    }
+  }
+  return paths;
+}
+
+const { product } = Astro.props as { product: Product };
+const { lang } = Astro.params as { lang: Locale };
+const locale = lang;
+
+const formatPrice = (price: number, currency = 'EGP') => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency', currency, minimumFractionDigits: 0
+    }).format(price);
+};
+---
+
+<Layout locale={locale} title={`${product.name} - nisa`}>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+         <div class="product-main-layout flex flex-col lg:flex-row gap-12">
+            <div class="w-full lg:w-1/2">
+                <div class="relative">
+                    <img id="main-product-image" src={product.colors[0].images[0]} alt={product.name} class="w-full rounded-lg shadow-lg sticky top-24">
+                    <div id="gallery-controls" class="absolute inset-0 flex items-center justify-between px-4 text-white" style="display: none;">
+                        <button id="prev-image" class="bg-black/30 rounded-full p-2 hover:bg-black/50 transition-colors">&lt;</button>
+                        <button id="next-image" class="bg-black/30 rounded-full p-2 hover:bg-black/50 transition-colors">&gt;</button>
+                    </div>
+                </div>
+                <div id="thumbnail-container" class="flex gap-2 mt-4 overflow-x-auto"></div>
+            </div>
+            <div class="w-full lg:w-1/2">
+                <h1 class="text-4xl font-medium">{product.name}</h1>
+                <div class="text-2xl my-4">
+                    <span>{formatPrice(product.price)}</span>
+                </div>
+                <p class="text-[#6B7B8C] dark:text-[#94a3b8] leading-relaxed mb-6">{product.description}</p>
+
+                <div class="mb-6">
+                    <label class="block font-medium mb-2">{t(locale, 'product.color')}</label>
+                    <div class="flex gap-2">
+                        {product.colors.map((color, index) => (
+                            <button
+                                class=`color-swatch border-2 rounded-full h-8 w-8 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#204566] ${index === 0 ? 'border-[#204566]' : 'border-transparent'} ${!(color.inStock ?? true) ? 'opacity-50 cursor-not-allowed relative' : ''}`
+                                style={`--swatch-color: ${color.code};`}
+                                data-images={JSON.stringify(color.images)}
+                                data-color-index={index}
+                                data-in-stock={color.inStock ?? true}
+                            >
+                                {!(color.inStock ?? true) && <div class="absolute inset-0 w-full h-full bg-white/70 rounded-full"></div>}
+                                {!(color.inStock ?? true) && <div class="absolute inset-0 w-full h-full" style="background: linear-gradient(to top right, transparent calc(50% - 1px), black, transparent calc(50% + 1px));"></div>}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                     <div class="flex justify-between items-center mb-2">
+                        <label class="block font-medium">{t(locale, 'product.size')}</label>
+                        <button id="size-guide-btn" class="text-sm text-[#6B7B8C] underline hover:text-[#204566]">{t(locale, 'product.sizeGuide')}</button>
+                    </div>
+                    <div class="flex gap-2">
+                        {product.sizes.map((size, index) => (
+                            <button class=`size-btn border-2 px-4 py-2 rounded-md ${index === 0 ? 'bg-[#204566] text-white' : 'bg-transparent'}`>{size}</button>
+                        ))}
+                    </div>
+                </div>
+
+                <button id="add-to-cart-product-page-btn" data-product-id={product.id} class="btn-primary w-full" disabled={!(product.colors[0].inStock ?? true)}>
+                    {(product.colors[0].inStock ?? true) ? t(locale, 'product.addToCart') : t(locale, 'product.soldOut')}
+                </button>
+                {!product.inStock && <p class="text-center mt-4 text-red-600 font-semibold">{t(locale, 'product.soldOut')}</p>}
+
+                 <div class="mt-8 flex justify-around text-center text-sm text-[#6B7B8C] dark:text-[#94a3b8] border-t border-b border-[#D4E4E8] dark:border-[#334155] py-4">
+                    <div class="flex items-center gap-2"><span>✓</span><span>{t(locale, 'product.hassleFreeReturns')}</span></div>
+                    <div class="flex items-center gap-2"><span>✓</span><span>{t(locale, 'product.securePayments')}</span></div>
+                     <div class="flex items-center gap-2"><span>✓</span><span>{t(locale, 'product.qualityFabrics')}</span></div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-xl font-medium mb-4 border-b border-[#D4E4E8] dark:border-[#334155] pb-2">{t(locale, 'product.detailsFit')}</h3>
+                    <ul class="text-[#6B7B8C] dark:text-[#94a3b8] space-y-2">
+                        <li><strong>{t(locale, 'product.fabric')}:</strong> {product.details.fabric}</li>
+                        <li><strong>{t(locale, 'product.fit')}:</strong> {product.details.fit}</li>
+                        <li><strong>{t(locale, 'product.care')}:</strong> {product.details.care}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+.color-swatch {
+    background-color: var(--swatch-color);
+}
+
+.btn-primary {
+    background-color: #204566;
+    color: #ffffff;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+:global(.dark) .btn-primary {
+    background-color: #3b82f6;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #163554;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(32, 69, 102, 0.3);
+}
+
+:global(.dark) .btn-primary:hover:not(:disabled) {
+    background-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:disabled {
+    background-color: #6B7B8C;
+    cursor: not-allowed;
+}
+</style>
+<style>
+.product-main-layout {
+    /* Default to row for larger screens, handled by lg:flex-row in Tailwind */
+}
+
+@media (max-width: 1023px) { /* Tailwind's 'lg' breakpoint is 1024px */
+    .product-main-layout {
+        flex-direction: column;
+    }
+}
+</style>
+<script define:vars={{ product, locale }}>
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    const addToCartBtn = document.getElementById('add-to-cart-product-page-btn');
+    const mainImage = document.getElementById('main-product-image');
+
+    const lang = locale;
+
+    colorSwatches.forEach(swatch => {
+        swatch.addEventListener('click', () => {
+            // Update active swatch border
+            colorSwatches.forEach(s => s.classList.remove('border-[#204566]'));
+            swatch.classList.add('border-[#204566]');
+
+            // Update main image
+            const images = JSON.parse(swatch.dataset.images);
+            if (images && images.length > 0) {
+                mainImage.src = images[0];
+            }
+
+            // Update add to cart button
+            const colorIndex = parseInt(swatch.dataset.colorIndex, 10);
+            const color = product.colors[colorIndex];
+            const inStock = color.inStock ?? true;
+            addToCartBtn.disabled = !inStock;
+            addToCartBtn.textContent = inStock ? 'Add to Cart' : 'Sold Out';
+        });
+    });
+</script>

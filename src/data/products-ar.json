@@ -1,0 +1,1141 @@
+{
+  "products": [
+    {
+      "id": "abaya-01",
+      "name": "كاردجان أونيكس",
+      "price": 1950,
+      "currency": "EGP",
+      "description": "مثالي للتجمعات المسائية والمناسبات الخاصة أو للتنسيق فوق قطع الكتان الأساسية لإطلالة محتشمة وراقية.",
+      "details": {
+        "fabric": "كتان فاخر 100%. مصنوع يدويًا بنقوش دقيقة مستوحاة من الفن الإسلامي والأندلسي. ملمس خفيف وفاخر، يسمح بمرور الهواء مع تفاصيل مفرغة رقيقة.",
+        "fit": "قصة مريحة وانسيابية. تصميم مستوحى من الكيمونو يمكن ارتداؤه مفتوحًا أو مربوطًا كروب. طول ميدي إلى ماكسي لتغطية محتشمة وأنيقة. أكمام واسعة لراحة إضافية ولمسة مميزة.",
+        "care": "يُغسل يدويًا منفصلًا بالماء البارد مع منظف لطيف. لا يُعصر أو يُلوى للحفاظ على الدانتيل الرقيق. يُجفف مفرودًا في الظل. يُبخر بدرجة حرارة منخفضة عند الحاجة مع تجنب ملامسة الدانتيل مباشرة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "بني داكن",
+          "code": "#a25936",
+          "images": [
+            "/assets/products/onyx-cardigan/dsc-0022-medium-68d6ea37b6b6d.webp",
+            "/assets/products/onyx-cardigan/dsc-0031-medium-68d6ea5556fe9.webp",
+            "/assets/products/onyx-cardigan/dsc-0023-medium-68d6ea51b5fef.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "بيج",
+          "code": "#ddd0b9",
+          "images": [
+            "/assets/products/onyx-cardigan/dsc-0081-medium-68d6ea5be092e.webp",
+            "/assets/products/onyx-cardigan/dsc-0079-medium-68d6ea5b881f1.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أسود برقوقي",
+          "code": "#201116",
+          "images": [
+            "/assets/products/onyx-cardigan/dsc-0102-medium-68d6ea5e86729.webp",
+            "/assets/products/onyx-cardigan/dsc4-0069-1-medium-68d6ea3782c7b.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "autumn-collection",
+      "featured": true,
+      "inStock": true,
+      "sku": "NSA-001"
+    },
+    {
+      "id": "hijab-01",
+      "name": "طقم داليا",
+      "price": 1700,
+      "currency": "EGP",
+      "description": "مثالي لعطلات الصيف، ومواعيد البرانش، والأمسيات الهادئة الأنيقة. نسقيه مع إكسسوارات من الخوص أو طرح مميزة لإطلالة حالمة.",
+      "details": {
+        "fabric": "قطن كرينكل: ناعم جدًا، يسمح بمرور الهواء، وخفيف. ملمس انسيابي بتجاعيد طبيعية لإطلالة سهلة وأنيقة. التنورة مبطنة بالكامل للحفاظ على الاحتشام دون التأثير على الراحة.",
+        "fit": "التوب: تصميم راب قابل للتعديل مع رباطين رقيقين على شكل فيونكة للمسة أنثوية. التنورة: قصة A-line تمنح حركة رشيقة وأناقة timeless. محتشم وشبابي في نفس الوقت، مثالي لستايل عصري وسهل.",
+        "care": "يُغسل يدويًا بالماء البارد أو على دورة غسيل لطيفة. لا يُستخدم المبيض. يُجفف في الهواء فقط للحفاظ على الملمس. لا يحتاج إلى كي بفضل ملمس الكرينكل الطبيعي."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "أصفر ذرة",
+          "code": "#f3dc6b",
+          "images": [
+            "/assets/products/dahlia set/img-2092-medium-68d8680401ba2.webp",
+            "/assets/products/dahlia set/img-5309-medium-68d868071924f.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أزرق",
+          "code": "#bccfdf",
+          "images": [
+            "/assets/products/dahlia set/img-2049-medium-68d867ff7d9b3.webp",
+            "/assets/products/dahlia set/img-2050-medium-68d868003de76.webp",
+            "/assets/products/dahlia set/img-2162-medium-68d86806c24e1.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أسود",
+          "code": "#000000",
+          "images": [
+            "/assets/products/dahlia set/9c2ca0f9-423a-482e-9c39-36fc0f4d266d-medium-68d867fbc7313.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "بيج",
+          "code": "#f4dab3",
+          "images": [
+            "/assets/products/dahlia set/da.png.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "autumn-collection",
+      "featured": true,
+      "inStock": true,
+      "sku": "NSA-002"
+    },
+    {
+      "id": "dress-01",
+      "name": "فستان قميص أورورا",
+      "price": 1400,
+      "currency": "EGP",
+      "description": "مثالي للمناسبات الرسمية، وإطلالات العمل، أو اللبس الكاجوال الأنيق. نسقيه مع بنطلون منظم أو تنورة انسيابية لإطلالة محتشمة وراقية.",
+      "details": {
+        "fabric": "قطن فاخر 100%. خامة منظمة وواضحة تمنح شكلًا رسميًا أنيقًا. تسمح بمرور الهواء لكنها متماسكة ومصممة لتحافظ على شكلها. تحتاج إلى كي جيد للحفاظ على مظهرها المرتب.",
+        "fit": "خيارات تنسيق متعددة: يمكن ربط الشريطين من الأمام لإطلالة مفتوحة كلاسيكية، أو لفهما عبر الفتحة المخفية لإغلاق أنيق بالكامل. طول ميدي وأكمام طويلة بكفوف أنيقة لإطلالة محتشمة راقية. قصة مصممة لإطالة القوام ومنحه انسيابية أنثوية.",
+        "care": "يُغسل في الغسالة بالماء البارد مع ألوان مشابهة. يُستخدم منظف لطيف. لا يُستخدم المبيض. يُكوى وهو رطب للحصول على أفضل نتيجة. يُعلق ليجف للحفاظ على شكله."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "رمادي فحمي",
+          "code": "#29262e",
+          "images": [
+            "/assets/products/aurora chemise dress/5657376f-c5d9-4722-85ae-3fb2899e67b2-medium-68e15ae6516aa.webp",
+            "/assets/products/aurora chemise dress/abaya-01-medium-68e15ae6506cb.webp"
+          ],
+          "inStock": false
+        },
+        {
+          "name": "أخضر زيتوني",
+          "code": "#4f422d",
+          "images": [
+            "/assets/products/aurora chemise dress/img-5308-medium-68e15aeead33e.webp"
+          ],
+          "inStock": false
+        },
+        {
+          "name": "أبيض نقي",
+          "code": "#fffdf5",
+          "images": [
+            "/assets/products/aurora chemise dress/dsc-0351-medium-68e15ae960f71.webp",
+            "/assets/products/aurora chemise dress/dsc-0344-medium-68e15ae9374b6.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "autumn-collection",
+      "featured": true,
+      "inStock": true,
+      "sku": "NSA-003"
+    },
+    {
+      "id": "abaya-02",
+      "name": "عباءة ثريا",
+      "price": 2200,
+      "currency": "EGP",
+      "description": "عباءة مفتوحة من الأمام بتصميم كيمونو وتطريز رقيق على الأكمام. قطعة statement حقيقية.",
+      "details": {
+        "fabric": "مصنوعة من كتان بيور فاخر معالج. ناعمة على البشرة، غير مهيجة، وتسمح بمرور الهواء. تتميز بخطوط سوداء رفيعة تضيف عمقًا ونمطًا مستوحى من التراث.",
+        "fit": "مفتوحة من الأمام، بأكمام واسعة.",
+        "care": "تُغسل يدويًا منفصلة بالماء البارد مع منظف لطيف. لا تُعصر أو تُلوى للحفاظ على التفاصيل الرقيقة. تُجفف مفرودة في الظل. تُبخر بدرجة حرارة منخفضة عند الحاجة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "مقلم أسود",
+          "code": "#000000",
+          "images": [
+            "/assets/products/thorya arabian abaya/dsc-0114-medium-68e15a1d2adb3.webp",
+            "/assets/products/thorya arabian abaya/dsc-0119-medium-68e15a2110d8f.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "مقلم زيتوني",
+          "code": "#5c4d3e",
+          "images": [
+            "/assets/products/thorya arabian abaya/dsc-0131-medium-68e15a2194ca2.webp",
+            "/assets/products/thorya arabian abaya/dsc-0142-medium-68e15a25099b9.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "مقلم بيج",
+          "code": "#ffe4d1",
+          "images": [
+            "/assets/products/thorya arabian abaya/dsc-0230-medium-68e15a2ac7d4f.webp",
+            "/assets/products/thorya arabian abaya/dsc-0210edited-medium-68e15a28139b6.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "autumn-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-004"
+    },
+    {
+      "id": "tunic-01",
+      "name": "كاردجان أوبال من الكتان",
+      "price": 1850,
+      "currency": "EGP",
+      "description": "قطعة أيقونية للأمسيات الرسمية، والتجمعات الثقافية، والإطلالات الكاجوال الراقية. نسقيها مع طرح حرير أو إكسسوارات بسيطة لإطلالة خالدة.",
+      "details": {
+        "fabric": "كتان بيور 100%: ثقيل، منظم، وطويل العمر. نسيج متماسك يسمح بمرور الهواء ويحافظ على شكله بأناقة. تطريز يدوي بدرجات باستيل ناعمة للمسة فنية راقية. رغم قوته، ملمسه ناعم ولطيف على البشرة.",
+        "fit": "تصميم راب متعدد الاستخدامات: يمكن ارتداؤه كروب بحزام لإطلالة راقية أو مفتوحًا كعباءة بانسيابية أنيقة. تغطية كاملة بطول طويل تضمن الاحتشام بلمسة عصرية. مصمم للنساء اللواتي يفضلن الفخامة الهادئة والأناقة السهلة.",
+        "care": "يفضل التنظيف الجاف للحفاظ على التطريز. عند الغسيل في المنزل: يُغسل يدويًا بالماء البارد مع منظف لطيف. لا يُستخدم المبيض. يُكوى على حرارة منخفضة وهو رطب لأفضل نتيجة. يُتجنب العصر للحفاظ على بنية الكتان."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "بيج كلاسيكي",
+          "code": "#f0f0e7",
+          "images": [
+            "/assets/products/opal cardigan/816df0a0-3e30-4ce4-8c6a-1cbd49eaf4f61-medium-68d72c785a9a8.webp",
+            "/assets/products/opal cardigan/img-1669-medium-68d72c481a29e.webp",
+            "/assets/products/opal cardigan/img-1674-medium-68d72c4547021.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "autumn-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-005"
+    },
+    {
+      "id": "hijab-02",
+      "name": "فستان قميص / كاردجان دوف",
+      "price": 1650,
+      "currency": "EGP",
+      "description": "قطعة خفيفة وأنيقة تضيف ملمسًا ورقيًا لإطلالتك.",
+      "details": {
+        "fabric": "دانتيل قطني فاخر 100% (روكاما). تطريز مفرغ رقيق بنقوش زهرية لملمس خفيف وهوائي. طبيعي التهوية وناعم على البشرة، مثالي للمواسم الدافئة. خامة توحي بالهدوء والنعومة والأنوثة.",
+        "fit": "تصميم اثنان في واحد: يمكن ارتداؤه مغلقًا بالكامل كفستان قميص محتشم، أو مفتوحًا ككاردجان انسيابي للتنسيق. قصة A-line مريحة بأكمام طويلة وكفوف أنيقة. مثالي لإطلالة cozy chic بطابع رومانسي ريفي.",
+        "care": "يفضل الغسيل اليدوي للحفاظ على الدانتيل الرقيق. يُستخدم ماء بارد ومنظف لطيف. يُتجنب المبيض. يُجفف مفرودًا لمنع التمدد. يُكوى على حرارة منخفضة عند الحاجة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "أخضر نعناعي",
+          "code": "#d4e0d6",
+          "images": [
+            "/assets/products/Dove petal/IMG_1500 (Medium).webp",
+            "/assets/products/Dove petal/IMG_1509.webp"
+          ],
+          "inStock": false
+        },
+        {
+          "name": "لافندر",
+          "code": "#d1c4cf",
+          "images": [
+            "/assets/products/Dove petal/img-1539-medium-68dc38e78cf8d.webp",
+            "/assets/products/Dove petal/IMG_2983.webp",
+            "/assets/products/Dove petal/IMG_2984.webp",
+            "/assets/products/Dove petal/img-1569-medium-68dc38fb10fab.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أبيض نقي",
+          "code": "#e1e7f9",
+          "images": [
+            "/assets/products/Dove petal/img-42351-medium-68dc390028d4a.webp",
+            "/assets/products/Dove petal/IMG_4232.webp",
+            "/assets/products/Dove petal/img-4332-medium-68dc390ac5762.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "autumn-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-006"
+    },
+    {
+      "id": "trousers-01",
+      "name": "فستان كتان أساسي",
+      "price": 1100,
+      "currency": "EGP",
+      "description": "أساس كل خزانة محتشمة، ينسجم بسهولة مع الكاردجانات والكيمونو والتنانير المفضلة لديكِ لإطلالة أنيقة وسهلة الطبقات.",
+      "details": {
+        "fabric": "كتان بيور 100% من الطبيعة إلى بشرتك. طبيعي التهوية، يمتص الرطوبة، ولطيف على البشرة. اللون الأبيض مبطن بالكامل لضمان تغطية مثالية. مصمم لإحساس فاخر وطبيعي.",
+        "fit": "قصة مستقيمة لمظهر نظيف ومحتشم. نصف كم مناسب للتنسيق مع طبقات متعددة. مثالي لإكمال إطلالتك المحتشمة تحت الكاردجانات المفتوحة أو القطع الشفافة، أو وحده لإطلالة minimal chic.",
+        "care": "يُغسل يدويًا أو في الغسالة بالماء البارد على دورة لطيفة. لا يُستخدم المبيض. يُكوى على حرارة منخفضة وهو رطب قليلًا. يُتجنب المجفف؛ يُجفف في الهواء للحفاظ على عمر الخامة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "بيج ناعم",
+          "code": "#e5d6c0",
+          "images": [
+            "/assets/products/Basic linen dress/IMG_2722 (Medium).webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "Pure White ",
+          "code": "#eef0f2",
+          "images": [
+            "/assets/products/Basic linen dress/IMG_2773 (Medium).webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أسود",
+          "code": "#000000",
+          "images": [
+            "/assets/products/Basic linen dress/IMG_2780 (Medium).webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "autumn-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-007"
+    },
+    {
+      "id": "winter-item-1",
+      "name": "إليف",
+      "price": 2980,
+      "currency": "EGP",
+      "description": "إعادة تقديم لقصّة الكيب الخالدة؛ بسيطة، أنيقة، وعملية. تجمع إليف بين الدفء والحركة، وتنتقل بسهولة بين الكاجوال والرسمي كقطعة تعبّر عن قوة هادئة.",
+      "details": {
+        "fabric": "صوف طبيعي بيور مبطن بقماش ميلتون ناعم؛ منظم، دافئ، وذو وزن جميل.",
+        "fit": "قصة كيب minimal تنسدل طبيعيًا، ومناسبة للتنسيق بين الكاجوال والرسمي.",
+        "care": "• تنظيف جاف فقط.\n• لا يُغسل ولا يُستخدم المجفف.\n• يُبخر بلطف من مسافة منخفضة — لا يُضغط عليه مباشرة.\n• يُحفظ مطويًا أو على شماعة عريضة للحفاظ على انسداله."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "أسود",
+          "code": "#000000",
+          "images": [
+            "/assets/products/winter-section/elif/black/1.webp",
+            "/assets/products/winter-section/elif/black/2.webp",
+            "/assets/products/winter-section/elif/black/3.webp",
+            "/assets/products/winter-section/elif/black/4.webp",
+            "/assets/products/winter-section/elif/black/5.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "بني شوكولاتة",
+          "code": "#b69e92",
+          "images": [
+            "/assets/products/winter-section/elif/chocolate brown/1.webp",
+            "/assets/products/winter-section/elif/chocolate brown/2.webp",
+            "/assets/products/winter-section/elif/chocolate brown/3.webp",
+            "/assets/products/winter-section/elif/chocolate brown/4.webp",
+            "/assets/products/winter-section/elif/chocolate brown/5.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "رمادي متوسط",
+          "code": "#808080",
+          "images": [
+            "/assets/products/winter-section/elif/medium grey/1 (1).webp",
+            "/assets/products/winter-section/elif/medium grey/2 (1).webp",
+            "/assets/products/winter-section/elif/medium grey/3 (2).webp",
+            "/assets/products/winter-section/elif/medium grey/4 (1).webp",
+            "/assets/products/winter-section/elif/medium grey/6 (1).webp",
+            "/assets/products/winter-section/elif/medium grey/7 (1).webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "winter-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-008"
+    },
+    {
+      "id": "winter-item-2",
+      "name": "آيفوري",
+      "price": 3980,
+      "currency": "EGP",
+      "description": "أفخم قطعة وأكثرها خلودًا في المجموعة؛ تعيد آيفوري تعريف معطف الشتاء بأنوثة انسيابية. مصممة بقصة full-circle (cloche) بدون حزام لتنسدل طبيعيًا حول الجسم، وتبرز الحرية والنعومة. أزرار كبس مخفية من نفس القماش تحافظ على نقاء التصميم. تأتي مع شال واسع مطابق يمكن تنسيقه بطرق متعددة؛ منسدل، ملفوف، أو متروك بانسيابية. كل طية وكل خياطة تهمس بأناقة هادئة ورقي دائم.",
+      "details": {
+        "fabric": "صوف طبيعي شديد النعومة، مبطن بطبقة حريرية وانسيابية تعزز الدفء والحركة. ملمس لطيف كأنه ثلج على البشرة.",
+        "fit": "قصة full-circle (cloche) بدون حزام؛ تنسدل طبيعيًا حول الجسم لمنح شكل أنثوي ورشيق.",
+        "care": "• تنظيف جاف فقط.\n• يُتجنب التعرض للحرارة وأشعة الشمس المباشرة.\n• يُبخر من مسافة لتجديد الملمس.\n• يُحفظ في مكان بارد وجاف على شماعة مبطنة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "أسود",
+          "code": "#000000",
+          "images": [
+            "/assets/products/winter-section/ivory_/black/1.webp",
+            "/assets/products/winter-section/ivory_/black/2 (2).webp",
+            "/assets/products/winter-section/ivory_/black/3 (2).webp",
+            "/assets/products/winter-section/ivory_/black/4.webp",
+            "/assets/products/winter-section/ivory_/black/5.webp",
+            "/assets/products/winter-section/ivory_/black/6.webp",
+            "/assets/products/winter-section/ivory_/black/7 (2).webp",
+            "/assets/products/winter-section/ivory_/black/8.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "جريج",
+          "code": "#948586",
+          "images": [
+            "/assets/products/winter-section/ivory_/greige/1.webp",
+            "/assets/products/winter-section/ivory_/greige/2.webp",
+            "/assets/products/winter-section/ivory_/greige/3.webp",
+            "/assets/products/winter-section/ivory_/greige/4.webp",
+            "/assets/products/winter-section/ivory_/greige/5.webp",
+            "/assets/products/winter-section/ivory_/greige/6.webp"
+          ],
+          "inStock": false
+        },
+        {
+          "name": "أوف وايت",
+          "code": "#d0d0d0",
+          "images": [
+            "/assets/products/winter-section/ivory_/off white_/1.webp",
+            "/assets/products/winter-section/ivory_/off white_/2.webp",
+            "/assets/products/winter-section/ivory_/off white_/3.webp",
+            "/assets/products/winter-section/ivory_/off white_/4.webp",
+            "/assets/products/winter-section/ivory_/off white_/5.webp",
+            "/assets/products/winter-section/ivory_/off white_/6.webp",
+            "/assets/products/winter-section/ivory_/off white_/7.webp",
+            "/assets/products/winter-section/ivory_/off white_/8.webp",
+            "/assets/products/winter-section/ivory_/off white_/9.webp",
+            "/assets/products/winter-section/ivory_/off white_/10.webp",
+            "/assets/products/winter-section/ivory_/off white_/11.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "winter-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-009"
+    },
+    {
+      "id": "winter-item-3",
+      "name": "جونا",
+      "price": 3200,
+      "currency": "EGP",
+      "description": "فستان قميص طويل مصنوع من صوف طبيعي ثقيل بملمس وبر ناعم يمنح إحساسًا بالدفء والأصالة. مصمم بأكمام منفوشة مجمعة عند المعصم باستيك، وأزرار كبيرة بطول القطعة لتنسيقها مفتوحة أو مغلقة. كاجوال، مستوحى من الخمسينيات، ومليء بروح الشتاء.",
+      "details": {
+        "fabric": "صوف طبيعي مبروش، سميك ودافئ بعمق — تمامًا مثل الطبيعة نفسها.",
+        "fit": "فستان قميص طويل بأكمام منفوشة مجمعة عند المعصم؛ متعدد التنسيق بأزرار كبيرة بطول القطعة.",
+        "care": "• تنظيف جاف فقط.\n• يُتجنب التعرض لأشعة الشمس المباشرة لفترات طويلة.\n• لا يُكوى؛ يُستخدم البخار من مسافة لتجديده.\n• يُحفظ داخل كيس ملابس قطني يسمح بالتهوية."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "رمادي داكن",
+          "code": "#858a8e",
+          "images": [
+            "/assets/products/winter-section/juna/Deep Grey/1 (2).webp",
+            "/assets/products/winter-section/juna/Deep Grey/2_.webp",
+            "/assets/products/winter-section/juna/Deep Grey/3 (2).webp",
+            "/assets/products/winter-section/juna/Deep Grey/4 (1).webp",
+            "/assets/products/winter-section/juna/Deep Grey/5 (1).webp",
+            "/assets/products/winter-section/juna/Deep Grey/6 (1).webp",
+            "/assets/products/winter-section/juna/Deep Grey/7 (1).webp",
+            "/assets/products/winter-section/juna/Deep Grey/8.webp"
+          ],
+          "inStock": false
+        },
+        {
+          "name": "بيج زيتوني",
+          "code": "#90795a",
+          "images": [
+            "/assets/products/winter-section/juna/Olive Beige/1.webp",
+            "/assets/products/winter-section/juna/Olive Beige/2.webp",
+            "/assets/products/winter-section/juna/Olive Beige/3.webp",
+            "/assets/products/winter-section/juna/Olive Beige/4.webp",
+            "/assets/products/winter-section/juna/Olive Beige/5.webp",
+            "/assets/products/winter-section/juna/Olive Beige/6(1).webp",
+            "/assets/products/winter-section/juna/Olive Beige/7(1).webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "بيج فاتح",
+          "code": "#ffe0c5",
+          "images": [
+            "/assets/products/winter-section/juna/Light Beige/1 (1).webp",
+            "/assets/products/winter-section/juna/Light Beige/2 (1).webp",
+            "/assets/products/winter-section/juna/Light Beige/3 (1).webp",
+            "/assets/products/winter-section/juna/Light Beige/4(1).webp",
+            "/assets/products/winter-section/juna/Light Beige/5(1).webp",
+            "/assets/products/winter-section/juna/Light Beige/5 (2).webp",
+            "/assets/products/winter-section/juna/Light Beige/6.webp",
+            "/assets/products/winter-section/juna/Light Beige/7.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "winter-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-010"
+    },
+    {
+      "id": "winter-item-4",
+      "name": "ليلا",
+      "price": 2250,
+      "currency": "EGP",
+      "description": "فستان بكسرات مميز بقصة مصممة وشال صوفي راقٍ ينسدل بأناقة فوق الكتفين، يغطي الصدر ويهبط بلطف على الظهر. البنية رسمية لكنها انسيابية، تمنح حركة خالدة ورشيقة. مصمم بالأسود العميق، رمز الغموض والفخامة الهادئة، ليجمع بين القوة والأنوثة.",
+      "details": {
+        "fabric": "صوف طبيعي ناعم بملمس رقيق ينسدل برشاقة. تمنح الخامة دفئًا وراحة ولمسة رقي مثالية للأمسيات الرسمية.",
+        "fit": "فستان بكسرات مصمم مع شال صوفي منسدل؛ رسمي وانسيابي في الوقت نفسه، يسمح بحركة رشيقة.",
+        "care": "• تنظيف جاف فقط.\n• يُتجنب العصر أو الكي المباشر.\n• يُحفظ مطويًا أو على شماعة مبطنة للحفاظ على الشكل."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "زيتوني",
+          "code": "#221f14",
+          "images": [
+            "/assets/products/winter-section/lela_/army_/2.webp",
+            "/assets/products/winter-section/lela_/army_/3.webp",
+            "/assets/products/winter-section/lela_/army_/4 (2).webp",
+            "/assets/products/winter-section/lela_/army_/5 (2).webp",
+            "/assets/products/winter-section/lela_/army_/6.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أسود",
+          "code": "#000000",
+          "images": [
+            "/assets/products/winter-section/lela_/black_/1.webp",
+            "/assets/products/winter-section/lela_/black_/2.webp",
+            "/assets/products/winter-section/lela_/black_/3.webp",
+            "/assets/products/winter-section/lela_/black_/4.webp",
+            "/assets/products/winter-section/lela_/black_/5.webp",
+            "/assets/products/winter-section/lela_/black_/6.webp",
+            "/assets/products/winter-section/lela_/black_/7.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "بني",
+          "code": "#4c302c",
+          "images": [
+            "/assets/products/winter-section/lela_/brown_/1.webp",
+            "/assets/products/winter-section/lela_/brown_/2.webp",
+            "/assets/products/winter-section/lela_/brown_/3.webp",
+            "/assets/products/winter-section/lela_/brown_/4.webp",
+            "/assets/products/winter-section/lela_/brown_/5.webp",
+            "/assets/products/winter-section/lela_/brown_/6.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "winter-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-011"
+    },
+    {
+      "id": "winter-item-5",
+      "name": "عباءة كيب بكسرات",
+      "description": "هذا وصف مؤقت لقطعة شتوية.",
+      "details": {
+        "fabric": "تفاصيل خامة مؤقتة.",
+        "fit": "تفاصيل قصة مؤقتة.",
+        "care": "تفاصيل عناية مؤقتة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "لون ١",
+          "code": "#FFFF00",
+          "images": [],
+          "inStock": true
+        },
+        {
+          "name": "لون ٢",
+          "code": "#FF00FF",
+          "images": [],
+          "inStock": true
+        },
+        {
+          "name": "لون ٣",
+          "code": "#00FFFF",
+          "images": [],
+          "inStock": true
+        }
+      ],
+      "category": "winter-collection",
+      "sku": "NSA-012",
+      "comingSoon": true
+    },
+    {
+      "id": "summer-deniz-pants",
+      "name": "بنطلون-جيبة Deniz",
+      "price": 1600,
+      "currency": "EGP",
+      "description": "تصميم جينز عملي يجمع بين الراحة، والحركة، والاحتشام اليومي. يمزج Deniz بين العملية والأناقة في قطعة مريحة بطابع مغامر وسهل الارتداء طوال اليوم.",
+      "details": {
+        "fabric": "جينز ثقيل فاخر عالي الجودة. خامة متماسكة وعملية مناسبة للحركة والاستخدام اليومي.",
+        "fit": "تصميم يبدو كجيبة بالكامل لكن بتفصيلة بنطلون مخفية. استيكات مخفية عند فتحات الأرجل لتسهيل الحركة. يجمع بين شكل الجيبة المحتشم وراحة البنطلون العملية. جيوب أمامية وخلفية. قصّات وخياطات متعددة تضيف شكلًا وتفاصيل مميزة. قصة واسعة ومريحة للحركة اليومية. مناسب للمشاوير، والمواصلات، والسفر، والحركة الكثيرة.",
+        "care": "يُغسل على دورة باردة لطيفة. يُغسل مقلوبًا للحفاظ على التفاصيل. لا يُستخدم المجفف. يُكوى أو يُبخر بحرارة متوسطة. تُغسل الألوان الداكنة بشكل منفصل."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "أخضر عسكري",
+          "code": "#4a5240",
+          "images": [
+            "/assets/products/New folder/Deniz pants/army/1.webp",
+            "/assets/products/New folder/Deniz pants/army/2.webp",
+            "/assets/products/New folder/Deniz pants/army/3.webp",
+            "/assets/products/New folder/Deniz pants/army/4.webp",
+            "/assets/products/New folder/Deniz pants/army/5.webp",
+            "/assets/products/New folder/Deniz pants/army/6.webp",
+            "/assets/products/New folder/Deniz pants/army/7.webp",
+            "/assets/products/New folder/Deniz pants/army/DSC09301.webp",
+            "/assets/products/New folder/Deniz pants/army/DSC09322.webp",
+            "/assets/products/New folder/Deniz pants/army/DSC09323.webp",
+            "/assets/products/New folder/Deniz pants/army/DSC09324.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "كحلي",
+          "code": "#1b2a4a",
+          "images": [
+            "/assets/products/New folder/Deniz pants/navy/1.webp",
+            "/assets/products/New folder/Deniz pants/navy/2.webp",
+            "/assets/products/New folder/Deniz pants/navy/3.webp",
+            "/assets/products/New folder/Deniz pants/navy/4.webp",
+            "/assets/products/New folder/Deniz pants/navy/5.webp",
+            "/assets/products/New folder/Deniz pants/navy/6.webp",
+            "/assets/products/New folder/Deniz pants/navy/DSC09171.webp",
+            "/assets/products/New folder/Deniz pants/navy/DSC09179.webp",
+            "/assets/products/New folder/Deniz pants/navy/DSC09204.webp",
+            "/assets/products/New folder/Deniz pants/navy/DSC09216.webp",
+            "/assets/products/New folder/Deniz pants/navy/DSC09219.webp",
+            "/assets/products/New folder/Deniz pants/navy/DSC09221.webp",
+            "/assets/products/New folder/Deniz pants/navy/DSC09222.webp",
+            "/assets/products/New folder/Deniz pants/navy/DSC09233.webp",
+            "/assets/products/New folder/Deniz pants/navy/DSC09243.webp",
+            "/assets/products/New folder/Deniz pants/navy/DSC09247.webp",
+            "/assets/products/New folder/Deniz pants/DSC09252.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أسود مغسول",
+          "code": "#2c2c2c",
+          "images": [
+            "/assets/products/New folder/Deniz pants/washed black/(1).webp",
+            "/assets/products/New folder/Deniz pants/washed black/(2).webp",
+            "/assets/products/New folder/Deniz pants/washed black/(3).webp",
+            "/assets/products/New folder/Deniz pants/washed black/(4).webp",
+            "/assets/products/New folder/Deniz pants/washed black/(5).webp",
+            "/assets/products/New folder/Deniz pants/washed black/(6).webp",
+            "/assets/products/New folder/Deniz pants/washed black/(7).webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "summer-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-013"
+    },
+    {
+      "id": "summer-gunes",
+      "name": "فستان Güneş",
+      "price": 2250,
+      "currency": "EGP",
+      "description": "تصميم مبهج مستوحى من الحدائق المزدهرة وضوء الشمس الدافئ. يحمل Güneş خفة ونعومة واضحة.",
+      "details": {
+        "fabric": "خامة ركامة مخلطة بتفريغات على شكل ورود وأوراق. انسيابي وخفيف بالحركة.",
+        "fit": "فستان قطعة واحدة بانسيابية واسعة. تفريغات على شكل ورود وأوراق في كامل القماش. قصة واسعة ومريحة. أطراف مزخرفة عند الأكمام، والصدر، وأسفل الفستان. أكمام قصيرة نسبيًا.",
+        "care": "يفضل الغسيل اليدوي. أو غسيل بارد لطيف جدًا. لا يُستخدم المجفف. يُبخر بخفة عند الحاجة. يُتعامل بحرص مع تفاصيل الركامة المفرغة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "أزرق فاتح",
+          "code": "#aec6d8",
+          "images": [
+            "/assets/products/New folder/Güneş/baby blue 2/1.webp",
+            "/assets/products/New folder/Güneş/baby blue 2/2.webp",
+            "/assets/products/New folder/Güneş/baby blue 2/3.webp",
+            "/assets/products/New folder/Güneş/baby blue 2/4.webp",
+            "/assets/products/New folder/Güneş/baby blue 2/5.webp",
+            "/assets/products/New folder/Güneş/baby blue 2/6.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أخضر",
+          "code": "#7a9e7e",
+          "images": [
+            "/assets/products/New folder/Güneş/green 1/1 cover.webp",
+            "/assets/products/New folder/Güneş/green 1/2.webp",
+            "/assets/products/New folder/Güneş/green 1/3.webp",
+            "/assets/products/New folder/Güneş/green 1/4.webp",
+            "/assets/products/New folder/Güneş/green 1/5.webp",
+            "/assets/products/New folder/Güneş/green 1/6.webp",
+            "/assets/products/New folder/Güneş/green 1/7.webp",
+            "/assets/products/New folder/Güneş/green 1/8.webp",
+            "/assets/products/New folder/Güneş/green 1/9.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "summer-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-014"
+    },
+    {
+      "id": "summer-thea-chemise",
+      "name": "قميص Daisy من الكتان",
+      "price": 1650,
+      "currency": "EGP",
+      "description": "قطعة كتان يومية ناعمة مستوحاة من البساطة والخفة والأناقة الهادئة. يجمع Daisy بين القصّة المريحة والملمس الطبيعي ليمنح شكلًا عمليًا وأنيقًا بسهولة.",
+      "details": {
+        "fabric": "كتان طبيعي ناعم جدًا. خامة خفيفة تسمح بمرور الهواء.",
+        "fit": "قميص ميدي واسع. أزرار خشبية أمامية بطول القطعة. أزرار جانبية للتحكم في الفتح والإغلاق والتنسيق. جيبان عند الصدر. إسورة ونصف ياقة قميص مقواتان. أكتاف ساقطة. قصة واسعة ومريحة.",
+        "care": "يُغسل على دورة باردة لطيفة. يفضل الغسيل اليدوي. لا يُستخدم المجفف. يُكوى أو يُبخر بحرارة متوسطة. يُغسل مع ألوان مشابهة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "كتان طبيعي",
+          "code": "#f5f0e8",
+          "images": [
+            "/assets/products/New folder/Thea chemise/1 cover.webp",
+            "/assets/products/New folder/Thea chemise/2.webp",
+            "/assets/products/New folder/Thea chemise/3.webp",
+            "/assets/products/New folder/Thea chemise/4.webp",
+            "/assets/products/New folder/Thea chemise/5.webp",
+            "/assets/products/New folder/Thea chemise/6.webp",
+            "/assets/products/New folder/Thea chemise/7.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "summer-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-015"
+    },
+    {
+      "id": "summer-thorya",
+      "name": "عباءة Thuraya",
+      "price": 1900,
+      "currency": "EGP",
+      "description": "مصممة للمرأة المحتشمة العصرية التي تحب الأناقة المستوحاة من التراث. مثالية للمشاوير المسائية، والفعاليات الثقافية، أو اللبس الكاجوال الفاخر.",
+      "details": {
+        "fabric": "مصنوعة من كتان بيور فاخر معالج. ناعمة على البشرة، غير مهيجة، وتسمح بمرور الهواء. تتميز بخطوط سوداء رفيعة تضيف عمقًا ونمطًا مستوحى من التراث.",
+        "fit": "قصة واسعة وانسيابية تمنح أقصى درجات الاحتشام والراحة. مستوحاة من الملحفة العربية التقليدية بلمسة عصرية أنيقة. متاحة بروح ميدي أو ماكسي في التنسيق. قصة واسعة تضمن سهولة ارتداء الطبقات.",
+        "care": "تُغسل يدويًا أو على دورة لطيفة بالماء البارد. يُستخدم منظف لطيف مع تجنب المبيض. تُجفف على سطح مستوٍ أو على شماعة. تُكوى بدرجة حرارة منخفضة عند الحاجة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "مقلم بيج",
+          "code": "#d4bfa0",
+          "images": [
+            "/assets/products/New folder/Thorya/beige/1.webp",
+            "/assets/products/New folder/Thorya/beige/2.webp",
+            "/assets/products/New folder/Thorya/beige/3.webp",
+            "/assets/products/New folder/Thorya/beige/4.webp",
+            "/assets/products/New folder/Thorya/beige/5.webp",
+            "/assets/products/New folder/Thorya/beige/6.webp",
+            "/assets/products/New folder/Thorya/beige/7.webp",
+            "/assets/products/New folder/Thorya/beige/8.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "مقلم أسود",
+          "code": "#000000",
+          "images": [
+            "/assets/products/New folder/Thorya/black/1.webp",
+            "/assets/products/New folder/Thorya/black/2.webp",
+            "/assets/products/New folder/Thorya/black/3.webp",
+            "/assets/products/New folder/Thorya/black/4.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "summer-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-016"
+    },
+    {
+      "id": "summer-anne",
+      "name": "فستان Anne من الكتان",
+      "price": 2650,
+      "currency": "EGP",
+      "description": "تصميم ريفي كلاسيكي خالد مصنوع من كتان بيور فاخر. يحمل فستان Anne أناقة هادئة من خلال قصته الواسعة، والكسر اليدوية الدقيقة، وملمس الكتان الطبيعي. قطعة تجمع بين الرقة والعملية في نفس الوقت.",
+      "details": {
+        "fabric": "خامة كتان طبيعية 100% وفاخرة. طبيعية وتسمح بمرور الهواء.",
+        "fit": "كسر يدوية دقيقة ممتدة من الصدر حتى البطن. تفاصيل كسر مماثلة في الظهر بشكل متناظر. أزرار خشبية أمامية. أكمام منفوشة بنفخة ناعمة مع إسورة قميص. قصة واسعة وانسيابية مريحة.",
+        "care": "يُغسل يدويًا أو على دورة باردة لطيفة. لا يُستخدم المجفف. يُكوى أو يُبخر بحرارة متوسطة. يُغسل مع ألوان مشابهة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "بني",
+          "code": "#7a5c45",
+          "images": [
+            "/assets/products/New folder/anne/brown 1/1 cover_.webp",
+            "/assets/products/New folder/anne/brown 1/2.webp",
+            "/assets/products/New folder/anne/brown 1/3.webp",
+            "/assets/products/New folder/anne/brown 1/4.webp",
+            "/assets/products/New folder/anne/brown 1/5.webp",
+            "/assets/products/New folder/anne/brown 1/6.webp",
+            "/assets/products/New folder/anne/brown 1/7.webp",
+            "/assets/products/New folder/anne/brown 1/8.webp",
+            "/assets/products/New folder/anne/brown 1/9.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "بيج زيتوني",
+          "code": "#9e9070",
+          "images": [
+            "/assets/products/New folder/anne/olive beige 2/(1).webp",
+            "/assets/products/New folder/anne/olive beige 2/(2).webp",
+            "/assets/products/New folder/anne/olive beige 2/(3).webp",
+            "/assets/products/New folder/anne/olive beige 2/(4).webp",
+            "/assets/products/New folder/anne/olive beige 2/(5).webp",
+            "/assets/products/New folder/anne/olive beige 2/(6).webp",
+            "/assets/products/New folder/anne/olive beige 2/(7).webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "summer-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-017"
+    },
+    {
+      "id": "summer-dahlia",
+      "name": "فستان Dahlia",
+      "price": 1850,
+      "currency": "EGP",
+      "description": "تصميم رومانسي ناعم مستوحى من الزهور المتفتحة وفساتين قصص الفانتازيا. يحمل Dahlia خفة واضحة في الحركة من خلال خامته الهوائية، وقصته المنفوشة، وتفاصيل الشرائط الرقيقة.",
+      "details": {
+        "fabric": "خامة قطن كرينكل ناعمة جدًا. شفافة بشكل بسيط وناعم. مريحة وتسمح بمرور الهواء.",
+        "fit": "تصميم ماكسي واسع ومنفوش. قصة واسعة تبدأ بانسيابية من أسفل الصدر. فتحة الرقبة والصدر بتفصيلة متقاطعة على شكل X. أكمام باف واسعة. إسورة رفيعة بأشرطة تُربط كفيونكة. كشكشة وخياطة مجمعة أسفل الصدر.",
+        "care": "يُغسل على دورة باردة لطيفة. يفضل الغسيل اليدوي. لا يُستخدم المجفف. يُبخر بخفة عند الحاجة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "أصفر فاتح",
+          "code": "#f5e6a3",
+          "images": [
+            "/assets/products/New folder/dahlia/baby yellow/1 cover.webp",
+            "/assets/products/New folder/dahlia/baby yellow/2.webp",
+            "/assets/products/New folder/dahlia/baby yellow/3.webp",
+            "/assets/products/New folder/dahlia/baby yellow/4.webp",
+            "/assets/products/New folder/dahlia/baby yellow/5.webp",
+            "/assets/products/New folder/dahlia/baby yellow/6.webp",
+            "/assets/products/New folder/dahlia/baby yellow/7.webp",
+            "/assets/products/New folder/dahlia/baby yellow/8.webp",
+            "/assets/products/New folder/dahlia/baby yellow/9.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "جريج",
+          "code": "#b5a898",
+          "images": [
+            "/assets/products/New folder/dahlia/greige/1.webp",
+            "/assets/products/New folder/dahlia/greige/2.webp",
+            "/assets/products/New folder/dahlia/greige/3.webp",
+            "/assets/products/New folder/dahlia/greige/33.webp",
+            "/assets/products/New folder/dahlia/greige/4.webp",
+            "/assets/products/New folder/dahlia/greige/5.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "summer-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-018"
+    },
+    {
+      "id": "summer-deniz",
+      "name": "فستان Deniz",
+      "price": 2100,
+      "currency": "EGP",
+      "description": "تصميم جينز مستوحى من الطابع الكلاسيكي القديم يجمع بين القوة والنعومة. يحمل Deniz روح المدن الساحلية القديمة.",
+      "details": {
+        "fabric": "جينز ثقيل فاخر عالي الجودة. خامة متماسكة بانسيابية ناعمة أثناء الحركة. مزين بكلفة من الركامة.",
+        "fit": "أزرار نحاسية أمامية بطول الفستان. قصة مميزة عند منطقة الوسط مستوحاة من شكل الرقم 7. قصة مقابلة بنفس الشكل في الظهر. تصميم واسع بدون تحديد فعلي لمنطقة الخصر. كلفة ركامة ممتدة على أطراف الفستان بالكامل. أكمام واسعة باستك منفوشة أسفل الاستك.",
+        "care": "يُغسل على دورة باردة لطيفة. يُغسل مقلوبًا للحفاظ على التفاصيل. لا يُستخدم المجفف. يُكوى أو يُبخر بحرارة متوسطة. تُغسل الألوان الداكنة بشكل منفصل."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "أسود",
+          "code": "#1a1a1a",
+          "images": [
+            "/assets/products/New folder/deniz/black 2/1.webp",
+            "/assets/products/New folder/deniz/black 2/2.webp",
+            "/assets/products/New folder/deniz/black 2/3.webp",
+            "/assets/products/New folder/deniz/black 2/4.webp",
+            "/assets/products/New folder/deniz/black 2/5.webp",
+            "/assets/products/New folder/deniz/black 2/6.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أزرق كحلي",
+          "code": "#2b3a5e",
+          "images": [
+            "/assets/products/New folder/deniz/navy blue 1/1 coner.webp",
+            "/assets/products/New folder/deniz/navy blue 1/2.webp",
+            "/assets/products/New folder/deniz/navy blue 1/3.webp",
+            "/assets/products/New folder/deniz/navy blue 1/4.webp",
+            "/assets/products/New folder/deniz/navy blue 1/5.webp",
+            "/assets/products/New folder/deniz/navy blue 1/6.webp",
+            "/assets/products/New folder/deniz/navy blue 1/7.webp",
+            "/assets/products/New folder/deniz/navy blue 1/8.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "summer-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-019"
+    },
+    {
+      "id": "summer-onyx",
+      "name": "فستان Onyx",
+      "price": 2250,
+      "currency": "EGP",
+      "description": "تصميم فاخر ومنعش يجمع بين النعومة والزخارف الراقية. يحمل Onyx حضورًا مميزًا من خلال قصته الواسعة، وتفاصيله المفرغة، وانسيابيته الخفيفة بالحركة.",
+      "details": {
+        "fabric": "جبير قطني فاخر. مفرغ بزخارف ونقوش مميزة.",
+        "fit": "فستان قطعة واحدة بانسيابية واسعة. قصة مريحة وواسعة بالكامل. مفرغ بالكامل بزخارف ونقوش أنيقة. النهايات مقصوصة بنفس شكل الزخارف.",
+        "care": "يفضل الغسيل اليدوي. أو غسيل بارد لطيف جدًا. لا يُستخدم المجفف. يُبخر بخفة عند الحاجة. يُتعامل بحرص مع تفاصيل الجبير المفرغة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "بيج",
+          "code": "#d8c9b0",
+          "images": [
+            "/assets/products/New folder/onyx/onyx/beige 2/1.webp",
+            "/assets/products/New folder/onyx/onyx/beige 2/2.webp",
+            "/assets/products/New folder/onyx/onyx/beige 2/3.webp",
+            "/assets/products/New folder/onyx/onyx/beige 2/4.webp",
+            "/assets/products/New folder/onyx/onyx/beige 2/5.webp",
+            "/assets/products/New folder/onyx/onyx/beige 2/6.webp",
+            "/assets/products/New folder/onyx/onyx/beige 2/7.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أسود",
+          "code": "#000000",
+          "images": [
+            "/assets/products/New folder/onyx/onyx/black 3/1 (2).webp",
+            "/assets/products/New folder/onyx/onyx/black 3/2.webp",
+            "/assets/products/New folder/onyx/onyx/black 3/3.webp",
+            "/assets/products/New folder/onyx/onyx/black 3/4.webp",
+            "/assets/products/New folder/onyx/onyx/black 3/5.webp",
+            "/assets/products/New folder/onyx/onyx/black 3/6.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "هافانا",
+          "code": "#8b5e3c",
+          "images": [
+            "/assets/products/New folder/onyx/onyx/havana 1/1.webp",
+            "/assets/products/New folder/onyx/onyx/havana 1/2.webp",
+            "/assets/products/New folder/onyx/onyx/havana 1/3.webp",
+            "/assets/products/New folder/onyx/onyx/havana 1/4.webp",
+            "/assets/products/New folder/onyx/onyx/havana 1/5.webp",
+            "/assets/products/New folder/onyx/onyx/havana 1/6.webp",
+            "/assets/products/New folder/onyx/onyx/havana 1/7.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "summer-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-020"
+    },
+    {
+      "id": "summer-opal",
+      "name": "كاردجان Opal من الكتان",
+      "price": 1500,
+      "currency": "EGP",
+      "description": "قطعة أيقونية للأمسيات الرسمية، والتجمعات الثقافية، والإطلالات الكاجوال الراقية. نسقيها مع طرح حرير أو إكسسوارات بسيطة لإطلالة خالدة.",
+      "details": {
+        "fabric": "كتان بيور 100%: ثقيل، منظم، وطويل العمر. نسيج متماسك يسمح بمرور الهواء ويحافظ على شكله بأناقة. تطريز يدوي بدرجات باستيل ناعمة للمسة فنية راقية. رغم قوته، ملمسه ناعم ولطيف على البشرة.",
+        "fit": "تصميم راب متعدد الاستخدامات: يمكن ارتداؤه كروب بحزام لإطلالة راقية أو مفتوحًا كعباءة بانسيابية أنيقة. تغطية كاملة بطول طويل تضمن الاحتشام بلمسة عصرية. مصمم للنساء اللواتي يفضلن الفخامة الهادئة والأناقة السهلة.",
+        "care": "يفضل التنظيف الجاف للحفاظ على التطريز. عند الغسيل في المنزل: يُغسل يدويًا بالماء البارد مع منظف لطيف. لا يُستخدم المبيض. يُكوى على حرارة منخفضة وهو رطب لأفضل نتيجة. يُتجنب العصر للحفاظ على بنية الكتان."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "بيج كلاسيكي",
+          "code": "#e8ddd0",
+          "images": [
+            "/assets/products/New folder/opal/opal/1.webp",
+            "/assets/products/New folder/opal/opal/2 (3).webp",
+            "/assets/products/New folder/opal/opal/3.webp",
+            "/assets/products/New folder/opal/opal/4.webp",
+            "/assets/products/New folder/opal/opal/5.webp",
+            "/assets/products/New folder/opal/opal/6 (2).webp",
+            "/assets/products/New folder/opal/opal/7.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "summer-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-021"
+    },
+    {
+      "id": "summer-velora",
+      "name": "فستان Velora",
+      "price": 1600,
+      "currency": "EGP",
+      "description": "تصميم مستوحى من العصر الفيكتوري بطابع رومانسي مليء بالفخامة الهادئة والانسيابية. يجمع Velora بين الأنوثة الكلاسيكية والتفاصيل الراقية.",
+      "details": {
+        "fabric": "بوبلين قطن 100%. تسمح بمرور الهواء وتحافظ على شكلها. ناعمة لكن بمظهر مرتب وأنيق.",
+        "fit": "أزرار أمامية بطول الفستان بالكامل. أزرار جانبية أسفل الجانبين للتحكم بدرجة الفتح. يمكن ارتداؤه مغلقًا بالكامل أو مفتوحًا قليلًا من الجانبين. كشكشة وكسر ممتدة أعلى الصدر ومتصلة بالكتف الساقط والظهر. قصة واسعة كلوش بانسيابية واضحة. أكمام باف واسعة مستوحاة من الطراز الفيكتوري. إسورة قميص عريضة مربوطة بشرائط من نفس الخامة. ياقة قميص كلاسيكية.",
+        "care": "يُغسل على دورة باردة لطيفة. لا يُستخدم المجفف. يُكوى أو يُبخر بحرارة منخفضة إلى متوسطة. يُغسل مع ألوان مشابهة."
+      },
+      "sizes": [
+        "مقاس واحد"
+      ],
+      "colors": [
+        {
+          "name": "أسود",
+          "code": "#1a1a1a",
+          "images": [
+            "/assets/products/New folder/velora/black 2/1.webp",
+            "/assets/products/New folder/velora/black 2/2.webp",
+            "/assets/products/New folder/velora/black 2/3.webp",
+            "/assets/products/New folder/velora/black 2/4.webp",
+            "/assets/products/New folder/velora/black 2/5.webp",
+            "/assets/products/New folder/velora/black 2/6.webp",
+            "/assets/products/New folder/velora/black 2/7.webp",
+            "/assets/products/New folder/velora/black 2/8.webp",
+            "/assets/products/New folder/velora/black 2/9.webp",
+            "/assets/products/New folder/velora/black 2/10.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "أخضر غابي",
+          "code": "#2d5a3d",
+          "images": [
+            "/assets/products/New folder/velora/forest green 2/1.webp",
+            "/assets/products/New folder/velora/forest green 2/2.webp",
+            "/assets/products/New folder/velora/forest green 2/3.webp",
+            "/assets/products/New folder/velora/forest green 2/4.webp",
+            "/assets/products/New folder/velora/forest green 2/5.webp",
+            "/assets/products/New folder/velora/forest green 2/6.webp",
+            "/assets/products/New folder/velora/forest green 2/7.webp",
+            "/assets/products/New folder/velora/forest green 2/8.webp",
+            "/assets/products/New folder/velora/forest green 2/9.webp"
+          ],
+          "inStock": true
+        },
+        {
+          "name": "جريج",
+          "code": "#b5a898",
+          "images": [
+            "/assets/products/New folder/velora/greige 1/1 cover.webp",
+            "/assets/products/New folder/velora/greige 1/1.webp",
+            "/assets/products/New folder/velora/greige 1/2.webp",
+            "/assets/products/New folder/velora/greige 1/3.webp",
+            "/assets/products/New folder/velora/greige 1/4.webp",
+            "/assets/products/New folder/velora/greige 1/5.webp",
+            "/assets/products/New folder/velora/greige 1/6.webp"
+          ],
+          "inStock": true
+        }
+      ],
+      "category": "summer-collection",
+      "featured": false,
+      "inStock": true,
+      "sku": "NSA-022"
+    }
+  ]
+}

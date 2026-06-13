@@ -2,15 +2,19 @@ import type { ProductRepository } from '../repositories/product-repository';
 import type { ContentRepository } from '../repositories/content-repository';
 import type { ShippingRepository } from '../repositories/shipping-repository';
 import type { SiteRepository } from '../repositories/site-repository';
+import type { Locale } from '../../i18n';
 
-let productRepositoryInstance: ProductRepository | null = null;
+let productRepositoryInstances: Record<Locale, ProductRepository | null> = {
+  en: null,
+  ar: null,
+};
 let contentRepositoryInstance: ContentRepository | null = null;
 let shippingRepositoryInstance: ShippingRepository | null = null;
 let siteRepositoryInstance: SiteRepository | null = null;
 
-async function loadJsonProductRepository(): Promise<ProductRepository> {
+async function loadJsonProductRepository(locale: Locale): Promise<ProductRepository> {
   const { JsonProductRepository } = await import('../repositories/json-product-repository');
-  return new JsonProductRepository();
+  return new JsonProductRepository(locale);
 }
 
 async function loadJsonContentRepository(): Promise<ContentRepository> {
@@ -28,15 +32,15 @@ async function loadJsonSiteRepository(): Promise<SiteRepository> {
   return new JsonSiteRepository();
 }
 
-export async function getProductRepository(): Promise<ProductRepository> {
-  if (!productRepositoryInstance) {
-    productRepositoryInstance = await loadJsonProductRepository();
+export async function getProductRepository(locale: Locale = 'en'): Promise<ProductRepository> {
+  if (!productRepositoryInstances[locale]) {
+    productRepositoryInstances[locale] = await loadJsonProductRepository(locale);
   }
-  return productRepositoryInstance;
+  return productRepositoryInstances[locale]!;
 }
 
-export function setProductRepository(repo: ProductRepository): void {
-  productRepositoryInstance = repo;
+export function setProductRepository(repo: ProductRepository, locale: Locale = 'en'): void {
+  productRepositoryInstances[locale] = repo;
 }
 
 export async function getContentRepository(): Promise<ContentRepository> {
@@ -73,7 +77,10 @@ export function setSiteRepository(repo: SiteRepository): void {
 }
 
 export function clearRepositoryCache(): void {
-  productRepositoryInstance = null;
+  productRepositoryInstances = {
+    en: null,
+    ar: null,
+  };
   contentRepositoryInstance = null;
   shippingRepositoryInstance = null;
   siteRepositoryInstance = null;

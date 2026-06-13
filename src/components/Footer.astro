@@ -1,12 +1,19 @@
 ---
-import site from '../data/site.json';
+import type { Locale } from '../i18n';
+import { t } from '../i18n';
+
+export interface Props {
+    locale: Locale;
+}
+
+const { locale } = Astro.props;
 ---
 
-<footer class="border-t border-[#D4E4E8] mt-16">
+<footer class="border-t border-[#D4E4E8] dark:border-[#334155] mt-16">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="text-center text-[#6B7B8C]">
-            <p>{site.footer.copyright}</p>
-            <p class="mt-2 text-sm">{site.footer.tagline}</p>
+        <div class="text-center text-[#6B7B8C] dark:text-[#94a3b8]">
+            <p>{t(locale, 'footer.copyright')}</p>
+            <p class="mt-2 text-sm">{t(locale, 'footer.tagline')}</p>
         </div>
     </div>
 </footer>

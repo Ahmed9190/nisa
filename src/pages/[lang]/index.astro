@@ -1,0 +1,68 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getContentRepository, getProductRepository } from '../../lib/services';
+import type { Locale } from '../../i18n';
+import { locales, t } from '../../i18n';
+
+export function getStaticPaths() {
+  return locales.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const locale = lang;
+
+const contentRepo = await getContentRepository();
+const productRepo = await getProductRepository(locale);
+
+const content = await contentRepo.getHomeContent();
+const featuredProducts = await Promise.all(
+  content.featuredCollection.featuredProductIds.map(id =>
+    productRepo.getById(id)
+  )
+);
+const validFeaturedProducts = featuredProducts.filter(Boolean);
+---
+
+<Layout locale={locale}>
+    <Hero backgroundImage={content.hero.backgroundImage} />
+    <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-12">
+        <h2 class="text-3xl font-medium text-center mb-12">{t(locale, 'home.featuredCollection.title')}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {validFeaturedProducts.map(product => (
+                <ProductCard product={product} locale={locale} />
+            ))}
+        </div>
+         <div class="text-center mt-16">
+            <a href={`/${locale}/shop/`} class="btn-secondary text-lg">{t(locale, 'home.featuredCollection.buttonText')}</a>
+        </div>
+    </section>
+</Layout>
+
+<style>
+.btn-secondary {
+    background-color: transparent;
+    color: #204566;
+    border: 2px solid #204566;
+    padding: calc(1rem - 2px) calc(2rem - 2px);
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+:global(.dark) .btn-secondary {
+    color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.btn-secondary:hover {
+    background-color: #204566;
+    color: #ffffff;
+}
+
+:global(.dark) .btn-secondary:hover {
+    background-color: #3b82f6;
+}
+</style>

@@ -1,11 +1,14 @@
 ---
 import type { Product } from '../types';
+import type { Locale } from '../i18n';
+import { t } from '../i18n';
 
 export interface Props {
     product: Product;
+    locale: Locale;
 }
 
-const { product } = Astro.props;
+const { product, locale } = Astro.props;
 
 const formatPrice = (price: number, currency = 'EGP') => {
     return new Intl.NumberFormat('en-US', {
@@ -14,25 +17,25 @@ const formatPrice = (price: number, currency = 'EGP') => {
 };
 ---
 
-<div class="product-card p-4 flex flex-col text-center border border-[#D4E4E8] rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
-    {product.comingSoon && <div class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">Coming Soon</div>}
-    { !product.inStock && !product.comingSoon && <div class="absolute top-2 left-2 bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">Sold Out</div> }
-    <a href={!product.comingSoon ? `/product/${product.id}` : '#'} class={product.comingSoon ? 'pointer-events-none' : ''}>
+<div class="product-card p-4 flex flex-col text-center border border-[#D4E4E8] dark:border-[#334155] rounded-lg shadow-sm hover:shadow-lg dark:shadow-gray-900 transition-shadow duration-300 bg-white dark:bg-[#1e293b]">
+    {product.comingSoon && <div class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">{t(locale, 'productCard.comingSoon')}</div>}
+    { !product.inStock && !product.comingSoon && <div class="absolute top-2 left-2 bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">{t(locale, 'productCard.soldOut')}</div> }
+    <a href={!product.comingSoon ? `/${locale}/product/${product.id}/` : '#'} class={product.comingSoon ? 'pointer-events-none' : ''}>
         <img src={product.colors[0].images[0]} alt={product.name} class="w-full h-auto object-cover rounded-md aspect-[3/4]">
     </a>
             <div class="flex-grow flex flex-col pt-4">
                 <h3 class="text-xl font-medium">{product.name}</h3>
-                <div class="text-lg text-[#6B7B8C] mt-1 flex-grow">
+                <div class="text-lg text-[#6B7B8C] dark:text-[#94a3b8] mt-1 flex-grow">
                     {product.price > 0 ? (
                         <span>{formatPrice(product.price)}</span>
                     ) : (
-                        <span class="text-lg font-medium">Coming Soon</span>
+                        <span class="text-lg font-medium">{t(locale, 'productCard.comingSoon')}</span>
                     )}
                 </div>
                 <div class="mt-4 grid grid-cols-2 gap-2">
-                    <a href={!product.comingSoon ? `/product/${product.id}` : '#'} class:list={["btn-secondary py-2 px-4 text-sm", { "opacity-50 cursor-not-allowed": product.comingSoon }]}>Details</a>
+                    <a href={!product.comingSoon ? `/${locale}/product/${product.id}/` : '#'} class:list={["btn-secondary py-2 px-4 text-sm", { "opacity-50 cursor-not-allowed": product.comingSoon }]}>{t(locale, 'productCard.details')}</a>
                     <button class="btn-primary py-2 px-4 text-sm add-to-cart-card-btn" data-product-id={product.id} disabled={!product.inStock || product.comingSoon}>
-                        {product.inStock ? 'Add to Cart' : (product.comingSoon ? 'Coming Soon' : 'Sold Out')}
+                        {product.inStock ? t(locale, 'productCard.addToCart') : (product.comingSoon ? t(locale, 'productCard.comingSoon') : t(locale, 'productCard.soldOut'))}
                     </button>
                 </div>
     </div>
@@ -43,7 +46,7 @@ const formatPrice = (price: number, currency = 'EGP') => {
 <style>
 .btn-primary {
     background-color: #204566;
-    color: #fffaf0;
+    color: #ffffff;
     padding: 0.5rem 1rem;
     border-radius: 6px;
     font-weight: 500;
@@ -53,11 +56,21 @@ const formatPrice = (price: number, currency = 'EGP') => {
     letter-spacing: 0.5px;
 }
 
+.dark .btn-primary {
+    background-color: #3b82f6;
+}
+
 .btn-primary:hover:not(:disabled) {
     background-color: #163554;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(32, 69, 102, 0.3);
 }
+
+.dark .btn-primary:hover:not(:disabled) {
+    background-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
 .btn-primary:disabled {
     background-color: #6B7B8C;
     cursor: not-allowed;
@@ -75,8 +88,17 @@ const formatPrice = (price: number, currency = 'EGP') => {
     text-align: center;
 }
 
+.dark .btn-secondary {
+    color: #3b82f6;
+    border-color: #3b82f6;
+}
+
 .btn-secondary:hover {
     background-color: #204566;
-    color: #fffaf0;
+    color: #ffffff;
+}
+
+.dark .btn-secondary:hover {
+    background-color: #3b82f6;
 }
 </style>

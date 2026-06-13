@@ -1,0 +1,120 @@
+{
+  "site": {
+    "title": "nisa - Not for every eye",
+    "description": "A fashion e-commerce website for modest women's clothing."
+  },
+  "navigation": {
+    "home": "Home",
+    "shop": "Shop",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "footer": {
+    "copyright": "© 2025 nisa. All rights reserved.",
+    "tagline": "Elegance in Modesty. Not for every eye."
+  },
+  "home": {
+    "hero": {
+      "title": "nisa",
+      "subtitle": "Not for every eye"
+    },
+    "featuredCollection": {
+      "title": "Featured Collection",
+      "buttonText": "Shop The Full Collection"
+    }
+  },
+  "about": {
+    "title": "Our Story",
+    "content": "nisa was born from a desire to blend timeless modesty with contemporary elegance. We believe that style should be an expression of self, and for many women, that expression includes a commitment to modest dress. Our brand is a celebration of this choice, offering beautifully crafted pieces that are both sophisticated and empowering. The name 'nisa', meaning 'women' in Arabic, is at the core of our mission: to serve and uplift women through fashion that resonates with their values."
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "submit": "Send Message",
+      "success": "Your message has been sent!",
+      "error": "Oops! There was a problem submitting your form"
+    }
+  },
+  "shop": {
+    "title": "Our Collection",
+    "categories": {
+      "summer-collection": "Summer Collection",
+      "winter-collection": "Winter Collection",
+      "autumn-collection": "Autumn Collection"
+    }
+  },
+  "product": {
+    "price": "Price",
+    "color": "Color",
+    "size": "Size",
+    "sizeGuide": "Size Guide",
+    "addToCart": "Add to Cart",
+    "soldOut": "Sold Out",
+    "comingSoon": "Coming Soon",
+    "details": "Details",
+    "detailsFit": "Details & Fit",
+    "fabric": "Fabric",
+    "fit": "Fit",
+    "care": "Care",
+    "hassleFreeReturns": "Hassle-Free Returns",
+    "securePayments": "Secure Payments",
+    "qualityFabrics": "Quality Fabrics"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "subtitle": "Complete your purchase",
+    "contactInfo": "Contact Information",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "shippingAddress": "Shipping Address",
+    "fullName": "Full Name",
+    "streetAddress": "Street Address",
+    "apartment": "Apartment, suite, etc. (optional)",
+    "city": "City",
+    "governorate": "Governorate",
+    "deliveryInstructions": "Landmark or special delivery instructions",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "savings": "Savings",
+    "total": "Total",
+    "placeOrder": "Place Order",
+    "emptyCart": "Your cart is empty."
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty.",
+    "subtotal": "Subtotal",
+    "proceedToCheckout": "Proceed to Checkout",
+    "quantity": "Qty",
+    "remove": "Remove"
+  },
+  "thankYou": {
+    "title": "Thank You!",
+    "message": "Your order has been placed successfully.",
+    "continueShopping": "Continue Shopping"
+  },
+  "sizeGuide": {
+    "title": "Size Guide",
+    "subtitle": "All measurements are in centimeters (cm).",
+    "size": "Size",
+    "bust": "Bust",
+    "waist": "Waist",
+    "hips": "Hips"
+  },
+  "productCard": {
+    "details": "Details",
+    "addToCart": "Add to Cart",
+    "soldOut": "Sold Out",
+    "comingSoon": "Coming Soon"
+  },
+  "common": {
+    "search": "Search",
+    "language": "Language",
+    "english": "English",
+    "arabic": "Arabic"
+  }
+}

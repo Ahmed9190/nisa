@@ -1,0 +1,54 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getProductRepository } from '../../lib/services';
+import type { Locale } from '../../i18n';
+import { locales, t } from '../../i18n';
+
+export function getStaticPaths() {
+  return locales.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const locale = lang;
+
+const productRepo = await getProductRepository(locale);
+const allProducts = await productRepo.getAll();
+
+const groupedProducts = allProducts.reduce((acc, product) => {
+    if (!acc[product.category]) {
+        acc[product.category] = [];
+    }
+    acc[product.category].push(product);
+    return acc;
+}, {});
+
+const categoryOrder = ['summer-collection', 'winter-collection', 'autumn-collection'];
+
+const orderedProducts = categoryOrder.map(category => {
+    return {
+        category: category,
+        products: groupedProducts[category] || []
+    }
+}).filter(group => group.products.length > 0);
+---
+
+<Layout locale={locale} title={`${t(locale, 'shop.title')} - nisa`}>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 class="text-4xl font-medium text-center mb-12">{t(locale, 'shop.title')}</h1>
+        <div id="shop-products">
+            {
+                orderedProducts.map(group => (
+                    <div class="mb-12">
+                        <h2 class="text-2xl font-medium text-center mb-8 capitalize">{t(locale, `shop.categories.${group.category}`)}</h2>
+                        <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                            {group.products.map(product => (
+                                <ProductCard product={product} locale={locale} />
+                            ))}
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</Layout>

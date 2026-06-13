@@ -1,51 +1,18 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import ProductCard from '../components/ProductCard.astro';
-import { getContentRepository, getProductRepository } from '../lib/services';
-
-const contentRepo = await getContentRepository();
-const productRepo = await getProductRepository();
-
-const content = await contentRepo.getHomeContent();
-const featuredProducts = content.featuredCollection.featuredProductIds.map(id => 
-    productRepo.getById(id)
-);
-
-// Since getById returns Promise, we need to wait for all
-const featuredProductsResolved = await Promise.all(featuredProducts);
-const validFeaturedProducts = featuredProductsResolved.filter(Boolean);
 ---
 
-<Layout>
-    <Hero backgroundImage={content.hero.backgroundImage} />
-    <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-12">
-        <h2 class="text-3xl font-medium text-center mb-12">{content.featuredCollection.title}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {validFeaturedProducts.map(product => (
-                <ProductCard product={product} />
-            ))}
-        </div>
-         <div class="text-center mt-16">
-            <a href="/shop" class="btn-secondary text-lg">{content.featuredCollection.buttonText}</a>
-        </div>
-    </section>
-</Layout>
-
-<style>
-.btn-secondary {
-    background-color: transparent;
-    color: #204566;
-    border: 2px solid #204566;
-    padding: calc(1rem - 2px) calc(2rem - 2px);
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-    background-color: #204566;
-    color: #fffaf0;
-}
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>nisa</title>
+  <meta http-equiv="refresh" content="0;url=/en/">
+  <script>
+    const lang = navigator.language.startsWith('ar') ? 'ar' : 'en';
+    window.location.replace('/' + lang + '/');
+  </script>
+</head>
+<body>
+  <a href="/en/">English</a> | <a href="/ar/">العربية</a>
+</body>
+</html>

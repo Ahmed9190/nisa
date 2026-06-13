@@ -1,13 +1,16 @@
 ---
-import type { SiteConfig } from '../types';
+import type { Locale } from '../i18n';
+import { locales } from '../i18n';
 
 export interface Props {
     title: string;
     description: string;
     image?: string;
+    locale: Locale;
 }
 
-const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
+const { title, description, image = '/placeholder-social.jpg', locale } = Astro.props;
+const canonicalPath = Astro.url.pathname;
 ---
 
 <meta charset="UTF-8" />
@@ -15,12 +18,19 @@ const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 <title>{title}</title>
 <meta name="description" content={description} />
 
+<link rel="canonical" href={new URL(canonicalPath, Astro.url)} />
+{locales.map(l => (
+    <link rel="alternate" hreflang={l} href={new URL(canonicalPath.replace(`/${locale}/`, `/${l}/`), Astro.url)} />
+))}
+<link rel="alternate" hreflang="x-default" href={new URL(canonicalPath.replace(`/${locale}/`, '/en/'), Astro.url)} />
+
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:locale" content={locale === 'ar' ? 'ar_AR' : 'en_US'} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
