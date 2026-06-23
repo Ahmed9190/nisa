@@ -493,9 +493,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                 const ctaOverlay = !product.comingSoon
                     ? `
-                    <div class="card-cta-overlay absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10 flex gap-2">
-                        <a href="/${locale}/product/${product.id}/" class="flex-1 text-center py-2 px-3 bg-white/90 dark:bg-gray-900/90 text-[#204566] dark:text-white rounded-md text-[11px] font-semibold backdrop-blur-sm shadow-sm hover:bg-white dark:hover:bg-gray-800 transition-all hover:scale-105">${locale === 'ar' ? 'التفاصيل' : 'Details'}</a>
-                        <button class="flex-1 py-2 px-3 bg-[#204566] hover:bg-[#163554] dark:bg-[#3182ce] dark:hover:bg-[#266395] text-white rounded-md text-[11px] font-semibold shadow-sm add-to-cart-card-btn transition-all hover:scale-105" data-product-id="${product.id}" ${!product.inStock ? 'disabled' : ''}>
+                    <div class="card-cta-overlay absolute inset-x-0 bottom-0 p-2 sm:p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10 flex gap-1.5 sm:gap-2">
+                        <a href="/${locale}/product/${product.id}/" class="flex-none w-auto sm:flex-1 text-center py-2 px-2 sm:px-3 bg-white/90 dark:bg-gray-900/90 text-[#204566] dark:text-white rounded-md text-[10px] sm:text-[11px] font-semibold backdrop-blur-sm shadow-sm hover:bg-white dark:hover:bg-gray-800 transition-all hover:scale-105 whitespace-nowrap">${locale === 'ar' ? 'التفاصيل' : 'Details'}</a>
+                        <button class="flex-1 py-2 px-2 sm:px-3 bg-[#204566] hover:bg-[#163554] dark:bg-[#3182ce] dark:hover:bg-[#266395] text-white rounded-md text-[10px] sm:text-[11px] font-semibold shadow-sm add-to-cart-card-btn transition-all hover:scale-105 whitespace-nowrap" data-product-id="${product.id}" ${!product.inStock ? 'disabled' : ''}>
                             ${product.inStock ? (locale === 'ar' ? 'أضف للسلة' : 'Add to Cart') : (locale === 'ar' ? 'نفذت الكمية' : 'Sold Out')}
                         </button>
                     </div>
@@ -655,26 +655,5 @@ document.addEventListener('DOMContentLoaded', () => {
     background-color: #3182ce !important;
     color: #ffffff !important;
     border-color: transparent !important;
-}
-
-/* CTA overlay — hidden by default, revealed on hover (desktop) or tap (mobile) */
-.card-cta-overlay {
-    transform: translateY(100%);
-    opacity: 0;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity   0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .group\/img:hover .card-cta-overlay {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Mobile tap — JS adds .cta-visible to the image wrapper */
-.group\/img.cta-visible .card-cta-overlay {
-    transform: translateY(0);
-    opacity: 1;
 }
 </style>

@@ -6,6 +6,7 @@
 
 # Astro cache
 /.astro
+/.netlify
 
 # Environment variables
 .env
