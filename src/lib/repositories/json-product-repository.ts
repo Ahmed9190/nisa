@@ -6,19 +6,30 @@ import { ProductStore, clearProductCache } from '../product-store';
 const cachedProducts = new Map<Locale, Product[]>();
 const productStore = new ProductStore();
 
+function toLocalizedProduct(product: Product, locale: Locale): Product {
+  if (locale === 'ar') {
+    return {
+      ...product,
+      name: product.nameAr || product.name,
+      description: product.descriptionAr || product.description,
+      details: product.detailsAr || product.details,
+      colors: product.colors.map((color) => ({
+        ...color,
+        name: color.nameAr || color.name,
+      })),
+    };
+  }
+  return product;
+}
+
 async function loadProducts(locale: Locale): Promise<Product[]> {
   if (cachedProducts.has(locale)) {
     return cachedProducts.get(locale)!;
   }
   
-  let products: Product[];
-  if (locale === 'ar') {
-    const module = await import('../../data/products-ar.json');
-    products = module.default?.products || module.products || [];
-  } else {
-    const module = await import('../../data/products-en.json');
-    products = module.default?.products || module.products || [];
-  }
+  const module = await import('../../data/products.json');
+  const rawProducts = module.default?.products || module.products || [];
+  const products = rawProducts.map((p) => toLocalizedProduct(p, locale));
   
   cachedProducts.set(locale, products);
   return products;
@@ -32,39 +43,43 @@ export class JsonProductRepository implements ProductRepository {
   }
 
   async getAll(): Promise<Product[]> {
-    return loadProducts(this.locale);
+    const products = await loadProducts(this.locale);
+    return products.filter(p => !p.hidden);
   }
 
   async getById(id: string): Promise<Product | null> {
     const products = await loadProducts(this.locale);
-    return products.find(p => p.id === id) || null;
+    const product = products.find(p => p.id === id) || null;
+    return (product && !product.hidden) ? product : null;
   }
 
   async getByCategory(category: string): Promise<Product[]> {
     const products = await loadProducts(this.locale);
-    return products.filter(p => p.category === category);
+    return products.filter(p => p.category === category && !p.hidden);
   }
 
   async getFeatured(): Promise<Product[]> {
     const products = await loadProducts(this.locale);
-    return products.filter(p => p.featured);
+    return products.filter(p => p.featured && !p.hidden);
   }
 
   async search(query: string): Promise<Product[]> {
     const products = await loadProducts(this.locale);
     const lowerQuery = query.toLowerCase();
     return products.filter(p => 
-      p.name.toLowerCase().includes(lowerQuery) ||
-      p.nameAr?.toLowerCase().includes(lowerQuery) ||
-      p.description.toLowerCase().includes(lowerQuery) ||
-      p.descriptionAr?.toLowerCase().includes(lowerQuery) ||
-      p.category.toLowerCase().includes(lowerQuery)
+      !p.hidden && (
+        p.name.toLowerCase().includes(lowerQuery) ||
+        p.nameAr?.toLowerCase().includes(lowerQuery) ||
+        p.description.toLowerCase().includes(lowerQuery) ||
+        p.descriptionAr?.toLowerCase().includes(lowerQuery) ||
+        p.category.toLowerCase().includes(lowerQuery)
+      )
     );
   }
 
   async getAllIds(): Promise<string[]> {
     const products = await loadProducts(this.locale);
-    return products.map(p => p.id);
+    return products.filter(p => !p.hidden).map(p => p.id);
   }
 
   async create(productData: Parameters<ProductRepository['create']>[0]): Promise<Product> {

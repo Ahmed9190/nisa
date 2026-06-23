@@ -25,13 +25,30 @@ const productsList = await productRepo.getAll();
 const shippingRates = await shippingRepo.getAllRates();
 
 const rtl = isRTL(locale);
+const pathname = Astro.url.pathname;
+const isShop = pathname.includes('/shop');
+const isHome = !isShop && !pathname.includes('/contact') && !pathname.includes('/about');
+const isContact = pathname.includes('/contact');
+const isAbout = pathname.includes('/about');
 ---
 
 <!DOCTYPE html>
 <html lang={locale} dir={rtl ? 'rtl' : 'ltr'}>
 <head>
     <Seo title={title} description={description} locale={locale} />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {locale === 'ar' ? (
+        <>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+            <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+        </>
+    ) : (
+        <>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+            <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
+        </>
+    )}
     <script is:inline>
         (function() {
             const theme = localStorage.getItem('nisa-theme') || 'light';
@@ -49,22 +66,29 @@ const rtl = isRTL(locale);
             --accent-hover: #163554;
             --card-bg: #ffffff;
             --overlay: rgba(0,0,0,0.5);
+            --font-family: 'Plus Jakarta Sans', sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+        }
+
+        :root[lang="ar"] {
+            --font-family: 'Cairo', sans-serif;
+            --font-serif: 'Cairo', serif;
         }
 
         .dark {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --border-color: #334155;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --card-bg: #1e293b;
+            --bg-primary: #081622;
+            --bg-secondary: #0e2537;
+            --text-primary: #ffffff;
+            --text-secondary: #e2e8f0;
+            --border-color: #1b456b;
+            --accent: #3182ce;
+            --accent-hover: #266395;
+            --card-bg: #0e2537;
             --overlay: rgba(0,0,0,0.7);
         }
 
         body {
-            font-family: 'Noto Sans Arabic', sans-serif;
+            font-family: var(--font-family);
             background-color: var(--bg-primary);
             color: var(--text-primary);
             transition: background-color 0.2s ease, color 0.2s ease;
@@ -169,6 +193,24 @@ const rtl = isRTL(locale);
             animation-timing-function: ease-in;
             animation-fill-mode: both;
         }
+
+        /* Scroll-driven entrance animations */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 1s cubic-bezier(0.215, 0.610, 0.355, 1), transform 1s cubic-bezier(0.215, 0.610, 0.355, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-on-scroll.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .transition-delay-300 {
+            transition-delay: 150ms;
+        }
+        .transition-delay-500 {
+            transition-delay: 300ms;
+        }
     </style>
 </head>
 <body class="antialiased" data-locale={locale}>
@@ -176,23 +218,55 @@ const rtl = isRTL(locale);
         <span id="toast-message"></span>
     </div>
     <Header locale={locale} />
-    <main>
+    <main class="pb-20 md:pb-0">
         <slot />
     </main>
     <Footer locale={locale} />
 
+    <!-- Sticky Bottom Navigation for Mobile -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-[#081622]/95 backdrop-blur-md border-t border-[#D4E4E8] dark:border-[#1b456b] z-40 md:hidden flex justify-around items-center py-2 px-2 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_12px_rgba(0,0,0,0.3)]">
+        <a href={`/${locale}/shop/`} class:list={[
+            "flex-1 flex flex-col items-center gap-1 text-[10px] font-medium tracking-wider transition-colors duration-200 py-1",
+            isShop ? "text-[#204566] dark:text-[#3182ce]" : "text-[#6B7B8C] dark:text-[#94a3b8]"
+        ]}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="scale-90 origin-top uppercase">{t(locale, 'mobileNav.shop')}</span>
+        </a>
+        <a href={`/${locale}/`} class:list={[
+            "flex-1 flex flex-col items-center gap-1 text-[10px] font-medium tracking-wider transition-colors duration-200 py-1",
+            isHome ? "text-[#204566] dark:text-[#3182ce]" : "text-[#6B7B8C] dark:text-[#94a3b8]"
+        ]}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            <span class="scale-90 origin-top uppercase">{t(locale, 'mobileNav.collections')}</span>
+        </a>
+        <a href={`/${locale}/about/`} class:list={[
+            "flex-1 flex flex-col items-center gap-1 text-[10px] font-medium tracking-wider transition-colors duration-200 py-1",
+            isAbout ? "text-[#204566] dark:text-[#3182ce]" : "text-[#6B7B8C] dark:text-[#94a3b8]"
+        ]}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="scale-90 origin-top uppercase">{t(locale, 'mobileNav.account')}</span>
+        </a>
+        <button id="cart-button-mobile" class="flex-1 flex flex-col items-center gap-1 text-[10px] font-medium tracking-wider transition-colors duration-200 bg-transparent border-none p-0 cursor-pointer text-[#6B7B8C] dark:text-[#94a3b8] focus:outline-none py-1">
+            <div class="relative">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span class="absolute -top-2 -right-2 bg-[#BEE2E8] text-[#1b456b] text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center cart-count" style="display: none;">0</span>
+            </div>
+            <span class="scale-90 origin-top uppercase">{t(locale, 'mobileNav.cart')}</span>
+        </button>
+    </div>
+
     <!-- Cart Drawer -->
     <div id="cart-drawer-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
-    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white dark:bg-[#1e293b] z-50 transform translate-x-full">
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white dark:bg-[#0e2537] z-50 transform translate-x-full">
         <div class="flex flex-col h-full">
-            <div class="flex items-center justify-between p-6 border-b border-[#D4E4E8] dark:border-[#334155]">
+            <div class="flex items-center justify-between p-6 border-b border-[#D4E4E8] dark:border-[#1b456b]">
                 <h2 class="text-2xl font-medium" id="cart-drawer-title">{t(locale, 'cart.title')}</h2>
                 <button id="close-cart-button" class="text-3xl">&times;</button>
             </div>
             <div id="cart-items" class="flex-grow p-6 overflow-y-auto">
                 <p class="text-center text-[#6B7B8C] dark:text-[#94a3b8]">{t(locale, 'cart.empty')}</p>
             </div>
-            <div class="p-6 border-t border-[#D4E4E8] dark:border-[#334155]">
+            <div class="p-6 border-t border-[#D4E4E8] dark:border-[#1b456b]">
                 <div class="flex justify-between items-center text-xl font-medium mb-4">
                     <span>{t(locale, 'cart.subtotal')}</span>
                     <span id="cart-subtotal">EGP 0</span>
@@ -212,7 +286,7 @@ const rtl = isRTL(locale);
 
     <!-- Size Guide Modal -->
     <div id="size-guide-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"></div>
-    <div id="size-guide-modal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#1e293b] shadow-2xl z-50 rounded-lg p-8 w-11/12 max-w-2xl hidden">
+    <div id="size-guide-modal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0e2537] shadow-2xl z-50 rounded-lg p-8 w-11/12 max-w-2xl hidden">
          <button id="close-size-guide-button" class="absolute top-4 right-4 text-3xl">&times;</button>
          <h2 class="text-2xl font-medium mb-4 text-center">{t(locale, 'sizeGuide.title')}</h2>
          <p class="text-center text-[#6B7B8C] dark:text-[#94a3b8] mb-6">{t(locale, 'sizeGuide.subtitle')}</p>
@@ -289,6 +363,12 @@ const t = (key) => {
 class ShoppingCart {
     constructor() {
         this.items = JSON.parse(localStorage.getItem('nisaCart')) || [];
+        // Sanitize old paths from localStorage
+        this.items.forEach(item => {
+            if (item.image && item.image.includes('/assets/products/New folder/')) {
+                item.image = item.image.replace('/assets/products/New folder/', '/assets/products/new/');
+            }
+        });
         this.updateCartUI();
     }
     addItem(product, color, size, quantity = 1) {
@@ -468,6 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const orderSummaryInput = document.getElementById('order-summary-input');
             const orderTotalInput = document.getElementById('order-total-input');
+            const itemsJsonInput = document.getElementById('items-json-input');
 
             if (orderSummaryInput) {
                 const itemsSummary = cart.items.map(item => {
@@ -482,6 +563,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (orderTotalInput) {
                 orderTotalInput.value = formatPrice(total);
+            }
+            if (itemsJsonInput) {
+                itemsJsonInput.value = JSON.stringify(cart.items.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    color: item.color.name,
+                    size: item.size,
+                    quantity: item.quantity,
+                    price: item.price
+                })));
             }
         }
 
@@ -526,7 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- EVENT LISTENERS ---
     body.addEventListener('click', e => {
-        if (e.target.closest('#cart-button')) toggleCartDrawer(true);
+        if (e.target.closest('#cart-button') || e.target.closest('#cart-button-mobile')) toggleCartDrawer(true);
         if (e.target.closest('#close-cart-button')) toggleCartDrawer(false);
         if (e.target.closest('#cart-drawer-overlay')) toggleCartDrawer(false);
 
@@ -638,7 +729,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (images) currentImages = images;
         if (index !== undefined) currentImageIndex = index;
 
-        mainImage.src = currentImages[currentImageIndex];
+        if (currentImages && currentImages.length > 0) {
+            mainImage.src = currentImages[currentImageIndex];
+        } else {
+            const comingSoonText = lang === 'ar' ? 'قريباً' : 'Coming Soon';
+            mainImage.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><rect width='100%' height='100%' fill='%23f3f4f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%239ca3af'>${comingSoonText}</text></svg>`;
+        }
 
         galleryControls.style.display = currentImages.length > 1 ? 'flex' : 'none';
 
@@ -700,6 +796,18 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast('Order placed successfully!');
       window.history.replaceState({}, document.title, "/");
     }
+
+    // Scroll Reveal Observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
   });
 </script>
 </body>

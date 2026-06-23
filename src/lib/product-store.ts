@@ -16,14 +16,10 @@ interface JsonProductFile {
   products: Product[];
 }
 
-interface LoadedProducts {
-  enProducts: Product[];
-  arProducts: Product[];
-}
-
 interface ProductStoreOptions {
-  enPath?: string;
-  arPath?: string;
+  productsPath?: string;
+  enPath?: string; // fallback
+  arPath?: string; // legacy (not used)
   imageRoot?: string;
 }
 
@@ -33,44 +29,41 @@ function resolveProjectRoot(): string {
 }
 
 const projectRoot = resolveProjectRoot();
-const defaultEnPath = path.join(projectRoot, 'src/data/products-en.json');
-const defaultArPath = path.join(projectRoot, 'src/data/products-ar.json');
+const defaultProductsPath = path.join(projectRoot, 'src/data/products.json');
 const defaultImageRoot = path.join(projectRoot, 'public/images/products');
 const cachedProducts = new Map<string, Product[]>();
 let writeQueue: Promise<void> = Promise.resolve();
 
 export class ProductStore implements ProductRepository {
-  private readonly enPath: string;
-  private readonly arPath: string;
+  private readonly productsPath: string;
   private readonly imageRoot: string;
 
   constructor(options: ProductStoreOptions = {}) {
-    this.enPath = options.enPath || defaultEnPath;
-    this.arPath = options.arPath || defaultArPath;
+    this.productsPath = options.productsPath || options.enPath || defaultProductsPath;
     this.imageRoot = options.imageRoot || defaultImageRoot;
   }
 
   async getAll(): Promise<Product[]> {
-    return this.readProducts('en');
+    return this.readProducts();
   }
 
   async getById(id: string): Promise<Product | null> {
-    const products = await this.readProducts('en');
+    const products = await this.readProducts();
     return products.find((product) => product.id === id) || null;
   }
 
   async getByCategory(category: string): Promise<Product[]> {
-    const products = await this.readProducts('en');
+    const products = await this.readProducts();
     return products.filter((product) => product.category === category);
   }
 
   async getFeatured(): Promise<Product[]> {
-    const products = await this.readProducts('en');
+    const products = await this.readProducts();
     return products.filter((product) => product.featured);
   }
 
   async search(query: string): Promise<Product[]> {
-    const products = await this.readProducts('en');
+    const products = await this.readProducts();
     const normalizedQuery = query.trim().toLowerCase();
 
     if (!normalizedQuery) {
@@ -92,23 +85,21 @@ export class ProductStore implements ProductRepository {
   }
 
   async getAllIds(): Promise<string[]> {
-    const products = await this.readProducts('en');
+    const products = await this.readProducts();
     return products.map((product) => product.id);
   }
 
   async create(productData: ProductInput | Partial<Product>): Promise<Product> {
     return this.withSequentialWrite(async () => {
       const input = validateProductInput(productData);
-      const loaded = await this.loadProducts();
+      const products = await this.readProducts();
       const product = toProduct(input);
-      product.id = this.uniqueId(product.id, [...loaded.enProducts, ...loaded.arProducts]);
+      product.id = this.uniqueId(product.id, products);
 
-      loaded.enProducts.push(product);
-      loaded.arProducts.push(this.toArProduct(product));
+      products.push(product);
 
-      await this.writeProducts(loaded);
-      clearProductCache(this.enPath);
-      clearProductCache(this.arPath);
+      await this.writeProducts(products);
+      clearProductCache(this.productsPath);
 
       return product;
     });
@@ -117,8 +108,8 @@ export class ProductStore implements ProductRepository {
   async update(id: string, productData: ProductInput | Partial<Product>): Promise<Product | null> {
     return this.withSequentialWrite(async () => {
       const input = validateProductInput(productData);
-      const loaded = await this.loadProducts();
-      const existing = loaded.enProducts.find((product) => product.id === id);
+      const products = await this.readProducts();
+      const existing = products.find((product) => product.id === id);
 
       if (!existing) {
         return null;
@@ -130,12 +121,10 @@ export class ProductStore implements ProductRepository {
       }
 
       const updated = mergeProductData(existing, input);
-      loaded.enProducts = loaded.enProducts.map((product) => product.id === id ? updated : product);
-      loaded.arProducts = loaded.arProducts.map((product) => product.id === id ? this.toArProduct(updated) : product);
+      const updatedProducts = products.map((product) => product.id === id ? updated : product);
 
-      await this.writeProducts(loaded);
-      clearProductCache(this.enPath);
-      clearProductCache(this.arPath);
+      await this.writeProducts(updatedProducts);
+      clearProductCache(this.productsPath);
 
       return updated;
     });
@@ -143,20 +132,18 @@ export class ProductStore implements ProductRepository {
 
   async delete(id: string): Promise<boolean> {
     return this.withSequentialWrite(async () => {
-      const loaded = await this.loadProducts();
-      const exists = loaded.enProducts.some((product) => product.id === id);
+      const products = await this.readProducts();
+      const exists = products.some((product) => product.id === id);
 
       if (!exists) {
         return false;
       }
 
       await this.deleteImagesForProduct(id);
-      loaded.enProducts = loaded.enProducts.filter((product) => product.id !== id);
-      loaded.arProducts = loaded.arProducts.filter((product) => product.id !== id);
+      const updatedProducts = products.filter((product) => product.id !== id);
 
-      await this.writeProducts(loaded);
-      clearProductCache(this.enPath);
-      clearProductCache(this.arPath);
+      await this.writeProducts(updatedProducts);
+      clearProductCache(this.productsPath);
 
       return true;
     });
@@ -176,14 +163,14 @@ export class ProductStore implements ProductRepository {
     return `/images/products/${safeName}`;
   }
 
-  private async readProducts(locale: 'en' | 'ar'): Promise<Product[]> {
-    const cacheKey = locale === 'en' ? this.enPath : this.arPath;
+  private async readProducts(): Promise<Product[]> {
+    const cacheKey = this.productsPath;
 
     if (cachedProducts.has(cacheKey)) {
       return cachedProducts.get(cacheKey)!;
     }
 
-    const filePath = locale === 'en' ? this.enPath : this.arPath;
+    const filePath = this.productsPath;
     const raw = await readFile(filePath, 'utf8');
     const parsed = JSON.parse(raw) as JsonProductFile;
     const products = parsed.products || [];
@@ -192,23 +179,8 @@ export class ProductStore implements ProductRepository {
     return products;
   }
 
-  private async loadProducts(): Promise<LoadedProducts> {
-    const [enProducts, arProducts] = await Promise.all([
-      this.readProducts('en'),
-      this.readProducts('ar'),
-    ]);
-
-    return {
-      enProducts: [...enProducts],
-      arProducts: [...arProducts],
-    };
-  }
-
-  private async writeProducts(loaded: LoadedProducts): Promise<void> {
-    await Promise.all([
-      this.atomicWriteJson(this.enPath, { products: loaded.enProducts }),
-      this.atomicWriteJson(this.arPath, { products: loaded.arProducts }),
-    ]);
+  private async writeProducts(products: Product[]): Promise<void> {
+    await this.atomicWriteJson(this.productsPath, { products });
   }
 
   private async atomicWriteJson(filePath: string, data: JsonProductFile): Promise<void> {
@@ -243,19 +215,6 @@ export class ProductStore implements ProductRepository {
     return `${id}-${index}`;
   }
 
-  private toArProduct(product: Product): Product {
-    return {
-      ...product,
-      name: product.nameAr || product.name,
-      description: product.descriptionAr || product.description,
-      details: product.detailsAr || product.details,
-      colors: product.colors.map((color) => ({
-        ...color,
-        name: color.nameAr || color.name,
-      })),
-    };
-  }
-
   private async deleteImagesByPrefix(prefix: string): Promise<void> {
     try {
       await mkdir(this.imageRoot, { recursive: true });
@@ -283,7 +242,7 @@ export class ProductStore implements ProductRepository {
 
 export const productStore = new ProductStore();
 
-export function clearProductCache(filePath = defaultEnPath): void {
+export function clearProductCache(filePath = defaultProductsPath): void {
   cachedProducts.delete(filePath);
 }
 
@@ -301,6 +260,7 @@ function mergeProductData(existing: Product, input: ProductInput): Product {
     featured: Boolean(input.featured),
     inStock: Boolean(input.inStock),
     comingSoon: Boolean(input.comingSoon),
+    hidden: Boolean(input.hidden),
     createdAt: existing.createdAt,
     updatedAt: timestamp,
   };
@@ -309,3 +269,4 @@ function mergeProductData(existing: Product, input: ProductInput): Product {
 export function getFirstProductImageUrl(product: Product): string | null {
   return getFirstImageUrl(product);
 }
+

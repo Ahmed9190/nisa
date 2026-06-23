@@ -109,7 +109,30 @@ describe('ProductStore', () => {
       expect(all).toHaveLength(3);
     });
 
-    it('should add product to both JSON files', async () => {
+    it('should create a hidden product', async () => {
+      const created = await store.create({
+        name: 'Hidden Product',
+        price: 50,
+        currency: 'EGP',
+        description: 'New desc',
+        details: { fabric: 'F', fit: 'F', care: 'C' },
+        sizes: ['M'],
+        colors: [{ name: 'Red', code: '#ff0000', images: ['/img/r.jpg'], inStock: true }],
+        category: 'cat1',
+        featured: false,
+        inStock: true,
+        sku: 'SKU-HIDDEN',
+        hidden: true,
+      });
+
+      expect(created.id).toBe('hidden-product');
+      expect(created.hidden).toBe(true);
+
+      const all = await store.getAll();
+      expect(all.find((p) => p.id === 'hidden-product')?.hidden).toBe(true);
+    });
+
+    it('should add product to the single JSON file with all translations', async () => {
       await store.create({
         name: 'Bilingual Test',
         nameAr: 'اختبار',
@@ -127,7 +150,10 @@ describe('ProductStore', () => {
       });
 
       const all = await store.getAll();
-      expect(all.find((p) => p.id === 'bilingual-test')?.name).toBe('Bilingual Test');
+      const created = all.find((p) => p.id === 'bilingual-test');
+      expect(created?.name).toBe('Bilingual Test');
+      expect(created?.nameAr).toBe('اختبار');
+      expect(created?.descriptionAr).toBe('وصف');
     });
   });
 
@@ -150,6 +176,26 @@ describe('ProductStore', () => {
       expect(updated).not.toBeNull();
       expect(updated!.name).toBe('Updated One');
       expect(updated!.price).toBe(150);
+    });
+
+    it('should update a product to be hidden', async () => {
+      const updated = await store.update('p1', {
+        name: 'Product One',
+        price: 100,
+        currency: 'EGP',
+        description: 'Desc',
+        details: { fabric: 'Linen', fit: 'Relaxed', care: 'Hand wash' },
+        sizes: ['One Size'],
+        colors: [{ name: 'Black', code: '#000000', images: ['/img/a.jpg'], inStock: true }],
+        category: 'cat1',
+        featured: false,
+        inStock: true,
+        sku: 'SKU1',
+        hidden: true,
+      });
+
+      expect(updated).not.toBeNull();
+      expect(updated!.hidden).toBe(true);
     });
 
     it('should return null for nonexistent product', async () => {

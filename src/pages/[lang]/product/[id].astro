@@ -5,21 +5,11 @@ import type { Locale } from '../../../i18n';
 import { locales, t } from '../../../i18n';
 import { getProductRepository } from '../../../lib/services';
 
-export async function getStaticPaths() {
-  const paths: { params: { lang: string; id: string }; props: { product: Product } }[] = [];
-  for (const lang of locales) {
-    const productRepo = await getProductRepository(lang as Locale);
-    const langProducts = await productRepo.getAll();
-    for (const product of langProducts) {
-      paths.push({ params: { lang, id: product.id }, props: { product } });
-    }
-  }
-  return paths;
-}
-
-const { product } = Astro.props as { product: Product };
-const { lang } = Astro.params as { lang: Locale };
+const { lang, id } = Astro.params as { lang: Locale; id: string };
 const locale = lang;
+
+const productRepo = await getProductRepository(locale);
+const product = await productRepo.getById(id);
 
 if (!product) {
   return Astro.redirect(`/${locale}/shop/`);
@@ -30,6 +20,11 @@ const formatPrice = (price: number, currency = 'EGP') => {
         style: 'currency', currency, minimumFractionDigits: 0
     }).format(price);
 };
+
+const comingSoonText = locale === 'ar' ? 'قريباً' : 'Coming Soon';
+const mainImageSrc = (product.colors[0] && product.colors[0].images && product.colors[0].images[0])
+    ? product.colors[0].images[0]
+    : `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><rect width='100%' height='100%' fill='%23f3f4f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%239ca3af'>${comingSoonText}</text></svg>`;
 ---
 
 <Layout locale={locale} title={`${product.name} - nisa`}>
@@ -37,7 +32,7 @@ const formatPrice = (price: number, currency = 'EGP') => {
          <div class="product-main-layout flex flex-col lg:flex-row gap-12">
             <div class="w-full lg:w-1/2">
                 <div class="relative">
-                    <img id="main-product-image" src={product.colors[0].images[0]} alt={product.name} class="w-full rounded-lg shadow-lg sticky top-24">
+                    <img id="main-product-image" src={mainImageSrc} alt={product.name} class="w-full rounded-lg shadow-lg sticky top-24">
                     <div id="gallery-controls" class="absolute inset-0 flex items-center justify-between px-4 text-white" style="display: none;">
                         <button id="prev-image" class="bg-black/30 rounded-full p-2 hover:bg-black/50 transition-colors">&lt;</button>
                         <button id="next-image" class="bg-black/30 rounded-full p-2 hover:bg-black/50 transition-colors">&gt;</button>
@@ -48,7 +43,11 @@ const formatPrice = (price: number, currency = 'EGP') => {
             <div class="w-full lg:w-1/2">
                 <h1 class="text-4xl font-medium">{product.name}</h1>
                 <div class="text-2xl my-4">
-                    <span>{formatPrice(product.price)}</span>
+                    {product.price > 0 ? (
+                        <span>{formatPrice(product.price)}</span>
+                    ) : (
+                        <span class="font-medium text-[#204566] dark:text-[#3182ce]">{t(locale, 'product.comingSoon')}</span>
+                    )}
                 </div>
                 <p class="text-[#6B7B8C] dark:text-[#94a3b8] leading-relaxed mb-6">{product.description}</p>
 
@@ -87,14 +86,14 @@ const formatPrice = (price: number, currency = 'EGP') => {
                 </button>
                 {!product.inStock && <p class="text-center mt-4 text-red-600 font-semibold">{t(locale, 'product.soldOut')}</p>}
 
-                 <div class="mt-8 flex justify-around text-center text-sm text-[#6B7B8C] dark:text-[#94a3b8] border-t border-b border-[#D4E4E8] dark:border-[#334155] py-4">
+                 <div class="mt-8 flex justify-around text-center text-sm text-[#6B7B8C] dark:text-[#94a3b8] border-t border-b border-[#D4E4E8] dark:border-[#1b456b] py-4">
                     <div class="flex items-center gap-2"><span>✓</span><span>{t(locale, 'product.hassleFreeReturns')}</span></div>
                     <div class="flex items-center gap-2"><span>✓</span><span>{t(locale, 'product.securePayments')}</span></div>
                      <div class="flex items-center gap-2"><span>✓</span><span>{t(locale, 'product.qualityFabrics')}</span></div>
                 </div>
 
                 <div class="mt-8">
-                    <h3 class="text-xl font-medium mb-4 border-b border-[#D4E4E8] dark:border-[#334155] pb-2">{t(locale, 'product.detailsFit')}</h3>
+                    <h3 class="text-xl font-medium mb-4 border-b border-[#D4E4E8] dark:border-[#1b456b] pb-2">{t(locale, 'product.detailsFit')}</h3>
                     <ul class="text-[#6B7B8C] dark:text-[#94a3b8] space-y-2">
                         <li><strong>{t(locale, 'product.fabric')}:</strong> {product.details.fabric}</li>
                         <li><strong>{t(locale, 'product.fit')}:</strong> {product.details.fit}</li>
@@ -124,7 +123,7 @@ const formatPrice = (price: number, currency = 'EGP') => {
 }
 
 :global(.dark) .btn-primary {
-    background-color: #3b82f6;
+    background-color: #3182ce;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -134,8 +133,8 @@ const formatPrice = (price: number, currency = 'EGP') => {
 }
 
 :global(.dark) .btn-primary:hover:not(:disabled) {
-    background-color: #2563eb;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    background-color: #266395;
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
 }
 
 .btn-primary:disabled {

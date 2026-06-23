@@ -10,7 +10,7 @@
     "contact": "Contact"
   },
   "footer": {
-    "copyright": "© 2025 nisa. All rights reserved.",
+    "copyright": "© 2026 nisa. All rights reserved.",
     "tagline": "Elegance in Modesty. Not for every eye."
   },
   "home": {
@@ -21,6 +21,16 @@
     "featuredCollection": {
       "title": "Featured Collection",
       "buttonText": "Shop The Full Collection"
+    },
+    "collectionBanner": {
+      "title": "THE COLLECTION",
+      "subtitle": "Quiet luxury designed for everyday elegance.",
+      "buttonText": "EXPLORE"
+    },
+    "story": {
+      "title": "Twice as Cozy",
+      "subtitle": "Our collections prioritize premium natural fabrics and relaxed silhouettes designed to offer effortless confidence and movement.",
+      "buttonText": "Our Philosophy"
     }
   },
   "about": {
@@ -39,7 +49,8 @@
     }
   },
   "shop": {
-    "title": "Our Collection",
+    "title": "New Arrivals",
+    "description": "Explore our latest collection of modest wear, featuring elegant abayas and refined sets crafted for the modern woman.",
     "categories": {
       "summer-collection": "Summer Collection",
       "winter-collection": "Winter Collection",
@@ -116,5 +127,35 @@
     "language": "Language",
     "english": "English",
     "arabic": "Arabic"
+  },
+  "mobileNav": {
+    "shop": "Shop",
+    "collections": "Collections",
+    "account": "Account",
+    "cart": "Cart"
+  },
+  "filterSort": {
+    "filters": "Filters",
+    "sortBy": "Sort By",
+    "collections": "Collections",
+    "sizes": "Sizes",
+    "colors": "Colors",
+    "priceRange": "Price Range",
+    "minPrice": "Min Price (LE)",
+    "maxPrice": "Max Price (LE)",
+    "inStockOnly": "In Stock Only",
+    "hideOutOfStock": "Hide out of stock items",
+    "clearAll": "Clear All",
+    "applyFilters": "Apply Filters",
+    "types": "Product Types",
+    "dresses": "Dresses",
+    "bottom": "Bottom",
+    "set": "Set",
+    "default": "Default / Featured",
+    "priceAsc": "Price: Low to High",
+    "priceDesc": "Price: High to Low",
+    "nameAsc": "Name: A to Z",
+    "nameDesc": "Name: Z to A",
+    "noProducts": "No products match the selected filters."
   }
 }

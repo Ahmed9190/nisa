@@ -90,6 +90,7 @@ function paramString(params: Record<string, string>): string {
             </a>
           </th>
           <th>Stock</th>
+          <th>Visibility</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -112,6 +113,13 @@ function paramString(params: Record<string, string>): string {
               <td>
                 {product.comingSoon ? 'Coming soon' : product.inStock ? 'In stock' : 'Out of stock'}
               </td>
+              <td>
+                {product.hidden ? (
+                  <span class="admin-status-badge" style="background-color: #fee2e2; color: #991b1b; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block;">Hidden</span>
+                ) : (
+                  <span class="admin-status-badge" style="background-color: #d1fae5; color: #065f46; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block;">Visible</span>
+                )}
+              </td>
               <td class="admin-actions">
                 <a class="admin-secondary-button" href={`/admin/products/${product.id}/?returnUrl=${encodeURIComponent(`/admin/products/${product.id}/`)}`}>Edit</a>
                 <a class="admin-danger-button" href={`/admin/products/${product.id}/delete/`}>Delete</a>
@@ -120,7 +128,7 @@ function paramString(params: Record<string, string>): string {
             </tr>
           );
         })}
-        {filtered.length === 0 && <tr><td colspan="8">No products found.</td></tr>}
+        {filtered.length === 0 && <tr><td colspan="9">No products found.</td></tr>}
       </tbody>
     </table>
   </div>

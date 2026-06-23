@@ -27,42 +27,154 @@ const validFeaturedProducts = featuredProducts.filter(Boolean);
 
 <Layout locale={locale}>
     <Hero backgroundImage={content.hero.backgroundImage} />
-    <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-12">
-        <h2 class="text-3xl font-medium text-center mb-12">{t(locale, 'home.featuredCollection.title')}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    
+    <!-- Featured Collection -->
+    <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 mt-12 overflow-hidden">
+        <div class="text-center mb-16 reveal-on-scroll">
+            <h2 class="text-3xl md:text-4xl font-serif font-light text-[#204566] dark:text-white tracking-wide">{t(locale, 'home.featuredCollection.title')}</h2>
+            <div class="w-12 h-[1px] bg-[#204566] dark:bg-[#3182ce] mx-auto mt-4"></div>
+        </div>
+        
+        <div class="featured-grid reveal-on-scroll transition-delay-300">
             {validFeaturedProducts.map(product => (
                 <ProductCard product={product} locale={locale} />
             ))}
         </div>
-         <div class="text-center mt-16">
-            <a href={`/${locale}/shop/`} class="btn-secondary text-lg">{t(locale, 'home.featuredCollection.buttonText')}</a>
+        
+        <div class="text-center mt-16 reveal-on-scroll transition-delay-500">
+            <a href={`/${locale}/shop/`} class="btn-secondary text-sm uppercase tracking-wider">{t(locale, 'home.featuredCollection.buttonText')}</a>
+        </div>
+    </section>
+
+    <!-- Collection Banner (Editorial Full-Bleed Section) -->
+    <section class="relative my-24 h-[55vh] md:h-[65vh] flex items-center justify-center overflow-hidden">
+        <img src="/assets/products/thorya arabian abaya/dsc-0114-medium-68e15a1d2adb3.webp" alt="Featured Collection" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[10000ms] hover:scale-105">
+        <div class="absolute inset-0 bg-black/45"></div>
+        <div class="relative z-10 text-center text-white px-4 reveal-on-scroll">
+            <h2 class="text-4xl md:text-6xl font-sans tracking-[0.25em] font-extrabold uppercase mb-4 text-white/95">
+                {t(locale, 'home.collectionBanner.title')}
+            </h2>
+            <p class="text-sm md:text-lg tracking-widest font-light mb-8 max-w-lg mx-auto text-white/90">
+                {t(locale, 'home.collectionBanner.subtitle')}
+            </p>
+            <a href={`/${locale}/shop/`} class="inline-block px-8 py-3.5 border border-white text-white uppercase tracking-widest text-xs font-semibold hover:bg-white hover:text-black transition-all duration-300 hover:scale-105">
+                {t(locale, 'home.collectionBanner.buttonText')}
+            </a>
+        </div>
+    </section>
+
+    <!-- Brand Story / "Twice as Cozy" equivalent Section -->
+    <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 mb-24 overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-center">
+            <!-- Staggered Image Grid -->
+            <div class="grid grid-cols-2 gap-4 reveal-on-scroll">
+                <div class="aspect-[3/4] overflow-hidden rounded-sm bg-gray-100 dark:bg-gray-800 shadow-sm">
+                    <img src="/assets/products/dahlia set/img-2049-medium-68d867ff7d9b3.webp" alt="Linen Style" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+                </div>
+                <div class="aspect-[3/4] overflow-hidden rounded-sm bg-gray-100 dark:bg-gray-800 shadow-sm mt-8">
+                    <img src="/assets/products/opal cardigan/816df0a0-3e30-4ce4-8c6a-1cbd49eaf4f61-medium-68d72c785a9a8.webp" alt="Embroidery Detail" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+                </div>
+            </div>
+            
+            <!-- Story Content -->
+            <div class="flex flex-col justify-center reveal-on-scroll transition-delay-300">
+                <h3 class="text-3xl md:text-4xl font-serif font-light text-[#204566] dark:text-white tracking-wide leading-tight mb-2">
+                    {t(locale, 'home.story.title')}
+                </h3>
+                <div class="w-12 h-[1px] bg-[#204566] dark:bg-[#3182ce] mb-8"></div>
+                <p class="text-base font-light text-[#6B7B8C] dark:text-gray-300 leading-relaxed mb-8">
+                    {t(locale, 'home.story.subtitle')}
+                </p>
+                <div>
+                    <a href={`/${locale}/about/`} class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#204566] dark:text-[#3182ce] group">
+                        <span>{t(locale, 'home.story.buttonText')}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 </Layout>
 
 <style>
+/* Featured collection: horizontal scroll on mobile, grid on desktop */
+.featured-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.75rem; /* room for scrollbar */
+}
+
+.featured-grid > :global(*) {
+    flex: 0 0 72vw;   /* each card takes ~72% of viewport width */
+    max-width: 280px;
+    scroll-snap-align: start;
+}
+
+/* Hide scrollbar visually but keep scroll functionality */
+.featured-grid::-webkit-scrollbar {
+    height: 4px;
+}
+.featured-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+.featured-grid::-webkit-scrollbar-thumb {
+    background: #c4d0db;
+    border-radius: 2px;
+}
+
+@media (min-width: 768px) {
+    .featured-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        overflow-x: unset;
+        padding-bottom: 0;
+        scroll-snap-type: unset;
+    }
+    .featured-grid > :global(*) {
+        flex: unset;
+        max-width: unset;
+    }
+}
+
+@media (min-width: 1024px) {
+    .featured-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 .btn-secondary {
     background-color: transparent;
     color: #204566;
-    border: 2px solid #204566;
-    padding: calc(1rem - 2px) calc(2rem - 2px);
-    border-radius: 6px;
+    border: 1px solid #204566;
+    padding: 0.75rem 2rem;
+    border-radius: 2px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: inline-block;
 }
 
 :global(.dark) .btn-secondary {
-    color: #3b82f6;
-    border-color: #3b82f6;
+    color: #3182ce;
+    border-color: #3182ce;
 }
 
 .btn-secondary:hover {
     background-color: #204566;
     color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(32, 69, 102, 0.1);
 }
 
 :global(.dark) .btn-secondary:hover {
-    background-color: #3b82f6;
+    background-color: #3182ce;
+    color: #ffffff;
 }
 </style>

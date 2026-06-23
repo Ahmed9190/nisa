@@ -27,6 +27,7 @@ const { colors, errors = {} } = Astro.props;
           <label>
             Arabic color name
             <input name={`colors[${index}].nameAr`} value={color.nameAr || ''} />
+            <small data-field-error={`colors.${index}.nameAr`}>{errors[`colors.${index}.nameAr`] || errors['colors.nameAr']}</small>
           </label>
           <label>
             Hex
@@ -56,6 +57,7 @@ const { colors, errors = {} } = Astro.props;
       <label>
         Arabic color name
         <input name="colors[0].nameAr" />
+        <small data-field-error="colors.0.nameAr"></small>
       </label>
       <label>
         Hex

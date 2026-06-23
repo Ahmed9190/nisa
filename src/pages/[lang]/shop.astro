@@ -15,40 +15,666 @@ const locale = lang;
 const productRepo = await getProductRepository(locale);
 const allProducts = await productRepo.getAll();
 
-const groupedProducts = allProducts.reduce((acc, product) => {
-    if (!acc[product.category]) {
-        acc[product.category] = [];
+// Extract unique filter options
+const allCategories = [...new Set(allProducts.map(p => p.category))];
+const allSizes = [...new Set(allProducts.flatMap(p => p.sizes))];
+const allColors = allProducts.flatMap(p => p.colors).reduce((acc, current) => {
+    const x = acc.find(item => item.code === current.code);
+    if (!x) {
+        return acc.concat([current]);
+    } else {
+        return acc;
     }
-    acc[product.category].push(product);
-    return acc;
-}, {});
-
-const categoryOrder = ['summer-collection', 'winter-collection', 'autumn-collection'];
-
-const orderedProducts = categoryOrder.map(category => {
-    return {
-        category: category,
-        products: groupedProducts[category] || []
-    }
-}).filter(group => group.products.length > 0);
+}, [] as typeof allProducts[0]['colors']);
 ---
 
 <Layout locale={locale} title={`${t(locale, 'shop.title')} - nisa`}>
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 class="text-4xl font-medium text-center mb-12">{t(locale, 'shop.title')}</h1>
-        <div id="shop-products">
-            {
-                orderedProducts.map(group => (
-                    <div class="mb-12">
-                        <h2 class="text-2xl font-medium text-center mb-8 capitalize">{t(locale, `shop.categories.${group.category}`)}</h2>
-                        <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                            {group.products.map(product => (
-                                <ProductCard product={product} locale={locale} />
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h1 class="text-3xl sm:text-4xl font-serif text-[#204566] dark:text-white text-center mt-4 mb-3 tracking-wide">{t(locale, 'shop.title')}</h1>
+        <p class="max-w-2xl mx-auto text-center text-[#6B7B8C] dark:text-[#94a3b8] text-sm sm:text-base leading-relaxed mb-8 font-light px-4">
+            {t(locale, 'shop.description')}
+        </p>
+
+        <!-- Filter / Count / Sort Bar -->
+        <div class="border-t border-b border-[#D4E4E8] dark:border-[#1b456b] py-3 px-4 mb-8 flex justify-between items-center text-xs sm:text-sm font-semibold tracking-widest text-[#204566] dark:text-white relative z-30">
+            <!-- Filter Dropdown Container -->
+            <div class="relative">
+                <button id="filter-trigger" class="flex items-center gap-1.5 hover:opacity-85 transition-opacity focus:outline-none uppercase">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="2" y1="14" x2="6" y2="14"></line><line x1="10" y1="8" x2="14" y2="8"></line><line x1="18" y1="16" x2="22" y2="16"></line></svg>
+                    <span>{t(locale, 'filterSort.filters')}</span>
+                </button>
+
+                <!-- Desktop Filter Dropdown -->
+                <div id="desktop-filter-dropdown" class={`hidden absolute top-full mt-3 ${locale === 'ar' ? 'right-0' : 'left-0'} w-[calc(100vw-2rem)] max-w-xs sm:w-80 max-h-[60vh] overflow-y-auto bg-white dark:bg-[#0e2537] border border-[#D4E4E8] dark:border-[#1b456b] shadow-xl rounded-lg p-6 space-y-6 z-40 ${locale === 'ar' ? 'text-right' : 'text-left'}`}>
+                    <!-- Product Types -->
+                    <div>
+                        <h4 class="text-xs font-semibold tracking-wider uppercase mb-3 text-[#204566] dark:text-white">{t(locale, 'filterSort.types')}</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="filter-type-btn px-4 py-2 border border-[#D4E4E8] dark:border-[#1b456b] rounded-full text-[11px] font-medium bg-transparent hover:border-[#204566] dark:hover:border-[#3182ce] text-gray-700 dark:text-gray-300 transition-colors" data-type="dresses">
+                                {t(locale, 'filterSort.dresses')}
+                            </button>
+                            <button class="filter-type-btn px-4 py-2 border border-[#D4E4E8] dark:border-[#1b456b] rounded-full text-[11px] font-medium bg-transparent hover:border-[#204566] dark:hover:border-[#3182ce] text-gray-700 dark:text-gray-300 transition-colors" data-type="bottom">
+                                {t(locale, 'filterSort.bottom')}
+                            </button>
+                            <button class="filter-type-btn px-4 py-2 border border-[#D4E4E8] dark:border-[#1b456b] rounded-full text-[11px] font-medium bg-transparent hover:border-[#204566] dark:hover:border-[#3182ce] text-gray-700 dark:text-gray-300 transition-colors" data-type="set">
+                                {t(locale, 'filterSort.set')}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div>
+                        <h4 class="text-xs font-semibold tracking-wider uppercase mb-3 text-[#204566] dark:text-white">{t(locale, 'filterSort.collections')}</h4>
+                        <div class="flex flex-wrap gap-2">
+                            {allCategories.map(cat => (
+                                <button class="filter-category-btn px-4 py-2 border border-[#D4E4E8] dark:border-[#1b456b] rounded-full text-[11px] font-medium bg-transparent hover:border-[#204566] dark:hover:border-[#3182ce] text-gray-700 dark:text-gray-300 transition-colors" data-category={cat}>
+                                    {t(locale, `shop.categories.${cat}`) || cat}
+                                </button>
                             ))}
                         </div>
                     </div>
+                    
+                    <!-- Sizes -->
+                    <div>
+                        <h4 class="text-xs font-semibold tracking-wider uppercase mb-3 text-[#204566] dark:text-white">{t(locale, 'filterSort.sizes')}</h4>
+                        <div class="flex flex-wrap gap-2">
+                            {allSizes.map(size => (
+                                <button class="filter-size-btn w-10 h-10 border border-[#D4E4E8] dark:border-[#1b456b] rounded-full text-xs font-semibold bg-transparent hover:border-[#204566] dark:hover:border-[#3182ce] text-gray-700 dark:text-gray-300 flex items-center justify-center transition-colors" data-size={size}>
+                                    {size}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    
+                    <!-- Colors -->
+                    <div>
+                        <h4 class="text-xs font-semibold tracking-wider uppercase mb-3 text-[#204566] dark:text-white">{t(locale, 'filterSort.colors')}</h4>
+                        <div class="flex flex-wrap gap-3">
+                            {allColors.map(color => (
+                                <button class="filter-color-btn w-8 h-8 rounded-full border-2 border-[#D4E4E8] dark:border-[#1b456b] p-0.5 transition-all relative" data-color={color.name} title={color.name}>
+                                    <span class="block w-full h-full rounded-full shadow-inner" style={`background-color: ${color.code};`}></span>
+                                    <span class="absolute inset-0 flex items-center justify-center text-white scale-0 transition-transform duration-200 checkmark z-10">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="drop-shadow-md"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div>
+                        <h4 class="text-xs font-semibold tracking-wider uppercase mb-3 text-[#204566] dark:text-white">{t(locale, 'filterSort.priceRange')}</h4>
+                        <div class="flex items-center gap-4">
+                            <div class="flex-1">
+                                <label class="text-[10px] uppercase text-gray-500 block mb-1">{t(locale, 'filterSort.minPrice')}</label>
+                                <input type="number" class="price-min-input w-full px-3 py-2 border border-[#D4E4E8] dark:border-[#1b456b] rounded bg-transparent dark:text-white text-sm focus:outline-none focus:border-[#204566] dark:focus:border-[#3182ce]" placeholder="0" min="0">
+                            </div>
+                            <div class="flex-1">
+                                <label class="text-[10px] uppercase text-gray-500 block mb-1">{t(locale, 'filterSort.maxPrice')}</label>
+                                <input type="number" class="price-max-input w-full px-3 py-2 border border-[#D4E4E8] dark:border-[#1b456b] rounded bg-transparent dark:text-white text-sm focus:outline-none focus:border-[#204566] dark:focus:border-[#3182ce]" placeholder="5000" min="0">
+                            </div>
+                        </div>
+                        <p id="price-range-warning" class="hidden text-[10px] text-red-500 mt-2 font-medium">
+                            {locale === 'ar' ? 'يجب أن يكون الحد الأقصى للسعر أكبر من الحد الأدنى' : 'Max price must be greater than min price'}
+                        </p>
+                    </div>
+
+                    <!-- Stock Status -->
+                    <div class="flex items-center justify-between py-2 border-t border-[#D4E4E8] dark:border-[#1b456b] pt-4">
+                        <div>
+                            <h4 class="text-xs font-semibold tracking-wider uppercase text-[#204566] dark:text-white">{t(locale, 'filterSort.inStockOnly')}</h4>
+                            <p class="text-[11px] text-gray-500">{t(locale, 'filterSort.hideOutOfStock')}</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="stock-toggle-input sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#204566] dark:peer-checked:bg-[#3182ce]"></div>
+                        </label>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="pt-4 border-t border-[#D4E4E8] dark:border-[#1b456b]">
+                        <button class="clear-filters-btn w-full py-2.5 text-xs font-semibold tracking-wider uppercase border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">{t(locale, 'filterSort.clearAll')}</button>
+                    </div>
+                </div>
+            </div>
+
+            <span id="product-count-display" class="text-[#6B7B8C] dark:text-[#94a3b8] font-normal uppercase">{allProducts.length} {locale === 'ar' ? 'منتجات' : 'ITEMS'}</span>
+
+            <!-- Sort Dropdown Container -->
+            <div class="relative">
+                <button id="sort-trigger" class="flex items-center gap-1 hover:opacity-85 transition-opacity focus:outline-none uppercase">
+                    <span>{t(locale, 'filterSort.sortBy')}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+
+                <!-- Desktop Sort Dropdown -->
+                <div id="desktop-sort-dropdown" class={`hidden absolute top-full mt-3 ${locale === 'ar' ? 'left-0' : 'right-0'} w-48 sm:w-64 bg-white dark:bg-[#0e2537] border border-[#D4E4E8] dark:border-[#1b456b] shadow-xl rounded-lg p-4 space-y-1 z-40 ${locale === 'ar' ? 'text-right' : 'text-left'}`}>
+                    <button class="sort-option-btn w-full text-left py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 font-medium transition-colors" data-sort="default">
+                        <span>{t(locale, 'filterSort.default')}</span>
+                        <svg class="w-4 h-4 text-[#204566] dark:text-[#3182ce] hidden checkmark-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                    <button class="sort-option-btn w-full text-left py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 font-medium transition-colors" data-sort="price-asc">
+                        <span>{t(locale, 'filterSort.priceAsc')}</span>
+                        <svg class="w-4 h-4 text-[#204566] dark:text-[#3182ce] hidden checkmark-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                    <button class="sort-option-btn w-full text-left py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 font-medium transition-colors" data-sort="price-desc">
+                        <span>{t(locale, 'filterSort.priceDesc')}</span>
+                        <svg class="w-4 h-4 text-[#204566] dark:text-[#3182ce] hidden checkmark-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                    <button class="sort-option-btn w-full text-left py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 font-medium transition-colors" data-sort="name-asc">
+                        <span>{t(locale, 'filterSort.nameAsc')}</span>
+                        <svg class="w-4 h-4 text-[#204566] dark:text-[#3182ce] hidden checkmark-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                    <button class="sort-option-btn w-full text-left py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 font-medium transition-colors" data-sort="name-desc">
+                        <span>{t(locale, 'filterSort.nameDesc')}</span>
+                        <svg class="w-4 h-4 text-[#204566] dark:text-[#3182ce] hidden checkmark-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flat Product Grid -->
+        <div id="shop-products" class="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-8">
+            {
+                allProducts.slice(0, 8).map(product => (
+                    <ProductCard product={product} locale={locale} />
                 ))
             }
         </div>
+
+        <!-- Infinite Scroll Sentry Spinner -->
+        <div id="infinite-scroll-sentry" class="w-full text-center py-12 flex justify-center items-center">
+            <div class="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent border-[#204566] dark:border-[#3182ce]"></div>
+        </div>
     </div>
 </Layout>
+
+<script define:vars={{ allProducts, locale }}>
+document.addEventListener('DOMContentLoaded', () => {
+    // Current Filter / Sort State
+    let selectedTypes = [];
+    let selectedCategories = [];
+    let selectedSizes = [];
+    let selectedColors = [];
+    let minPrice = null;
+    let maxPrice = null;
+    let inStockOnly = false;
+    let currentSort = 'default';
+
+    // Infinite Scroll Pagination State
+    let productsShownLimit = 8;
+    let lastRenderedCount = 8; // Start at 8 since server-side already rendered first 8 products
+    let currentFilteredProducts = [...allProducts];
+
+    // DOM Elements
+    const filterDropdown = document.getElementById('desktop-filter-dropdown');
+    const sortDropdown = document.getElementById('desktop-sort-dropdown');
+
+    // Trigger buttons
+    const filterTrigger = document.getElementById('filter-trigger');
+    const sortTrigger = document.getElementById('sort-trigger');
+
+    // Clear & Apply Buttons
+    const clearFiltersBtn = document.querySelector('.clear-filters-btn');
+
+    // Price Inputs & Stock Toggle
+    const priceMinInput = document.querySelector('.price-min-input');
+    const priceMaxInput = document.querySelector('.price-max-input');
+    const stockToggle = document.querySelector('.stock-toggle-input');
+    const priceRangeWarning = document.getElementById('price-range-warning');
+
+    // Display counts
+    const countDisplay = document.getElementById('product-count-display');
+
+    // --- DROPDOWNS TOGGLES ---
+    const closeDropdowns = () => {
+        if (filterDropdown) filterDropdown.classList.add('hidden');
+        if (sortDropdown) sortDropdown.classList.add('hidden');
+    };
+
+    if (filterTrigger) {
+        filterTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (filterDropdown) filterDropdown.classList.toggle('hidden');
+            if (sortDropdown) sortDropdown.classList.add('hidden');
+        });
+    }
+
+    if (sortTrigger) {
+        sortTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (sortDropdown) sortDropdown.classList.toggle('hidden');
+            if (filterDropdown) filterDropdown.classList.add('hidden');
+        });
+    }
+
+    // Prevent closing when clicking inside dropdowns
+    if (filterDropdown) {
+        filterDropdown.addEventListener('click', (e) => e.stopPropagation());
+    }
+    if (sortDropdown) {
+        sortDropdown.addEventListener('click', (e) => e.stopPropagation());
+    }
+
+    // Click outside to close dropdowns
+    document.addEventListener('click', closeDropdowns);
+
+    // --- FILTER INTERACTIVE STATES ---
+    const typeBtns = document.querySelectorAll('.filter-type-btn');
+    typeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const type = btn.dataset.type;
+            if (selectedTypes.includes(type)) {
+                selectedTypes = selectedTypes.filter(t => t !== type);
+            } else {
+                selectedTypes.push(type);
+            }
+            typeBtns.forEach(b => {
+                if (selectedTypes.includes(b.dataset.type)) {
+                    b.classList.add('filter-active');
+                } else {
+                    b.classList.remove('filter-active');
+                }
+            });
+            applyFilterAndSort();
+        });
+    });
+
+    const categoryBtns = document.querySelectorAll('.filter-category-btn');
+    categoryBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const cat = btn.dataset.category;
+            if (selectedCategories.includes(cat)) {
+                selectedCategories = selectedCategories.filter(c => c !== cat);
+            } else {
+                selectedCategories.push(cat);
+            }
+            categoryBtns.forEach(b => {
+                if (selectedCategories.includes(b.dataset.category)) {
+                    b.classList.add('filter-active');
+                } else {
+                    b.classList.remove('filter-active');
+                }
+            });
+            applyFilterAndSort();
+        });
+    });
+
+    const sizeBtns = document.querySelectorAll('.filter-size-btn');
+    sizeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const size = btn.dataset.size;
+            if (selectedSizes.includes(size)) {
+                selectedSizes = selectedSizes.filter(s => s !== size);
+            } else {
+                selectedSizes.push(size);
+            }
+            sizeBtns.forEach(b => {
+                if (selectedSizes.includes(b.dataset.size)) {
+                    b.classList.add('filter-active');
+                } else {
+                    b.classList.remove('filter-active');
+                }
+            });
+            applyFilterAndSort();
+        });
+    });
+
+    const colorBtns = document.querySelectorAll('.filter-color-btn');
+    colorBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const color = btn.dataset.color;
+            if (selectedColors.includes(color)) {
+                selectedColors = selectedColors.filter(c => c !== color);
+            } else {
+                selectedColors.push(color);
+            }
+            colorBtns.forEach(b => {
+                const checkmark = b.querySelector('.checkmark');
+                if (selectedColors.includes(b.dataset.color)) {
+                    b.classList.add('border-[#204566]', 'dark:border-[#3182ce]');
+                    if (checkmark) {
+                        checkmark.classList.remove('scale-0');
+                        checkmark.classList.add('scale-100');
+                    }
+                } else {
+                    b.classList.remove('border-[#204566]', 'dark:border-[#3182ce]');
+                    if (checkmark) {
+                        checkmark.classList.remove('scale-100');
+                        checkmark.classList.add('scale-0');
+                    }
+                }
+            });
+            applyFilterAndSort();
+        });
+    });
+
+    // --- PRICE AND STOCK LISTENERS FOR IMMEDIATE APPLY ---
+    if (priceMinInput) {
+        priceMinInput.addEventListener('input', () => applyFilterAndSort());
+    }
+    if (priceMaxInput) {
+        priceMaxInput.addEventListener('input', () => applyFilterAndSort());
+    }
+    if (stockToggle) {
+        stockToggle.addEventListener('change', () => applyFilterAndSort());
+    }
+
+    // --- SORT OPTION HANDLING ---
+    const sortBtns = document.querySelectorAll('.sort-option-btn');
+    const updateSortVisuals = () => {
+        sortBtns.forEach(btn => {
+            const checkmark = btn.querySelector('.checkmark-icon');
+            if (btn.dataset.sort === currentSort) {
+                btn.classList.add('bg-gray-50', 'dark:bg-gray-800', 'text-[#204566]', 'dark:text-[#3182ce]');
+                if (checkmark) checkmark.classList.remove('hidden');
+            } else {
+                btn.classList.remove('bg-gray-50', 'dark:bg-gray-800', 'text-[#204566]', 'dark:text-[#3182ce]');
+                if (checkmark) checkmark.classList.add('hidden');
+            }
+        });
+    };
+    updateSortVisuals();
+
+    sortBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentSort = btn.dataset.sort;
+            updateSortVisuals();
+            applyFilterAndSort();
+            closeDropdowns();
+        });
+    });
+
+    // --- CLEAR FILTERS ---
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', () => {
+            selectedTypes = [];
+            selectedCategories = [];
+            selectedSizes = [];
+            selectedColors = [];
+            minPrice = null;
+            maxPrice = null;
+            inStockOnly = false;
+
+            typeBtns.forEach(b => b.classList.remove('filter-active'));
+            categoryBtns.forEach(b => b.classList.remove('filter-active'));
+            sizeBtns.forEach(b => b.classList.remove('filter-active'));
+            colorBtns.forEach(b => {
+                b.classList.remove('border-[#204566]', 'dark:border-[#3182ce]');
+                const check = b.querySelector('.checkmark');
+                if (check) {
+                    check.classList.remove('scale-100');
+                    check.classList.add('scale-0');
+                }
+            });
+
+            if (priceMinInput) priceMinInput.value = '';
+            if (priceMaxInput) priceMaxInput.value = '';
+            if (stockToggle) stockToggle.checked = false;
+
+            applyFilterAndSort();
+            closeDropdowns();
+        });
+    }
+
+    // --- MAIN RENDER AND LOGIC ---
+    const formatPrice = (price) => {
+        if (locale === 'ar') {
+            return `${price.toLocaleString('ar-EG')} ج.م`;
+        }
+        return `LE ${price.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    };
+
+    const renderProducts = (productsToRender) => {
+        const container = document.getElementById('shop-products');
+        const sentry = document.getElementById('infinite-scroll-sentry');
+        if (!container) return;
+
+        // If it's a full clear / reset (lastRenderedCount === 0), clear container
+        if (lastRenderedCount === 0) {
+            container.innerHTML = '';
+        }
+
+        const productsToDisplay = productsToRender.slice(0, productsShownLimit);
+        
+        if (productsToDisplay.length === 0) {
+            container.innerHTML = `
+                <div class="col-span-full py-16 text-center text-[#6B7B8C] dark:text-[#94a3b8] font-light">
+                    ${locale === 'ar' ? 'لا توجد منتجات تطابق الفلاتر المحددة.' : 'No products match the selected filters.'}
+                </div>
+            `;
+            if (sentry) sentry.style.display = 'none';
+            lastRenderedCount = 0;
+            return;
+        }
+
+        if (sentry) {
+            sentry.style.display = productsShownLimit < productsToRender.length ? 'flex' : 'none';
+        }
+        
+        // Append only newly loaded products to prevent image flickering
+        const newProducts = productsToRender.slice(lastRenderedCount, productsShownLimit);
+        
+        if (newProducts.length > 0) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = newProducts.map(product => {
+                const comingSoonBadge = product.comingSoon 
+                    ? `<div class="absolute top-3 left-3 bg-white text-black text-[10px] font-semibold tracking-wider px-2.5 py-1 z-10 shadow-sm uppercase">${locale === 'ar' ? 'قريباً' : 'COMING SOON'}</div>`
+                    : '';
+                const soldOutBadge = (!product.inStock && !product.comingSoon)
+                    ? `<div class="absolute top-3 left-3 bg-black text-white text-[10px] font-semibold tracking-wider px-2.5 py-1 z-10 shadow-sm uppercase">${locale === 'ar' ? 'نفذت الكمية' : 'SOLD OUT'}</div>`
+                    : '';
+                const bestSellerBadge = (product.featured && !product.comingSoon && product.inStock)
+                    ? `<div class="absolute top-3 left-3 bg-white text-black text-[10px] font-semibold tracking-wider px-2.5 py-1 z-10 shadow-sm uppercase">BEST SELLER</div>`
+                    : '';
+                    
+                const colorDots = product.colors.map((color, index) => `
+                    <button
+                        class="color-dot w-3 h-3 rounded-full border border-gray-300 dark:border-gray-600 inline-block shadow-inner hover:scale-125 transition-all duration-200 cursor-pointer focus:outline-none ${index === 0 ? 'ring-2 ring-offset-1 ring-[#204566] dark:ring-white scale-110' : ''}"
+                        style="background-color: ${color.code};"
+                        title="${color.name}"
+                        data-images='${JSON.stringify(color.images)}'
+                        aria-label="${color.name}"
+                    ></button>
+                `).join('');
+                
+                const priceContent = product.price > 0 
+                    ? `<span>${formatPrice(product.price)}</span>`
+                    : `<span class="font-medium text-[#204566] dark:text-[#3182ce]">${locale === 'ar' ? 'قريباً' : 'Coming Soon'}</span>`;
+
+                const comingSoonText = locale === 'ar' ? 'قريباً' : 'Coming Soon';
+                const mainImageSrc = (product.colors[0] && product.colors[0].images && product.colors[0].images[0]) 
+                    ? product.colors[0].images[0] 
+                    : `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><rect width='100%' height='100%' fill='%23f3f4f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%239ca3af'>${comingSoonText}</text></svg>`;
+
+                const secondImage = product.colors[0].images[1]
+                    ? `<img src="${product.colors[0].images[1]}" alt="${product.name}" class="secondary-image absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out scale-100 group-hover/img:scale-105 opacity-0 group-hover/img:opacity-100">`
+                    : '';
+                    
+                const ctaOverlay = !product.comingSoon
+                    ? `
+                    <div class="card-cta-overlay absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10 flex gap-2">
+                        <a href="/${locale}/product/${product.id}/" class="flex-1 text-center py-2 px-3 bg-white/90 dark:bg-gray-900/90 text-[#204566] dark:text-white rounded-md text-[11px] font-semibold backdrop-blur-sm shadow-sm hover:bg-white dark:hover:bg-gray-800 transition-all hover:scale-105">${locale === 'ar' ? 'التفاصيل' : 'Details'}</a>
+                        <button class="flex-1 py-2 px-3 bg-[#204566] hover:bg-[#163554] dark:bg-[#3182ce] dark:hover:bg-[#266395] text-white rounded-md text-[11px] font-semibold shadow-sm add-to-cart-card-btn transition-all hover:scale-105" data-product-id="${product.id}" ${!product.inStock ? 'disabled' : ''}>
+                            ${product.inStock ? (locale === 'ar' ? 'أضف للسلة' : 'Add to Cart') : (locale === 'ar' ? 'نفذت الكمية' : 'Sold Out')}
+                        </button>
+                    </div>
+                    `
+                    : '';
+                
+                return `
+                    <div class="product-card flex flex-col text-center transition-all duration-300 bg-transparent dark:text-white relative group">
+                        <div class="relative overflow-hidden rounded-md bg-gray-50 dark:bg-gray-900 aspect-[3/4] group/img">
+                            ${comingSoonBadge}
+                            ${soldOutBadge}
+                            ${bestSellerBadge}
+                            <a href="${!product.comingSoon ? `/${locale}/product/${product.id}/` : '#'}" class="w-full h-full block ${product.comingSoon ? 'pointer-events-none' : ''}">
+                                <img src="${mainImageSrc}" alt="${product.name}" class="main-image w-full h-full object-cover transition-all duration-700 ease-out group-hover/img:scale-105 ${product.colors[0].images[1] ? 'group-hover/img:opacity-0' : ''}">
+                                ${secondImage}
+                            </a>
+                            ${ctaOverlay}
+                        </div>
+                        
+                        <div class="flex-grow flex flex-col pt-3 pb-2 px-1">
+                            <h3 class="text-base sm:text-lg font-serif text-[#204566] dark:text-white font-medium tracking-wide line-clamp-1 transition-colors group-hover:text-opacity-80">${product.name}</h3>
+                            <div class="text-xs sm:text-sm text-[#6B7B8C] dark:text-[#94a3b8] mt-1 font-light">
+                                ${priceContent}
+                            </div>
+                            
+                            <!-- Color Dots -->
+                            <div class="flex justify-center gap-1.5 mt-2">
+                                ${colorDots}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            while (tempDiv.firstChild) {
+                container.appendChild(tempDiv.firstChild);
+            }
+        }
+
+        lastRenderedCount = productsShownLimit;
+    };
+
+    const applyFilterAndSort = () => {
+        minPrice = priceMinInput && priceMinInput.value ? parseFloat(priceMinInput.value) : null;
+        maxPrice = priceMaxInput && priceMaxInput.value ? parseFloat(priceMaxInput.value) : null;
+        inStockOnly = stockToggle ? stockToggle.checked : false;
+
+        // Validation Check
+        if (minPrice !== null && maxPrice !== null && maxPrice < minPrice) {
+            if (priceRangeWarning) priceRangeWarning.classList.remove('hidden');
+            if (priceMinInput) {
+                priceMinInput.classList.remove('border-[#D4E4E8]', 'dark:border-[#1b456b]');
+                priceMinInput.classList.add('border-red-500', 'dark:border-red-500');
+            }
+            if (priceMaxInput) {
+                priceMaxInput.classList.remove('border-[#D4E4E8]', 'dark:border-[#1b456b]');
+                priceMaxInput.classList.add('border-red-500', 'dark:border-red-500');
+            }
+        } else {
+            if (priceRangeWarning) priceRangeWarning.classList.add('hidden');
+            if (priceMinInput) {
+                priceMinInput.classList.remove('border-red-500', 'dark:border-red-500');
+                priceMinInput.classList.add('border-[#D4E4E8]', 'dark:border-[#1b456b]');
+            }
+            if (priceMaxInput) {
+                priceMaxInput.classList.remove('border-red-500', 'dark:border-red-500');
+                priceMaxInput.classList.add('border-[#D4E4E8]', 'dark:border-[#1b456b]');
+            }
+        }
+
+        let results = [...allProducts];
+
+        // 1. Type Filter
+        if (selectedTypes.length > 0) {
+            results = results.filter(p => selectedTypes.includes(p.type));
+        }
+
+        // 2. Category Filter
+        if (selectedCategories.length > 0) {
+            results = results.filter(p => selectedCategories.includes(p.category));
+        }
+
+        // 3. Size Filter
+        if (selectedSizes.length > 0) {
+            results = results.filter(p => p.sizes.some(s => selectedSizes.includes(s)));
+        }
+
+        // 4. Color Filter
+        if (selectedColors.length > 0) {
+            results = results.filter(p => p.colors.some(c => selectedColors.includes(c.name)));
+        }
+
+        // 5. Min Price
+        if (minPrice !== null) {
+            results = results.filter(p => p.price >= minPrice);
+        }
+
+        // 6. Max Price
+        if (maxPrice !== null) {
+            results = results.filter(p => p.price <= maxPrice);
+        }
+
+        // 7. In Stock
+        if (inStockOnly) {
+            results = results.filter(p => p.inStock);
+        }
+
+        // 8. Sort
+        if (currentSort === 'price-asc') {
+            results.sort((a, b) => a.price - b.price);
+        } else if (currentSort === 'price-desc') {
+            results.sort((a, b) => b.price - a.price);
+        } else if (currentSort === 'name-asc') {
+            results.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (currentSort === 'name-desc') {
+            results.sort((a, b) => b.name.localeCompare(a.name));
+        }
+
+        currentFilteredProducts = results;
+        productsShownLimit = 8; // Reset limit on filter/sort change
+        lastRenderedCount = 0;  // Reset rendered count to clear container
+
+        // Update displays
+        if (countDisplay) {
+            const itemsText = locale === 'ar' ? 'منتجات' : 'ITEMS';
+            countDisplay.textContent = `${results.length} ${itemsText}`;
+        }
+
+        renderProducts(results);
+    };
+
+    // Infinite Scroll Intersection Observer Setup
+    const sentry = document.getElementById('infinite-scroll-sentry');
+    if (sentry) {
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                if (productsShownLimit < currentFilteredProducts.length) {
+                    productsShownLimit += 8;
+                    renderProducts(currentFilteredProducts);
+                }
+            }
+        }, { rootMargin: '200px' });
+        observer.observe(sentry);
+    }
+});
+</script>
+
+<style>
+/* Active state for filter pill buttons (type, category, size) */
+.filter-active {
+    background-color: #204566 !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+}
+
+:global(.dark) .filter-active {
+    background-color: #3182ce !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+}
+
+/* CTA overlay — hidden by default, revealed on hover (desktop) or tap (mobile) */
+.card-cta-overlay {
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity   0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .group\/img:hover .card-cta-overlay {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Mobile tap — JS adds .cta-visible to the image wrapper */
+.group\/img.cta-visible .card-cta-overlay {
+    transform: translateY(0);
+    opacity: 1;
+}
+</style>

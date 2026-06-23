@@ -17,6 +17,7 @@ export const PUT: APIRoute = async ({ request, params }) => {
 
     return jsonResponse({ product: updated }, 200);
   } catch (error) {
+    console.error('API validation error details for PUT:', error);
     const status = error instanceof Error && error.message.includes('Invalid') ? 400 : 400;
     return jsonResponse({ error: 'Validation failed', details: formatZodErrors(error) }, status);
   }

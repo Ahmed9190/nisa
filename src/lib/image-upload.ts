@@ -23,6 +23,10 @@ export async function parseUploadedImages(formData: FormData): Promise<UploadedI
       continue;
     }
 
+    if (value.size === 0 || value.name === '') {
+      continue;
+    }
+
     const match = key.match(/^images\[(\d+)\]$/);
     if (!match) {
       continue;

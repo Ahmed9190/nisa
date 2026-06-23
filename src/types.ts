@@ -37,10 +37,12 @@ export interface Product {
     inStock?: boolean;
   }[];
   category: string;
+  type?: string;
   featured: boolean;
   inStock: boolean;
   sku: string;
   comingSoon?: boolean;
+  hidden?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

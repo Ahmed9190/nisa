@@ -13,7 +13,7 @@ export const colorSchema = z.object({
   name: z.string().trim().min(1, 'Color name is required'),
   nameAr: z.string().trim().optional(),
   code: z.string().trim().regex(HEX_COLOR_PATTERN, 'Color must use #RRGGBB format'),
-  images: z.array(z.string().trim().regex(/^\/[\w./-]+$/, 'Image must be a valid relative URL')).min(1, 'At least one image is required'),
+  images: z.array(z.string().trim().startsWith('/', 'Image must be a valid relative URL')).min(1, 'At least one image is required'),
   inStock: z.boolean().default(true),
 });
 
@@ -31,10 +31,12 @@ export const productInputSchema = z.object({
   sizes: z.array(z.string().trim().min(1, 'Size cannot be empty')).min(1, 'At least one size is required'),
   colors: z.array(colorSchema).min(1, 'At least one color is required'),
   category: z.string().trim().min(1, 'Category is required'),
+  type: z.string().trim().optional(),
   featured: z.boolean().default(false),
   inStock: z.boolean().default(true),
   sku: z.string().trim().min(1, 'SKU is required'),
   comingSoon: z.boolean().default(false),
+  hidden: z.boolean().default(false),
 }).superRefine((value, ctx) => {
   if (value.priceBefore !== undefined && value.priceBefore <= value.price) {
     ctx.addIssue({
@@ -79,6 +81,7 @@ export function parseProductForm(formData: FormData): ProductInput {
     inStock: formData.get('inStock') === 'on',
     sku: formData.get('sku') || '',
     comingSoon: formData.get('comingSoon') === 'on',
+    hidden: formData.get('hidden') === 'on',
   });
 }
 
@@ -111,6 +114,7 @@ export function toProduct(input: ProductInput, now = new Date()): Product {
     featured: Boolean(input.featured),
     inStock: Boolean(input.inStock),
     comingSoon: Boolean(input.comingSoon),
+    hidden: Boolean(input.hidden),
     createdAt: input.id ? undefined : timestamp,
     updatedAt: timestamp,
   };
@@ -130,6 +134,7 @@ export function mergeProductData(existing: Product, input: ProductInput): Produc
     featured: Boolean(input.featured),
     inStock: Boolean(input.inStock),
     comingSoon: Boolean(input.comingSoon),
+    hidden: Boolean(input.hidden),
     createdAt: existing.createdAt,
     updatedAt: timestamp,
   };

@@ -6,10 +6,147 @@ interface Props {
 const { backgroundImage } = Astro.props;
 ---
 
-<div class="relative text-center text-white h-[50vh] md:h-[60vh] flex items-center justify-center">
-    <img src={backgroundImage} alt="Modest fashion cover" class="absolute inset-0 w-full h-full object-cover -z-10">
-    <div class="absolute inset-0 bg-black/40 -z-10"></div>
-    <div>
-        <img src="/assets/logo/artboard-4-copy-68f969a3418e0.webp" alt="nisa logo" class="h-48 md:h-64">
+<div id="hero-container" class="relative text-center text-white h-[70vh] md:h-[80vh] flex items-center justify-center overflow-hidden border-b border-[#D4E4E8] dark:border-[#1b456b]">
+    <img src={backgroundImage} alt="Modest fashion cover" class="absolute inset-0 w-full h-full object-cover -z-20 transition-transform duration-[15000ms] ease-out hover:scale-105">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60 -z-15"></div>
+    <canvas id="hero-particles" class="absolute inset-0 w-full h-full -z-10 pointer-events-none opacity-60 dark:opacity-80"></canvas>
+    <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center justify-center gap-6 px-4">
+        <div class="border border-white/20 p-8 md:p-14 backdrop-blur-[1px] rounded-sm transition-all duration-700 hover:border-white/40">
+            <h1 class="text-6xl md:text-8xl font-serif tracking-[0.2em] md:tracking-[0.35em] font-light uppercase text-white drop-shadow-md leading-none select-none">
+                nisa
+            </h1>
+            <p class="text-xs md:text-sm tracking-[0.4em] md:tracking-[0.6em] text-white/90 font-light uppercase mt-6 select-none">
+                Not for every eye
+            </p>
+        </div>
+        <div class="absolute bottom-[-12vh] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-pulse opacity-75 hidden md:flex">
+            <span class="text-[9px] uppercase tracking-[0.3em] font-light text-white/80">Scroll</span>
+            <svg class="w-4 h-4 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('hero-container');
+        const canvas = document.getElementById('hero-particles') as HTMLCanvasElement;
+        if (!container || !canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        let width = canvas.width = container.offsetWidth;
+        let height = canvas.height = container.offsetHeight;
+
+        const particles: Array<{
+            x: number;
+            y: number;
+            vx: number;
+            vy: number;
+            radius: number;
+            alpha: number;
+            targetAlpha: number;
+        }> = [];
+
+        const particleCount = Math.min(120, Math.floor((width * height) / 4000));
+
+        // Create particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                radius: Math.random() * 3 + 1.5,
+                alpha: 0,
+                targetAlpha: Math.random() * 0.6 + 0.4
+            });
+        }
+
+        let mouse = { x: -1000, y: -1000, active: false };
+
+        container.addEventListener('mousemove', (e: MouseEvent) => {
+            const rect = container.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+            mouse.active = true;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            mouse.active = false;
+        });
+
+        function resize() {
+            if (!container || !canvas) return;
+            width = canvas.width = container.offsetWidth;
+            height = canvas.height = container.offsetHeight;
+        }
+
+        window.addEventListener('resize', resize);
+
+        function draw() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw connections
+            for (let i = 0; i < particles.length; i++) {
+                const p1 = particles[i];
+                
+                // Fade in
+                if (p1.alpha < p1.targetAlpha) {
+                    p1.alpha += 0.01;
+                }
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 160) {
+                        const connAlpha = (1 - dist / 160) * 0.35 * p1.alpha;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(190, 226, 232, ${connAlpha})`; // matching --accent light (#BEE2E8)
+                        ctx.lineWidth = 0.65;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+
+                // Draw particle
+                ctx.beginPath();
+                ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${p1.alpha})`;
+                ctx.fill();
+
+                // Move particle
+                p1.x += p1.vx;
+                p1.y += p1.vy;
+
+                // Mouse interaction (gentle attraction / avoidance)
+                if (mouse.active) {
+                    const dx = p1.x - mouse.x;
+                    const dy = p1.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 220) {
+                        const force = (220 - dist) / 220;
+                        // Pull slightly towards mouse
+                        p1.x -= dx * force * 0.03;
+                        p1.y -= dy * force * 0.03;
+                    }
+                }
+
+                // Boundaries
+                if (p1.x < 0 || p1.x > width) p1.vx *= -1;
+                if (p1.y < 0 || p1.y > height) p1.vy *= -1;
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    });
+</script>

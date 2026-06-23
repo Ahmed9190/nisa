@@ -35,6 +35,7 @@ const defaultProduct: Product = {
   inStock: true,
   sku: '',
   comingSoon: false,
+  hidden: false,
 };
 const initialProduct = product || defaultProduct;
 const initialJson = JSON.stringify(initialProduct).replace(/</g, '\\u003c');
@@ -61,6 +62,7 @@ const method = action === 'create' ? 'POST' : 'PUT';
       <label>
         Arabic name
         <input name="nameAr" value={initialProduct.nameAr || ''} />
+        <small data-field-error="nameAr">{errors.nameAr}</small>
       </label>
       <label>
         SKU
@@ -94,6 +96,10 @@ const method = action === 'create' ? 'POST' : 'PUT';
         <input type="checkbox" name="comingSoon" checked={initialProduct.comingSoon || false} />
         Coming soon
       </label>
+      <label class="admin-checkbox">
+        <input type="checkbox" name="hidden" checked={initialProduct.hidden || false} />
+        Hidden (hide from shop)
+      </label>
     </div>
 
     <div class="admin-form-panel">
@@ -106,6 +112,7 @@ const method = action === 'create' ? 'POST' : 'PUT';
       <label>
         Arabic description
         <textarea name="descriptionAr">{initialProduct.descriptionAr || ''}</textarea>
+        <small data-field-error="descriptionAr">{errors.descriptionAr}</small>
       </label>
       <label>
         Fabric
@@ -125,14 +132,17 @@ const method = action === 'create' ? 'POST' : 'PUT';
       <label>
         Arabic fabric
         <textarea name="detailsAr.fabric">{initialProduct.detailsAr?.fabric || ''}</textarea>
+        <small data-field-error="detailsAr.fabric">{errors['detailsAr.fabric']}</small>
       </label>
       <label>
         Arabic fit
         <textarea name="detailsAr.fit">{initialProduct.detailsAr?.fit || ''}</textarea>
+        <small data-field-error="detailsAr.fit">{errors['detailsAr.fit']}</small>
       </label>
       <label>
         Arabic care
         <textarea name="detailsAr.care">{initialProduct.detailsAr?.care || ''}</textarea>
+        <small data-field-error="detailsAr.care">{errors['detailsAr.care']}</small>
       </label>
     </div>
   </section>
@@ -235,6 +245,7 @@ const method = action === 'create' ? 'POST' : 'PUT';
     set(payload, 'featured', checked('featured'));
     set(payload, 'inStock', checked('inStock'));
     set(payload, 'comingSoon', checked('comingSoon'));
+    set(payload, 'hidden', checked('hidden'));
     set(payload, 'sizes', [...form.querySelectorAll('[name="sizes"]')].map((input) => input.value).filter(Boolean));
 
     const colors = [...form.querySelectorAll('[data-color-row]')].map((row, index) => {
@@ -284,11 +295,26 @@ const method = action === 'create' ? 'POST' : 'PUT';
   function showValidationErrors(details) {
     form.querySelectorAll('[data-field-error]').forEach((element) => {
       element.textContent = '';
+      const label = element.closest('label');
+      if (label) {
+        label.classList.remove('has-error');
+      }
     });
     Object.entries(details).forEach(([path, message]) => {
-      const element = form.querySelector(`[data-field-error="${path}"]`);
+      let element = form.querySelector(`[data-field-error="${path}"]`);
+      let currentPath = path;
+      
+      while (!element && currentPath.includes('.')) {
+        currentPath = currentPath.substring(0, currentPath.lastIndexOf('.'));
+        element = form.querySelector(`[data-field-error="${currentPath}"]`);
+      }
+
       if (element) {
         element.textContent = message;
+        const label = element.closest('label');
+        if (label) {
+          label.classList.add('has-error');
+        }
       }
     });
   }

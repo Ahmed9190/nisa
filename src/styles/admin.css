@@ -686,3 +686,18 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Form validation error highlights */
+.admin-form-panel label.has-error input,
+.admin-form-panel label.has-error textarea,
+.admin-form-panel label.has-error select,
+.admin-color-fields label.has-error input,
+.admin-size-row.has-error input {
+  border-color: #dc2626 !important;
+  background-color: #fef2f2 !important;
+}
+
+label.has-error {
+  color: #dc2626 !important;
+}
+

@@ -15,6 +15,15 @@ describe('JsonProductRepository', () => {
       expect(Array.isArray(products)).toBe(true);
       expect(products.length).toBeGreaterThan(0);
     });
+
+    it('should return localized products when locale is ar', async () => {
+      const arRepo = new JsonProductRepository('ar');
+      const products = await arRepo.getAll();
+      expect(products.length).toBeGreaterThan(0);
+      const abaya = products.find(p => p.id === 'abaya-01');
+      expect(abaya).toBeDefined();
+      expect(abaya?.name).toBe('كاردجان أونيكس');
+    });
   });
 
   describe('when getById is called', () => {

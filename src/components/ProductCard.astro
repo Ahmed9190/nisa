@@ -10,40 +10,176 @@ export interface Props {
 
 const { product, locale } = Astro.props;
 
-const formatPrice = (price: number, currency = 'EGP') => {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency', currency, minimumFractionDigits: 0
-    }).format(price);
+const comingSoonText = locale === 'ar' ? 'قريباً' : 'Coming Soon';
+const mainImageSrc = (product.colors[0] && product.colors[0].images && product.colors[0].images[0])
+    ? product.colors[0].images[0]
+    : `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><rect width='100%' height='100%' fill='%23f3f4f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%239ca3af'>${comingSoonText}</text></svg>`;
+
+const formatPrice = (price: number) => {
+    if (locale === 'ar') {
+        return `${price.toLocaleString('ar-EG')} ج.م`;
+    }
+    return `LE ${price.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
 };
 ---
 
-<div class="product-card p-4 flex flex-col text-center border border-[#D4E4E8] dark:border-[#334155] rounded-lg shadow-sm hover:shadow-lg dark:shadow-gray-900 transition-shadow duration-300 bg-white dark:bg-[#1e293b]">
-    {product.comingSoon && <div class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">{t(locale, 'productCard.comingSoon')}</div>}
-    { !product.inStock && !product.comingSoon && <div class="absolute top-2 left-2 bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-full">{t(locale, 'productCard.soldOut')}</div> }
-    <a href={!product.comingSoon ? `/${locale}/product/${product.id}/` : '#'} class={product.comingSoon ? 'pointer-events-none' : ''}>
-        <img src={product.colors[0].images[0]} alt={product.name} class="w-full h-auto object-cover rounded-md aspect-[3/4]">
-    </a>
-            <div class="flex-grow flex flex-col pt-4">
-                <h3 class="text-xl font-medium">{product.name}</h3>
-                <div class="text-lg text-[#6B7B8C] dark:text-[#94a3b8] mt-1 flex-grow">
-                    {product.price > 0 ? (
-                        <span>{formatPrice(product.price)}</span>
-                    ) : (
-                        <span class="text-lg font-medium">{t(locale, 'productCard.comingSoon')}</span>
-                    )}
-                </div>
-                <div class="mt-4 grid grid-cols-2 gap-2">
-                    <a href={!product.comingSoon ? `/${locale}/product/${product.id}/` : '#'} class:list={["btn-secondary py-2 px-4 text-sm", { "opacity-50 cursor-not-allowed": product.comingSoon }]}>{t(locale, 'productCard.details')}</a>
-                    <button class="btn-primary py-2 px-4 text-sm add-to-cart-card-btn" data-product-id={product.id} disabled={!product.inStock || product.comingSoon}>
-                        {product.inStock ? t(locale, 'productCard.addToCart') : (product.comingSoon ? t(locale, 'productCard.comingSoon') : t(locale, 'productCard.soldOut'))}
-                    </button>
-                </div>
+<div class="product-card flex flex-col text-center transition-all duration-300 bg-transparent dark:text-white relative group">
+    <div class="relative overflow-hidden rounded-md bg-gray-50 dark:bg-gray-900 aspect-[3/4] group/img">
+        {product.comingSoon && <div class="absolute top-3 left-3 bg-white text-black text-[10px] font-semibold tracking-wider px-2.5 py-1 z-10 shadow-sm uppercase">{t(locale, 'productCard.comingSoon')}</div>}
+        {!product.inStock && !product.comingSoon && <div class="absolute top-3 left-3 bg-black text-white text-[10px] font-semibold tracking-wider px-2.5 py-1 z-10 shadow-sm uppercase">{t(locale, 'productCard.soldOut')}</div>}
+        {product.featured && !product.comingSoon && product.inStock && <div class="absolute top-3 left-3 bg-white text-black text-[10px] font-semibold tracking-wider px-2.5 py-1 z-10 shadow-sm uppercase">BEST SELLER</div>}
+        
+        <a href={!product.comingSoon ? `/${locale}/product/${product.id}/` : '#'} class={`w-full h-full block ${product.comingSoon ? 'pointer-events-none' : ''}`}>
+            <img src={mainImageSrc} alt={product.name} class={`main-image w-full h-full object-cover transition-all duration-700 ease-out group-hover/img:scale-105 ${product.colors[0].images[1] ? 'group-hover/img:opacity-0' : ''}`}>
+            {product.colors[0].images[1] && (
+                <img src={product.colors[0].images[1]} alt={product.name} class="secondary-image absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out scale-100 group-hover/img:scale-105 opacity-0 group-hover/img:opacity-100">
+            )}
+        </a>
+
+        <!-- Hover CTA overlay for Desktop -->
+        {!product.comingSoon && (
+            <div class="card-cta-overlay absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10 flex gap-2">
+                <a href={`/${locale}/product/${product.id}/`} class="flex-1 text-center py-2 px-3 bg-white/90 dark:bg-gray-900/90 text-[#204566] dark:text-white rounded-md text-[11px] font-semibold backdrop-blur-sm shadow-sm hover:bg-white dark:hover:bg-gray-800 transition-all hover:scale-105">{t(locale, 'productCard.details')}</a>
+                <button class="flex-1 py-2 px-3 bg-[#204566] hover:bg-[#163554] dark:bg-[#3182ce] dark:hover:bg-[#266395] text-white rounded-md text-[11px] font-semibold shadow-sm add-to-cart-card-btn transition-all hover:scale-105" data-product-id={product.id} disabled={!product.inStock}>
+                    {product.inStock ? t(locale, 'productCard.addToCart') : t(locale, 'productCard.soldOut')}
+                </button>
+            </div>
+        )}
     </div>
-</div>
+    
+    <div class="flex-grow flex flex-col pt-3 pb-2 px-1">
+        <h3 class="text-base sm:text-lg font-serif text-[#204566] dark:text-white font-medium tracking-wide line-clamp-1 transition-colors group-hover:text-opacity-80">{product.name}</h3>
+        <div class="text-xs sm:text-sm text-[#6B7B8C] dark:text-[#94a3b8] mt-1 font-light">
+            {product.price > 0 ? (
+                <span>{formatPrice(product.price)}</span>
+            ) : (
+                <span class="font-medium text-[#204566] dark:text-[#3182ce]">{t(locale, 'productCard.comingSoon')}</span>
+            )}
+        </div>
+        
+        <!-- Color Dots -->
+        <div class="color-dots-container flex justify-center gap-1.5 mt-2">
+            {product.colors.map((color, index) => (
+                <button
+                    class={`color-dot w-3 h-3 rounded-full border border-gray-300 dark:border-gray-600 inline-block shadow-inner hover:scale-125 transition-all duration-200 cursor-pointer focus:outline-none ${index === 0 ? 'ring-2 ring-offset-1 ring-[#204566] dark:ring-white scale-110' : ''}`}
+                    style={`background-color: ${color.code};`}
+                    title={color.name}
+                    data-images={JSON.stringify(color.images)}
+                    aria-label={color.name}
+                ></button>
+            ))}
+        </div>
     </div>
 </div>
 
+<script>
+    // Event delegation for color dot clicks (works for statically and dynamically rendered cards)
+    function setupColorSelectionDelegation() {
+        document.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement | null;
+            const dot = target?.closest('.color-dot');
+            if (!dot) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const card = dot.closest('.product-card');
+            if (!card) return;
+
+            const dots = card.querySelectorAll('.color-dot');
+            const mainImg = card.querySelector('.main-image') as HTMLImageElement | null;
+            const secondaryImg = card.querySelector('.secondary-image') as HTMLImageElement | null;
+
+            // Update active styling
+            dots.forEach(d => {
+                d.classList.remove('ring-2', 'ring-offset-1', 'ring-[#204566]', 'dark:ring-white', 'scale-110');
+            });
+            dot.classList.add('ring-2', 'ring-offset-1', 'ring-[#204566]', 'dark:ring-white', 'scale-110');
+
+            // Parse images
+            try {
+                const imagesData = dot.getAttribute('data-images');
+                if (imagesData) {
+                    const images = JSON.parse(imagesData);
+                    if (images && images.length > 0) {
+                        if (mainImg) mainImg.src = images[0];
+                        if (secondaryImg) {
+                            if (images[1]) {
+                                secondaryImg.src = images[1];
+                                secondaryImg.style.display = 'block';
+                                mainImg.classList.add('group-hover/img:opacity-0');
+                            } else {
+                                secondaryImg.style.display = 'none';
+                                mainImg.classList.remove('group-hover/img:opacity-0');
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('Error parsing color images:', err);
+            }
+        });
+    }
+
+    // Initialize delegation once
+    setupColorSelectionDelegation();
+
+    // --- Mobile tap-to-reveal CTA overlay ---
+    // On touch devices, first tap reveals the overlay; buttons can then be tapped normally.
+    function setupMobileCTATap() {
+        // Only activate on touch-capable devices
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+        document.addEventListener('touchstart', (e) => {
+            const target = e.target as HTMLElement | null;
+
+            // If tapping a CTA button or link, let the event through
+            if (target?.closest('.card-cta-overlay')) return;
+
+            const imgWrapper = target?.closest('.group\\/img');
+
+            // Hide all other open overlays
+            document.querySelectorAll('.group\\/img.cta-visible').forEach(el => {
+                if (el !== imgWrapper) el.classList.remove('cta-visible');
+            });
+
+            if (imgWrapper) {
+                if (!imgWrapper.classList.contains('cta-visible')) {
+                    // First tap: show overlay, block navigation
+                    e.preventDefault();
+                    imgWrapper.classList.add('cta-visible');
+                }
+                // Second tap on the image itself (not on CTA): let navigation happen
+            }
+        }, { passive: false });
+    }
+
+    setupMobileCTATap();
+</script>
+
 <style>
+/* CTA overlay — hidden by default, revealed on hover (desktop) or tap (mobile) */
+.card-cta-overlay {
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity   0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Desktop hover via CSS */
+@media (hover: hover) and (pointer: fine) {
+    .group\/img:hover .card-cta-overlay {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Mobile tap — JS adds .cta-visible to the image wrapper */
+.group\/img.cta-visible .card-cta-overlay {
+    transform: translateY(0);
+    opacity: 1;
+}
+
 .btn-primary {
     background-color: #204566;
     color: #ffffff;
@@ -56,8 +192,8 @@ const formatPrice = (price: number, currency = 'EGP') => {
     letter-spacing: 0.5px;
 }
 
-.dark .btn-primary {
-    background-color: #3b82f6;
+:global(.dark) .btn-primary {
+    background-color: #3182ce;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -66,9 +202,9 @@ const formatPrice = (price: number, currency = 'EGP') => {
     box-shadow: 0 4px 12px rgba(32, 69, 102, 0.3);
 }
 
-.dark .btn-primary:hover:not(:disabled) {
-    background-color: #2563eb;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+:global(.dark) .btn-primary:hover:not(:disabled) {
+    background-color: #266395;
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
 }
 
 .btn-primary:disabled {
@@ -88,9 +224,9 @@ const formatPrice = (price: number, currency = 'EGP') => {
     text-align: center;
 }
 
-.dark .btn-secondary {
-    color: #3b82f6;
-    border-color: #3b82f6;
+:global(.dark) .btn-secondary {
+    color: #3182ce;
+    border-color: #3182ce;
 }
 
 .btn-secondary:hover {
@@ -98,7 +234,8 @@ const formatPrice = (price: number, currency = 'EGP') => {
     color: #ffffff;
 }
 
-.dark .btn-secondary:hover {
-    background-color: #3b82f6;
+:global(.dark) .btn-secondary:hover {
+    background-color: #3182ce;
+    color: #ffffff;
 }
 </style>
