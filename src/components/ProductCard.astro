@@ -38,9 +38,9 @@ const formatPrice = (price: number) => {
 
         <!-- Hover CTA overlay for Desktop -->
         {!product.comingSoon && (
-            <div class="card-cta-overlay absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10 flex gap-2">
-                <a href={`/${locale}/product/${product.id}/`} class="flex-1 text-center py-2 px-3 bg-white/90 dark:bg-gray-900/90 text-[#204566] dark:text-white rounded-md text-[11px] font-semibold backdrop-blur-sm shadow-sm hover:bg-white dark:hover:bg-gray-800 transition-all hover:scale-105">{t(locale, 'productCard.details')}</a>
-                <button class="flex-1 py-2 px-3 bg-[#204566] hover:bg-[#163554] dark:bg-[#3182ce] dark:hover:bg-[#266395] text-white rounded-md text-[11px] font-semibold shadow-sm add-to-cart-card-btn transition-all hover:scale-105" data-product-id={product.id} disabled={!product.inStock}>
+            <div class="card-cta-overlay absolute inset-x-0 bottom-0 p-2 sm:p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10 flex gap-1.5 sm:gap-2">
+                <a href={`/${locale}/product/${product.id}/`} class="flex-none w-auto sm:flex-1 text-center py-2 px-2 sm:px-3 bg-white/90 dark:bg-gray-900/90 text-[#204566] dark:text-white rounded-md text-[10px] sm:text-[11px] font-semibold backdrop-blur-sm shadow-sm hover:bg-white dark:hover:bg-gray-800 transition-all hover:scale-105 whitespace-nowrap">{t(locale, 'productCard.details')}</a>
+                <button class="flex-1 py-2 px-2 sm:px-3 bg-[#204566] hover:bg-[#163554] dark:bg-[#3182ce] dark:hover:bg-[#266395] text-white rounded-md text-[10px] sm:text-[11px] font-semibold shadow-sm add-to-cart-card-btn transition-all hover:scale-105 whitespace-nowrap" data-product-id={product.id} disabled={!product.inStock}>
                     {product.inStock ? t(locale, 'productCard.addToCart') : t(locale, 'productCard.soldOut')}
                 </button>
             </div>
@@ -157,7 +157,7 @@ const formatPrice = (price: number) => {
     setupMobileCTATap();
 </script>
 
-<style>
+<style is:global>
 /* CTA overlay — hidden by default, revealed on hover (desktop) or tap (mobile) */
 .card-cta-overlay {
     transform: translateY(100%);

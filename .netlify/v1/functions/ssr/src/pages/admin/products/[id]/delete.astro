@@ -1,0 +1,49 @@
+---
+import AdminLayout from '../../../../layouts/AdminLayout.astro';
+import { productStore } from '../../../../lib/product-store';
+import { getFirstImageUrl } from '../../../../lib/validation';
+
+const { id } = Astro.params;
+const product = await productStore.getById(id || '');
+
+if (!product) {
+  return Astro.redirect('/admin/products/');
+}
+
+const returnUrl = Astro.url.searchParams.get('returnUrl') || '/admin/products/';
+const previewImage = getFirstImageUrl(product);
+---
+
+<AdminLayout title={`Delete — ${product.name}`} active="products">
+  <div class="admin-delete-page">
+    <h2>Delete product</h2>
+    <p>Are you sure you want to delete <strong>{product.name}</strong>?</p>
+    {previewImage && <img src={previewImage} alt="" class="admin-delete-preview" />}
+    <p class="admin-delete-warning">This will remove the product from both EN and AR JSON files and delete uploaded images.</p>
+    <form method="POST" action={`/admin/api/products/${id}/`} data-delete-form>
+      <input type="hidden" name="_method" value="DELETE" />
+      <div class="admin-form-actions">
+        <a class="admin-secondary-button" href={returnUrl}>Cancel</a>
+        <button type="submit" class="admin-danger-button">Delete permanently</button>
+      </div>
+    </form>
+  </div>
+</AdminLayout>
+
+<script is:inline>
+  const form = document.querySelector('[data-delete-form]');
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const csrf = document.cookie.split('; ').find((cookie) => cookie.startsWith('csrf_token='))?.split('=')[1];
+    const response = await fetch(form.action, {
+      method: 'POST',
+      headers: { 'x-csrf-token': csrf || '' },
+      body: new FormData(form),
+    });
+    if (response.ok) {
+      window.location.href = '/admin/products/';
+    } else {
+      window.showAdminToast?.('Failed to delete product', 'error');
+    }
+  });
+</script>

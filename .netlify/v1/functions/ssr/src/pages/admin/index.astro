@@ -1,0 +1,54 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { productStore } from '../../lib/product-store';
+
+const products = await productStore.getAll();
+const total = products.length;
+const inStock = products.filter((p) => p.inStock && !p.comingSoon).length;
+const outOfStock = products.filter((p) => !p.inStock && !p.comingSoon).length;
+const comingSoon = products.filter((p) => p.comingSoon).length;
+const featured = products.filter((p) => p.featured).length;
+const categories = [...new Set(products.map((p) => p.category).filter(Boolean))];
+const lowestPrice = Math.min(...products.filter((p) => p.price).map((p) => p.price));
+const highestPrice = Math.max(...products.filter((p) => p.price).map((p) => p.price));
+---
+
+<AdminLayout title="Dashboard" active="dashboard">
+  <div class="admin-stats-grid">
+    <div class="admin-stat-card">
+      <p class="admin-stat-label">Total products</p>
+      <p class="admin-stat-value">{total}</p>
+    </div>
+    <div class="admin-stat-card">
+      <p class="admin-stat-label">In stock</p>
+      <p class="admin-stat-value">{inStock}</p>
+    </div>
+    <div class="admin-stat-card">
+      <p class="admin-stat-label">Out of stock</p>
+      <p class="admin-stat-value">{outOfStock}</p>
+    </div>
+    <div class="admin-stat-card">
+      <p class="admin-stat-label">Coming soon</p>
+      <p class="admin-stat-value">{comingSoon}</p>
+    </div>
+    <div class="admin-stat-card">
+      <p class="admin-stat-label">Featured</p>
+      <p class="admin-stat-value">{featured}</p>
+    </div>
+    <div class="admin-stat-card">
+      <p class="admin-stat-label">Categories</p>
+      <p class="admin-stat-value">{categories.length}</p>
+    </div>
+    <div class="admin-stat-card">
+      <p class="admin-stat-label">Price range</p>
+      <p class="admin-stat-value">EGP {lowestPrice} — {highestPrice}</p>
+    </div>
+  </div>
+
+  <h2 class="admin-section-title">Categories</h2>
+  <ul class="admin-categories-list">
+    {categories.map((cat) => (
+      <li class="admin-category-item">{cat}</li>
+    ))}
+  </ul>
+</AdminLayout>

@@ -1,0 +1,20 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import type { Locale } from '../../i18n';
+import { locales, t } from '../../i18n';
+
+export function getStaticPaths() {
+  return locales.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const locale = lang;
+---
+
+<Layout locale={locale} title={`${t(locale, 'thankYou.title')} - nisa`}>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+        <h1 class="text-4xl font-medium text-center mb-2">{t(locale, 'thankYou.title')}</h1>
+        <p class="text-center text-[#6B7B8C] dark:text-[#94a3b8] mb-12">{t(locale, 'thankYou.message')}</p>
+        <a href={`/${locale}/shop/`} class="text-blue-500 hover:underline">{t(locale, 'thankYou.continueShopping')}</a>
+    </div>
+</Layout>
